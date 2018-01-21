@@ -1,0 +1,17 @@
+<schemalist>
+  <schema id="com.github.alainm23.planner" path="/com/github/alainm23/planner/" gettext-domain="planner">
+
+    <key name="window-height" type="i">
+      <default>800</default>
+      <summary>Most recent height of Planner</summary>
+      <description>Most recent height of Planner</description>
+    </key>
+    
+    <key name="window-width" type="i">
+      <default>600</default>
+      <summary>Most recent width of Planner</summary>
+      <description>Most recent width of Planner</description>
+    </key>
+
+  </schema>
+</schemalist>
