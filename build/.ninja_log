@@ -1,0 +1,14 @@
+# ninja log v5
+0	543	1516549696	build.ninja	767dfe84644b22bd
+0	5	1516549696	as-resources.c	2410a3414a2f78ce
+0	7	1516549696	as-resources.h	9c36d8bb291a956d
+0	1229	1516549697	com.github.alainm23.planner@exe/src/Application.c	ad9b72eca04b8ce0
+0	1229	1516549697	com.github.alainm23.planner@exe/src/MainWindow.c	ad9b72eca04b8ce0
+0	1229	1516549697	com.github.alainm23.planner@exe/src/Widgets/Headerbar.c	ad9b72eca04b8ce0
+0	1229	1516549697	com.github.alainm23.planner@exe/src/Widgets/WelcomeView.c	ad9b72eca04b8ce0
+7	1599	1516549697	com.github.alainm23.planner@exe/meson-generated_.._as-resources.c.o	4ecfda1d9d93e924
+1230	2570	1516549698	com.github.alainm23.planner@exe/meson-generated_src_Widgets_Headerbar.c.o	39cdbc656d62e1a6
+1229	2571	1516549698	com.github.alainm23.planner@exe/meson-generated_src_Application.c.o	eba3d83b48a99e3d
+1229	2699	1516549698	com.github.alainm23.planner@exe/meson-generated_src_MainWindow.c.o	199884f498d798f0
+1230	2718	1516549698	com.github.alainm23.planner@exe/meson-generated_src_Widgets_WelcomeView.c.o	21c9f63e6a6d20cd
+2718	3251	1516549699	com.github.alainm23.planner	d4f64a4f3e1b0bce
