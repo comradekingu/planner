@@ -1,5 +1,11 @@
 namespace Planner {
     public class Headerbar : Gtk.HeaderBar {
+        
+        //stacks
+        //private Gtk.Stack stack;
+        //private Gtk.StackSwitcher stack_switcher;
+        ProjectButton projectbutton;
+
         public Headerbar () {
             set_title ("Planner");
             set_show_close_button (true);
@@ -8,6 +14,21 @@ namespace Planner {
             style_context.add_class ("format-bar");
             style_context.add_class (Gtk.STYLE_CLASS_LINKED);
 
+            build_ui ();
+        }
+
+        private void build_ui () {
+        
+            projectbutton = new ProjectButton ();
+            this.pack_start (projectbutton);
+            /* stack init
+            stack = new Gtk.Stack ();
+            stack_switcher = new Gtk.StackSwitcher ();
+            stack_switcher.set_stack (stack);
+            stack_switcher.set_halign (Gtk.Align.CENTER);
+
+            this.set_custom_title (stack_switcher);
+            */
 
         }
     }

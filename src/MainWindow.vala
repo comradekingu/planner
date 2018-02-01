@@ -1,26 +1,45 @@
 namespace Planner {
     public class MainWindow : Gtk.Window {
 
+        AppSettings settings;
+
         private Headerbar headerbar;
         private WelcomeView welcome;
 
-        public MainWindow (Gtk.Application application) {
+        public SqliteDatabase db;
 
-            this.set_application (application);
-            this.icon_name = "com.github.alainm23.planner";
-            this.title = "Planner";
-            this.window_position = Gtk.WindowPosition.CENTER;
-            this.set_default_size (1159, 745);
+        public MainWindow (Gtk.Application application) {
+            GLib.Object (
+                            application: application,
+                            icon_name: "com.github.alainm23.planner",
+                            height_request: 700,
+                            width_request: 900,
+                            title: _("Planner")
+                        );
+        }
+
+        construct {
+
+            var provider = new Gtk.CssProvider ();
+            provider.load_from_resource ("/com/github/alainm23/planner/application.css");
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            
+            this.db = new SqliteDatabase ();
+
+            build_ui ();
+
+        }
+
+        public void build_ui () {
 
             headerbar = new Headerbar ();
             set_titlebar (headerbar);
 
-            welcome = new WelcomeView ();
-            add (welcome);
-
-
-            //Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, width.to_string() + " - " + height.to_string());
-            //msg.show ();
+            if ( !Utils.exists_database () ) {
+                welcome = new WelcomeView ();
+                this.add (welcome);  
+            } 
+            
         }
     }
 }

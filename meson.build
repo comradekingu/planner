@@ -28,10 +28,15 @@ executable(
     'src/MainWindow.vala',
     'src/Widgets/Headerbar.vala',
     'src/Widgets/WelcomeView.vala',
+    'src/Widgets/ProjectButton.vala',
+    'src/Constants/AppSettings.vala',
+    'src/Services/Database.vala',
+    'src/Utils/Files.vala',
     dependencies: [
         dependency('glib-2.0'),
         dependency('granite'),
         dependency('gtk+-3.0'),
+        dependency('sqlite3'),
         meson.get_compiler('c').find_library('m', required : false)
     ],
     install: true

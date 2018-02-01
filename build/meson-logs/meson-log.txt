@@ -1,4 +1,4 @@
-Build started at 2018-01-21T10:48:15.970711
+Build started at 2018-01-31T21:57:39.440075
 Main binary: /usr/bin/python3
 Python system: Linux
 The Meson build system
@@ -8,7 +8,7 @@ Build dir: /home/alain/Vala/planner/build
 Build type: native build
 Project name: com.github.alainm23.planner
 Native C compiler: cc (gcc 5.4.0)
-Native Vala compiler: valac (valac 0.36.8)
+Native Vala compiler: valac (valac 0.36.10)
 Build machine cpu family: x86_64
 Build machine cpu: x86_64
 Configuring config.h using configuration
@@ -18,8 +18,8 @@ Native dependency glib-2.0 found: YES 2.48.2
 WARNING: GLib compiled dependencies do not work reliably with 
 the current version of GLib. See the following upstream issue: https://bugzilla.gnome.org/show_bug.cgi?id=774368
 Running compile:
-Working directory:  /tmp/tmp_n1sd6cz
-Command line:  cc /tmp/tmp_n1sd6cz/testfile.c -O0 -Wl,--start-group -lm -Wl,--end-group -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmp_n1sd6cz/output.exe 
+Working directory:  /tmp/tmpndau8xlt
+Command line:  cc /tmp/tmpndau8xlt/testfile.c -O0 -Wl,--start-group -lm -Wl,--end-group -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmpndau8xlt/output.exe 
 
 Code:
  int main(int argc, char **argv) { return 0; }

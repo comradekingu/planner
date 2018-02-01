@@ -1,7 +1,7 @@
 [
   {
     "directory": "/home/alain/Vala/planner/build",
-    "command": "valac -C --debug --pkg gtk+-3.0 --pkg granite --pkg glib-2.0 --directory com.github.alainm23.planner@exe --basedir ../ --gresources=../data/com.github.alainm23.planner.gresource.xml ../src/Application.vala ../src/MainWindow.vala ../src/Widgets/Headerbar.vala ../src/Widgets/WelcomeView.vala",
+    "command": "valac -C --debug --pkg sqlite3 --pkg gtk+-3.0 --pkg granite --pkg glib-2.0 --directory com.github.alainm23.planner@exe --basedir ../ --gresources=../data/com.github.alainm23.planner.gresource.xml ../src/Application.vala ../src/MainWindow.vala ../src/Widgets/Headerbar.vala ../src/Widgets/WelcomeView.vala ../src/Widgets/ProjectButton.vala ../src/Constants/AppSettings.vala ../src/Services/Database.vala ../src/Utils/Files.vala",
     "file": "../src/Application.vala"
   },
   {
@@ -28,5 +28,25 @@
     "directory": "/home/alain/Vala/planner/build",
     "command": "cc  -Icom.github.alainm23.planner@exe -I. -I.. -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/granite -I/usr/include/gee-0.8 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -w -O0 -g '-DGETTEXT_PACKAGE=\"com.github.alainm23.planner\"' -pthread -MMD -MQ 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_WelcomeView.c.o' -MF 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_WelcomeView.c.o.d' -o 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_WelcomeView.c.o' -c 'com.github.alainm23.planner@exe/src/Widgets/WelcomeView.c'",
     "file": "com.github.alainm23.planner@exe/src/Widgets/WelcomeView.c"
+  },
+  {
+    "directory": "/home/alain/Vala/planner/build",
+    "command": "cc  -Icom.github.alainm23.planner@exe -I. -I.. -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/granite -I/usr/include/gee-0.8 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -w -O0 -g '-DGETTEXT_PACKAGE=\"com.github.alainm23.planner\"' -pthread -MMD -MQ 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_ProjectButton.c.o' -MF 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_ProjectButton.c.o.d' -o 'com.github.alainm23.planner@exe/meson-generated_src_Widgets_ProjectButton.c.o' -c 'com.github.alainm23.planner@exe/src/Widgets/ProjectButton.c'",
+    "file": "com.github.alainm23.planner@exe/src/Widgets/ProjectButton.c"
+  },
+  {
+    "directory": "/home/alain/Vala/planner/build",
+    "command": "cc  -Icom.github.alainm23.planner@exe -I. -I.. -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/granite -I/usr/include/gee-0.8 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -w -O0 -g '-DGETTEXT_PACKAGE=\"com.github.alainm23.planner\"' -pthread -MMD -MQ 'com.github.alainm23.planner@exe/meson-generated_src_Constants_AppSettings.c.o' -MF 'com.github.alainm23.planner@exe/meson-generated_src_Constants_AppSettings.c.o.d' -o 'com.github.alainm23.planner@exe/meson-generated_src_Constants_AppSettings.c.o' -c 'com.github.alainm23.planner@exe/src/Constants/AppSettings.c'",
+    "file": "com.github.alainm23.planner@exe/src/Constants/AppSettings.c"
+  },
+  {
+    "directory": "/home/alain/Vala/planner/build",
+    "command": "cc  -Icom.github.alainm23.planner@exe -I. -I.. -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/granite -I/usr/include/gee-0.8 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -w -O0 -g '-DGETTEXT_PACKAGE=\"com.github.alainm23.planner\"' -pthread -MMD -MQ 'com.github.alainm23.planner@exe/meson-generated_src_Services_Database.c.o' -MF 'com.github.alainm23.planner@exe/meson-generated_src_Services_Database.c.o.d' -o 'com.github.alainm23.planner@exe/meson-generated_src_Services_Database.c.o' -c 'com.github.alainm23.planner@exe/src/Services/Database.c'",
+    "file": "com.github.alainm23.planner@exe/src/Services/Database.c"
+  },
+  {
+    "directory": "/home/alain/Vala/planner/build",
+    "command": "cc  -Icom.github.alainm23.planner@exe -I. -I.. -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/granite -I/usr/include/gee-0.8 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/mirclient -I/usr/include/mircore -I/usr/include/mircookie -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng12 -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -w -O0 -g '-DGETTEXT_PACKAGE=\"com.github.alainm23.planner\"' -pthread -MMD -MQ 'com.github.alainm23.planner@exe/meson-generated_src_Utils_Files.c.o' -MF 'com.github.alainm23.planner@exe/meson-generated_src_Utils_Files.c.o.d' -o 'com.github.alainm23.planner@exe/meson-generated_src_Utils_Files.c.o' -c 'com.github.alainm23.planner@exe/src/Utils/Files.c'",
+    "file": "com.github.alainm23.planner@exe/src/Utils/Files.c"
   }
 ]

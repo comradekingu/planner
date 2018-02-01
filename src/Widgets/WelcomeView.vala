@@ -1,5 +1,8 @@
 namespace Planner {
     public class WelcomeView : Granite.Widgets.Welcome {
+
+        public SqliteDatabase db;
+        
         public WelcomeView () {
             Object (
                 title: _("No Project Open"),
@@ -17,7 +20,10 @@ namespace Planner {
             activated.connect ( (i) => {
                 if (i == 0) {
                     // New project
-                    //print("New Project");
+                    Utils.create_dir_with_parents ("/.local/share/planner/");
+                    this.db = new SqliteDatabase ();
+                    
+                    this.destroy ();
                 }
                 else if (i == 1) {
                     // Open Project
