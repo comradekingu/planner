@@ -7,8 +7,6 @@
 #include <gtk/gtk.h>
 #include <granite.h>
 #include <pango/pango.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 #define PLANNER_TYPE_PROJECT_BUTTON (planner_project_button_get_type ())
@@ -22,22 +20,37 @@ typedef struct _PlannerProjectButton PlannerProjectButton;
 typedef struct _PlannerProjectButtonClass PlannerProjectButtonClass;
 typedef struct _PlannerProjectButtonPrivate PlannerProjectButtonPrivate;
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-#define _g_free0(var) (var = (g_free (var), NULL))
+typedef struct _Block2Data Block2Data;
+
+#define PLANNER_TYPE_PROJECT_POPOVER (planner_project_popover_get_type ())
+#define PLANNER_PROJECT_POPOVER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PLANNER_TYPE_PROJECT_POPOVER, PlannerProjectPopover))
+#define PLANNER_PROJECT_POPOVER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PLANNER_TYPE_PROJECT_POPOVER, PlannerProjectPopoverClass))
+#define PLANNER_IS_PROJECT_POPOVER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PLANNER_TYPE_PROJECT_POPOVER))
+#define PLANNER_IS_PROJECT_POPOVER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PLANNER_TYPE_PROJECT_POPOVER))
+#define PLANNER_PROJECT_POPOVER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PLANNER_TYPE_PROJECT_POPOVER, PlannerProjectPopoverClass))
+
+typedef struct _PlannerProjectPopover PlannerProjectPopover;
+typedef struct _PlannerProjectPopoverClass PlannerProjectPopoverClass;
 
 struct _PlannerProjectButton {
-	GtkButton parent_instance;
+	GtkGrid parent_instance;
 	PlannerProjectButtonPrivate * priv;
 };
 
 struct _PlannerProjectButtonClass {
-	GtkButtonClass parent_class;
+	GtkGridClass parent_class;
 };
 
 struct _PlannerProjectButtonPrivate {
 	GtkLabel* project_title;
 	GtkLabel* project_description;
-	GtkImage* _icon;
-	GtkGrid* project_grid;
+	GtkButton* _icon;
+};
+
+struct _Block2Data {
+	int _ref_count_;
+	PlannerProjectButton* self;
+	GtkButton* icon;
 };
 
 
@@ -51,6 +64,13 @@ enum  {
 PlannerProjectButton* planner_project_button_new (void);
 PlannerProjectButton* planner_project_button_construct (GType object_type);
 static GObject * planner_project_button_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
+static Block2Data* block2_data_ref (Block2Data* _data2_);
+static void block2_data_unref (void * _userdata_);
+static void _planner_project_button___lambda4_ (Block2Data* _data2_);
+GType planner_project_popover_get_type (void) G_GNUC_CONST;
+PlannerProjectPopover* planner_project_popover_new (GtkWidget* relative);
+PlannerProjectPopover* planner_project_popover_construct (GType object_type, GtkWidget* relative);
+static void __planner_project_button___lambda4__gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void planner_project_button_finalize (GObject * obj);
 
 
@@ -60,26 +80,76 @@ PlannerProjectButton* planner_project_button_construct (GType object_type) {
 	self = (PlannerProjectButton*) g_object_new (object_type, NULL);
 #line 2 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	return self;
-#line 64 "ProjectButton.c"
+#line 84 "ProjectButton.c"
 }
 
 
 PlannerProjectButton* planner_project_button_new (void) {
 #line 2 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	return planner_project_button_construct (PLANNER_TYPE_PROJECT_BUTTON);
-#line 71 "ProjectButton.c"
+#line 91 "ProjectButton.c"
 }
 
 
-static const gchar* string_to_string (const gchar* self) {
-	const gchar* result = NULL;
-#line 1442 "/usr/share/vala-0.36/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, NULL);
-#line 1443 "/usr/share/vala-0.36/vapi/glib-2.0.vapi"
-	result = self;
-#line 1443 "/usr/share/vala-0.36/vapi/glib-2.0.vapi"
-	return result;
-#line 83 "ProjectButton.c"
+static Block2Data* block2_data_ref (Block2Data* _data2_) {
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	g_atomic_int_inc (&_data2_->_ref_count_);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	return _data2_;
+#line 100 "ProjectButton.c"
+}
+
+
+static void block2_data_unref (void * _userdata_) {
+	Block2Data* _data2_;
+	_data2_ = (Block2Data*) _userdata_;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	if (g_atomic_int_dec_and_test (&_data2_->_ref_count_)) {
+#line 109 "ProjectButton.c"
+		PlannerProjectButton* self;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+		self = _data2_->self;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+		_g_object_unref0 (_data2_->icon);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+		_g_object_unref0 (self);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+		g_slice_free (Block2Data, _data2_);
+#line 119 "ProjectButton.c"
+	}
+}
+
+
+static void _planner_project_button___lambda4_ (Block2Data* _data2_) {
+	PlannerProjectButton* self;
+	PlannerProjectPopover* popover = NULL;
+	GtkButton* _tmp0_;
+	PlannerProjectPopover* _tmp1_;
+	PlannerProjectPopover* _tmp2_;
+#line 32 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	self = _data2_->self;
+#line 33 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp0_ = _data2_->icon;
+#line 33 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp1_ = planner_project_popover_new ((GtkWidget*) _tmp0_);
+#line 33 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	g_object_ref_sink (_tmp1_);
+#line 33 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	popover = _tmp1_;
+#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp2_ = popover;
+#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	gtk_widget_show_all ((GtkWidget*) _tmp2_);
+#line 32 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_g_object_unref0 (popover);
+#line 146 "ProjectButton.c"
+}
+
+
+static void __planner_project_button___lambda4__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+#line 32 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_planner_project_button___lambda4_ (self);
+#line 153 "ProjectButton.c"
 }
 
 
@@ -87,6 +157,7 @@ static GObject * planner_project_button_constructor (GType type, guint n_constru
 	GObject * obj;
 	GObjectClass * parent_class;
 	PlannerProjectButton * self;
+	Block2Data* _data2_;
 	GtkLabel* _tmp0_;
 	GtkLabel* _tmp1_;
 	GtkStyleContext* _tmp2_;
@@ -99,145 +170,99 @@ static GObject * planner_project_button_constructor (GType type, guint n_constru
 	GtkLabel* _tmp9_;
 	GtkLabel* _tmp10_;
 	GtkStyleContext* _tmp11_;
-	GtkStyleContext* _tmp12_;
-	gchar* username = NULL;
-	const gchar* _tmp13_;
-	gchar* _tmp14_;
-	gchar* iconfile = NULL;
-	const gchar* _tmp15_;
-	const gchar* _tmp16_;
-	gchar* _tmp17_;
-	GraniteWidgetsAvatar* avatar_default_dnd = NULL;
-	GraniteWidgetsAvatar* _tmp18_;
-	GtkGrid* _tmp19_;
-	GtkGrid* _tmp20_;
-	GraniteWidgetsAvatar* _tmp21_;
-	GtkGrid* _tmp22_;
-	GtkLabel* _tmp23_;
-	GtkGrid* _tmp24_;
-	GtkLabel* _tmp25_;
-	GtkGrid* _tmp26_;
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	GtkButton* _tmp12_;
+	GtkButton* _tmp13_;
+	GtkButton* _tmp14_;
+	GtkLabel* _tmp15_;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	parent_class = G_OBJECT_CLASS (planner_project_button_parent_class);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PLANNER_TYPE_PROJECT_BUTTON, PlannerProjectButton);
-#line 12 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_data2_ = g_slice_new0 (Block2Data);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_data2_->_ref_count_ = 1;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_data2_->self = g_object_ref (self);
+#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp0_ = (GtkLabel*) gtk_label_new ("Project title");
-#line 12 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	g_object_ref_sink (_tmp0_);
-#line 12 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_g_object_unref0 (self->priv->project_title);
-#line 12 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	self->priv->project_title = _tmp0_;
-#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 14 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp1_ = self->priv->project_title;
-#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 14 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp2_ = gtk_widget_get_style_context ((GtkWidget*) _tmp1_);
-#line 13 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 14 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_style_context_add_class (_tmp2_, GRANITE_STYLE_CLASS_H3_LABEL);
-#line 14 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 15 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp3_ = self->priv->project_title;
-#line 14 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 15 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_widget_set_halign ((GtkWidget*) _tmp3_, GTK_ALIGN_START);
-#line 15 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 16 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp4_ = self->priv->project_title;
-#line 15 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 16 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_widget_set_valign ((GtkWidget*) _tmp4_, GTK_ALIGN_END);
-#line 18 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp5_ = (GtkLabel*) gtk_label_new ("project description");
-#line 18 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	g_object_ref_sink (_tmp5_);
-#line 18 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_g_object_unref0 (self->priv->project_description);
-#line 18 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	self->priv->project_description = _tmp5_;
-#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 20 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp6_ = self->priv->project_description;
-#line 19 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 20 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_widget_set_halign ((GtkWidget*) _tmp6_, GTK_ALIGN_START);
-#line 20 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 21 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp7_ = self->priv->project_description;
-#line 20 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 21 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_widget_set_valign ((GtkWidget*) _tmp7_, GTK_ALIGN_START);
-#line 21 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 22 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp8_ = self->priv->project_description;
-#line 21 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 22 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_label_set_line_wrap (_tmp8_, TRUE);
-#line 22 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 23 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp9_ = self->priv->project_description;
-#line 22 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 23 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_label_set_line_wrap_mode (_tmp9_, PANGO_WRAP_WORD);
-#line 23 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 24 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp10_ = self->priv->project_description;
-#line 23 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 24 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_tmp11_ = gtk_widget_get_style_context ((GtkWidget*) _tmp10_);
-#line 23 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+#line 24 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	gtk_style_context_add_class (_tmp11_, GTK_STYLE_CLASS_DIM_LABEL);
-#line 25 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp12_ = gtk_widget_get_style_context ((GtkWidget*) self);
-#line 25 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	gtk_style_context_add_class (_tmp12_, GTK_STYLE_CLASS_FLAT);
-#line 28 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp13_ = g_get_user_name ();
-#line 28 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp14_ = g_strdup (_tmp13_);
-#line 28 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	username = _tmp14_;
-#line 29 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp15_ = username;
-#line 29 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp16_ = string_to_string (_tmp15_);
-#line 29 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp17_ = g_strconcat ("/var/lib/AccountsService/icons/", _tmp16_, NULL);
-#line 29 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	iconfile = _tmp17_;
 #line 31 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp18_ = granite_widgets_avatar_new_with_default_icon (32);
+	_tmp12_ = (GtkButton*) gtk_button_new_from_icon_name ("avatar-default", GTK_ICON_SIZE_DND);
 #line 31 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	g_object_ref_sink (_tmp18_);
+	g_object_ref_sink (_tmp12_);
 #line 31 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	avatar_default_dnd = _tmp18_;
-#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp19_ = (GtkGrid*) gtk_grid_new ();
-#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	g_object_ref_sink (_tmp19_);
-#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_g_object_unref0 (self->priv->project_grid);
-#line 34 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	self->priv->project_grid = _tmp19_;
-#line 37 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp20_ = self->priv->project_grid;
-#line 37 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp21_ = avatar_default_dnd;
-#line 37 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	gtk_grid_attach (_tmp20_, (GtkWidget*) _tmp21_, 0, 0, 1, 2);
-#line 38 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp22_ = self->priv->project_grid;
-#line 38 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp23_ = self->priv->project_title;
-#line 38 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	gtk_grid_attach (_tmp22_, (GtkWidget*) _tmp23_, 1, 0, 1, 1);
-#line 39 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp24_ = self->priv->project_grid;
-#line 39 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp25_ = self->priv->project_description;
-#line 39 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	gtk_grid_attach (_tmp24_, (GtkWidget*) _tmp25_, 1, 1, 1, 1);
-#line 40 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_tmp26_ = self->priv->project_grid;
-#line 40 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	gtk_container_add ((GtkContainer*) self, (GtkWidget*) _tmp26_);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_g_object_unref0 (avatar_default_dnd);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_g_free0 (iconfile);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_g_free0 (username);
-#line 9 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_data2_->icon = _tmp12_;
+#line 32 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp13_ = _data2_->icon;
+#line 32 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	g_signal_connect_data (_tmp13_, "clicked", (GCallback) __planner_project_button___lambda4__gtk_button_clicked, block2_data_ref (_data2_), (GClosureNotify) block2_data_unref, 0);
+#line 41 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp14_ = _data2_->icon;
+#line 41 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	gtk_grid_attach ((GtkGrid*) self, (GtkWidget*) _tmp14_, 0, 0, 1, 2);
+#line 42 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_tmp15_ = self->priv->project_title;
+#line 42 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	gtk_grid_attach ((GtkGrid*) self, (GtkWidget*) _tmp15_, 1, 0, 1, 1);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	block2_data_unref (_data2_);
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
+	_data2_ = NULL;
+#line 10 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	return obj;
-#line 241 "ProjectButton.c"
+#line 266 "ProjectButton.c"
 }
 
 
@@ -250,14 +275,14 @@ static void planner_project_button_class_init (PlannerProjectButtonClass * klass
 	G_OBJECT_CLASS (klass)->constructor = planner_project_button_constructor;
 #line 2 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	G_OBJECT_CLASS (klass)->finalize = planner_project_button_finalize;
-#line 254 "ProjectButton.c"
+#line 279 "ProjectButton.c"
 }
 
 
 static void planner_project_button_instance_init (PlannerProjectButton * self) {
 #line 2 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	self->priv = PLANNER_PROJECT_BUTTON_GET_PRIVATE (self);
-#line 261 "ProjectButton.c"
+#line 286 "ProjectButton.c"
 }
 
 
@@ -271,11 +296,9 @@ static void planner_project_button_finalize (GObject * obj) {
 	_g_object_unref0 (self->priv->project_description);
 #line 6 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	_g_object_unref0 (self->priv->_icon);
-#line 7 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
-	_g_object_unref0 (self->priv->project_grid);
 #line 2 "/home/alain/Vala/planner/src/Widgets/ProjectButton.vala"
 	G_OBJECT_CLASS (planner_project_button_parent_class)->finalize (obj);
-#line 279 "ProjectButton.c"
+#line 302 "ProjectButton.c"
 }
 
 
@@ -284,7 +307,7 @@ GType planner_project_button_get_type (void) {
 	if (g_once_init_enter (&planner_project_button_type_id__volatile)) {
 		static const GTypeInfo g_define_type_info = { sizeof (PlannerProjectButtonClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) planner_project_button_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PlannerProjectButton), 0, (GInstanceInitFunc) planner_project_button_instance_init, NULL };
 		GType planner_project_button_type_id;
-		planner_project_button_type_id = g_type_register_static (gtk_button_get_type (), "PlannerProjectButton", &g_define_type_info, 0);
+		planner_project_button_type_id = g_type_register_static (gtk_grid_get_type (), "PlannerProjectButton", &g_define_type_info, 0);
 		g_once_init_leave (&planner_project_button_type_id__volatile, planner_project_button_type_id);
 	}
 	return planner_project_button_type_id__volatile;

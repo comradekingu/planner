@@ -63,8 +63,8 @@ static Block1Data* block1_data_ref (Block1Data* _data1_);
 static void block1_data_unref (void * _userdata_);
 PlannerMainWindow* planner_main_window_new (GtkApplication* application);
 PlannerMainWindow* planner_main_window_construct (GType object_type, GtkApplication* application);
-static void __lambda5_ (Block1Data* _data1_);
-static void ___lambda5__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self);
+static void __lambda6_ (Block1Data* _data1_);
+static void ___lambda6__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self);
 static gint planner_planner_main (gchar** args, int args_length1);
 
 
@@ -114,7 +114,7 @@ static void block1_data_unref (void * _userdata_) {
 }
 
 
-static void __lambda5_ (Block1Data* _data1_) {
+static void __lambda6_ (Block1Data* _data1_) {
 	PlannerPlanner* self;
 #line 17 "/home/alain/Vala/planner/src/Application.vala"
 	self = _data1_->self;
@@ -127,9 +127,9 @@ static void __lambda5_ (Block1Data* _data1_) {
 }
 
 
-static void ___lambda5__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self) {
+static void ___lambda6__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self) {
 #line 17 "/home/alain/Vala/planner/src/Application.vala"
-	__lambda5_ (self);
+	__lambda6_ (self);
 #line 134 "Application.c"
 }
 
@@ -165,7 +165,7 @@ static void planner_planner_real_activate (GApplication* base) {
 #line 15 "/home/alain/Vala/planner/src/Application.vala"
 	gtk_application_add_accelerator ((GtkApplication*) self, "<Control>q", "app.quit", NULL);
 #line 17 "/home/alain/Vala/planner/src/Application.vala"
-	g_signal_connect_data (quit_action, "activate", (GCallback) ___lambda5__g_simple_action_activate, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+	g_signal_connect_data (quit_action, "activate", (GCallback) ___lambda6__g_simple_action_activate, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
 #line 8 "/home/alain/Vala/planner/src/Application.vala"
 	_g_object_unref0 (quit_action);
 #line 8 "/home/alain/Vala/planner/src/Application.vala"

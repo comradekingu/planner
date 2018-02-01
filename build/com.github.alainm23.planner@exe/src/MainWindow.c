@@ -112,7 +112,7 @@ PlannerMainWindow* planner_main_window_construct (GType object_type, GtkApplicat
 #line 12 "/home/alain/Vala/planner/src/MainWindow.vala"
 	_tmp0_ = application;
 #line 12 "/home/alain/Vala/planner/src/MainWindow.vala"
-	self = (PlannerMainWindow*) g_object_new (object_type, "application", _tmp0_, "icon-name", "com.github.alainm23.planner", "height-request", 700, "width-request", 900, "title", _ ("Planner"), NULL);
+	self = (PlannerMainWindow*) g_object_new (object_type, "application", _tmp0_, "icon-name", "com.github.alainm23.planner", "height-request", 700, "width-request", 1009, "title", _ ("Planner"), NULL);
 #line 11 "/home/alain/Vala/planner/src/MainWindow.vala"
 	return self;
 #line 119 "MainWindow.c"
