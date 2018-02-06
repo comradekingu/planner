@@ -6,7 +6,6 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <granite.h>
-#include <glib/gi18n-lib.h>
 #include <gdk/gdk.h>
 
 
@@ -112,17 +111,17 @@ PlannerMainWindow* planner_main_window_construct (GType object_type, GtkApplicat
 #line 12 "/home/alain/Vala/planner/src/MainWindow.vala"
 	_tmp0_ = application;
 #line 12 "/home/alain/Vala/planner/src/MainWindow.vala"
-	self = (PlannerMainWindow*) g_object_new (object_type, "application", _tmp0_, "icon-name", "com.github.alainm23.planner", "height-request", 700, "width-request", 1009, "title", _ ("Planner"), NULL);
+	self = (PlannerMainWindow*) g_object_new (object_type, "application", _tmp0_, "icon-name", "com.github.alainm23.planner", "height-request", 829, "width-request", 1199, "title", "Planner", NULL);
 #line 11 "/home/alain/Vala/planner/src/MainWindow.vala"
 	return self;
-#line 119 "MainWindow.c"
+#line 118 "MainWindow.c"
 }
 
 
 PlannerMainWindow* planner_main_window_new (GtkApplication* application) {
 #line 11 "/home/alain/Vala/planner/src/MainWindow.vala"
 	return planner_main_window_construct (PLANNER_TYPE_MAIN_WINDOW, application);
-#line 126 "MainWindow.c"
+#line 125 "MainWindow.c"
 }
 
 
@@ -148,7 +147,7 @@ void planner_main_window_build_ui (PlannerMainWindow* self) {
 	_tmp2_ = planner_utils_exists_database ();
 #line 38 "/home/alain/Vala/planner/src/MainWindow.vala"
 	if (!_tmp2_) {
-#line 152 "MainWindow.c"
+#line 151 "MainWindow.c"
 		PlannerWelcomeView* _tmp3_;
 		PlannerWelcomeView* _tmp4_;
 #line 39 "/home/alain/Vala/planner/src/MainWindow.vala"
@@ -163,7 +162,7 @@ void planner_main_window_build_ui (PlannerMainWindow* self) {
 		_tmp4_ = self->priv->welcome;
 #line 40 "/home/alain/Vala/planner/src/MainWindow.vala"
 		gtk_container_add ((GtkContainer*) self, (GtkWidget*) _tmp4_);
-#line 167 "MainWindow.c"
+#line 166 "MainWindow.c"
 	}
 }
 
@@ -210,7 +209,7 @@ static GObject * planner_main_window_constructor (GType type, guint n_construct_
 	_g_object_unref0 (provider);
 #line 21 "/home/alain/Vala/planner/src/MainWindow.vala"
 	return obj;
-#line 214 "MainWindow.c"
+#line 213 "MainWindow.c"
 }
 
 
@@ -223,14 +222,14 @@ static void planner_main_window_class_init (PlannerMainWindowClass * klass) {
 	G_OBJECT_CLASS (klass)->constructor = planner_main_window_constructor;
 #line 2 "/home/alain/Vala/planner/src/MainWindow.vala"
 	G_OBJECT_CLASS (klass)->finalize = planner_main_window_finalize;
-#line 227 "MainWindow.c"
+#line 226 "MainWindow.c"
 }
 
 
 static void planner_main_window_instance_init (PlannerMainWindow * self) {
 #line 2 "/home/alain/Vala/planner/src/MainWindow.vala"
 	self->priv = PLANNER_MAIN_WINDOW_GET_PRIVATE (self);
-#line 234 "MainWindow.c"
+#line 233 "MainWindow.c"
 }
 
 
@@ -248,7 +247,7 @@ static void planner_main_window_finalize (GObject * obj) {
 	_g_object_unref0 (self->db);
 #line 2 "/home/alain/Vala/planner/src/MainWindow.vala"
 	G_OBJECT_CLASS (planner_main_window_parent_class)->finalize (obj);
-#line 252 "MainWindow.c"
+#line 251 "MainWindow.c"
 }
 
 

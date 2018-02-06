@@ -1,4 +1,4 @@
-Build started at 2018-02-01T09:07:41.768327
+Build started at 2018-02-05T20:28:24.895549
 Main binary: /usr/bin/python3
 Python system: Linux
 The Meson build system
@@ -18,8 +18,8 @@ Native dependency glib-2.0 found: YES 2.48.2
 WARNING: GLib compiled dependencies do not work reliably with 
 the current version of GLib. See the following upstream issue: https://bugzilla.gnome.org/show_bug.cgi?id=774368
 Running compile:
-Working directory:  /tmp/tmpe4inqexk
-Command line:  cc /tmp/tmpe4inqexk/testfile.c -O0 -Wl,--start-group -lm -Wl,--end-group -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmpe4inqexk/output.exe 
+Working directory:  /tmp/tmpmzl8j7iz
+Command line:  cc /tmp/tmpmzl8j7iz/testfile.c -O0 -Wl,--start-group -lm -Wl,--end-group -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmpmzl8j7iz/output.exe 
 
 Code:
  int main(int argc, char **argv) { return 0; }

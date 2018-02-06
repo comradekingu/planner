@@ -12,9 +12,9 @@ namespace Planner {
             GLib.Object (
                             application: application,
                             icon_name: "com.github.alainm23.planner",
-                            height_request: 700,
-                            width_request: 900,
-                            title: _("Planner")
+                            height_request: 829,
+                            width_request: 1199,
+                            title: "Planner"
                         );
         }
 

@@ -22,7 +22,6 @@ namespace Planner {
                     // New project
                     Utils.create_dir_with_parents ("/.local/share/planner/");
                     this.db = new SqliteDatabase ();
-                    
                     this.destroy ();
                 }
                 else if (i == 1) {

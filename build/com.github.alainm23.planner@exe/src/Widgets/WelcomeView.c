@@ -54,11 +54,11 @@ enum  {
 PlannerWelcomeView* planner_welcome_view_new (void);
 PlannerWelcomeView* planner_welcome_view_construct (GType object_type);
 static GObject * planner_welcome_view_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
-static void _planner_welcome_view___lambda5_ (PlannerWelcomeView* self, gint i);
+static void _planner_welcome_view___lambda7_ (PlannerWelcomeView* self, gint i);
 void planner_utils_create_dir_with_parents (const gchar* dir);
 PlannerSqliteDatabase* planner_sqlite_database_new (gboolean skip_tables);
 PlannerSqliteDatabase* planner_sqlite_database_construct (GType object_type, gboolean skip_tables);
-static void __planner_welcome_view___lambda5__granite_widgets_welcome_activated (GraniteWidgetsWelcome* _sender, gint index, gpointer self);
+static void __planner_welcome_view___lambda7__granite_widgets_welcome_activated (GraniteWidgetsWelcome* _sender, gint index, gpointer self);
 static void planner_welcome_view_finalize (GObject * obj);
 
 
@@ -79,7 +79,7 @@ PlannerWelcomeView* planner_welcome_view_new (void) {
 }
 
 
-static void _planner_welcome_view___lambda5_ (PlannerWelcomeView* self, gint i) {
+static void _planner_welcome_view___lambda7_ (PlannerWelcomeView* self, gint i) {
 	gint _tmp0_;
 #line 21 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 	_tmp0_ = i;
@@ -95,14 +95,14 @@ static void _planner_welcome_view___lambda5_ (PlannerWelcomeView* self, gint i) 
 		_g_object_unref0 (self->db);
 #line 24 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 		self->db = _tmp1_;
-#line 26 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
+#line 25 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 		gtk_widget_destroy ((GtkWidget*) self);
 #line 101 "WelcomeView.c"
 	} else {
 		gint _tmp2_;
-#line 28 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
+#line 27 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 		_tmp2_ = i;
-#line 28 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
+#line 27 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 		if (_tmp2_ == 1) {
 #line 108 "WelcomeView.c"
 		}
@@ -110,9 +110,9 @@ static void _planner_welcome_view___lambda5_ (PlannerWelcomeView* self, gint i) 
 }
 
 
-static void __planner_welcome_view___lambda5__granite_widgets_welcome_activated (GraniteWidgetsWelcome* _sender, gint index, gpointer self) {
+static void __planner_welcome_view___lambda7__granite_widgets_welcome_activated (GraniteWidgetsWelcome* _sender, gint index, gpointer self) {
 #line 20 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
-	_planner_welcome_view___lambda5_ ((PlannerWelcomeView*) self, index);
+	_planner_welcome_view___lambda7_ ((PlannerWelcomeView*) self, index);
 #line 117 "WelcomeView.c"
 }
 
@@ -138,7 +138,7 @@ static GObject * planner_welcome_view_constructor (GType type, guint n_construct
 #line 18 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 	granite_widgets_welcome_append ((GraniteWidgetsWelcome*) self, "document-open", _ ("Open project"), _ ("Open a saved project."));
 #line 20 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
-	g_signal_connect_object ((GraniteWidgetsWelcome*) self, "activated", (GCallback) __planner_welcome_view___lambda5__granite_widgets_welcome_activated, self, 0);
+	g_signal_connect_object ((GraniteWidgetsWelcome*) self, "activated", (GCallback) __planner_welcome_view___lambda7__granite_widgets_welcome_activated, self, 0);
 #line 13 "/home/alain/Vala/planner/src/Widgets/WelcomeView.vala"
 	return obj;
 #line 145 "WelcomeView.c"

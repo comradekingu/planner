@@ -1,10 +1,11 @@
 namespace Planner { 
-    public class ProjectButton : Gtk.Button {
+    public class ProjectButton : Gtk.Grid {
         
         Gtk.Label   project_title;
         Gtk.Label   project_description;
-        Gtk.Image?  _icon;
-        Gtk.Grid    project_grid;
+        Gtk.Button  _icon;
+
+        //Gtk.Grid    project_grid;
         
         construct {
             
@@ -22,22 +23,25 @@ namespace Planner {
             project_description.set_line_wrap_mode (Pango.WrapMode.WORD);
             project_description.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
 
-            get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            //set_focus_on_click (true);
+            //get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
             // Img
-            var username = GLib.Environment.get_user_name ();
-            var iconfile = @"/var/lib/AccountsService/icons/$username";
 
-            var avatar_default_dnd = new Granite.Widgets.Avatar.with_default_icon (32);
+            var icon = new Gtk.Button.from_icon_name("avatar-default", Gtk.IconSize.DND);
+            icon.clicked.connect ( () => {
+                var popover = new ProjectPopover (icon);
+                popover.show_all ();
+            });
 
             // Button contents wrapper
-            project_grid = new Gtk.Grid ();
+            //project_grid = new Gtk.Grid ();
             //project_grid.column_spacing = 12;
 
-            project_grid.attach (avatar_default_dnd, 0, 0, 1, 2);
-            project_grid.attach (project_title, 1, 0, 1, 1);
-            project_grid.attach (project_description, 1, 1, 1, 1);
-            this.add (project_grid);
+            attach (icon, 0, 0, 1, 2);
+            attach (project_title, 1, 0, 1, 1);
+            //attach (project_description, 1, 1, 1, 1);
+            //this.add (project_grid);
         }
     }
 }

@@ -1,7 +1,8 @@
-/*define-color colorPrimary #0d52bf;*/
+/*define-color colorPrimary #0d52bf;  */
 .titlebar {
-    padding: 0 6px;
+    padding: 3.5 6px;
 }
+/*
 .titlebar .linked .button {
     border-radius: 0;
     padding: 12px 10px;
@@ -11,17 +12,5 @@
 .titlebar .linked .button:checked {
      box-shadow: inset 0 0 0 1px alpha (#000, 0.05);
  }
-.favorite-pink {
-    color: #E32550;
-}
-.favorite-grey {
-    color: #B0B0B0;
-}
-.tweet-entry {
-    background: white;
-    border-style: solid;
-    border-width: 0.25px;
-}
- .white-box {
-    background: white;
- }
+
+ /*12px10px; */

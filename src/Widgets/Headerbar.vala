@@ -29,7 +29,6 @@ namespace Planner {
 
             this.set_custom_title (stack_switcher);
             */
-
         }
     }
 }

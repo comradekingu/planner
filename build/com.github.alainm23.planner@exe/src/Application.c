@@ -63,8 +63,8 @@ static Block1Data* block1_data_ref (Block1Data* _data1_);
 static void block1_data_unref (void * _userdata_);
 PlannerMainWindow* planner_main_window_new (GtkApplication* application);
 PlannerMainWindow* planner_main_window_construct (GType object_type, GtkApplication* application);
-static void __lambda6_ (Block1Data* _data1_);
-static void ___lambda6__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self);
+static void __lambda8_ (Block1Data* _data1_);
+static void ___lambda8__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self);
 static gint planner_planner_main (gchar** args, int args_length1);
 
 
@@ -86,9 +86,9 @@ PlannerPlanner* planner_planner_new (void) {
 
 
 static Block1Data* block1_data_ref (Block1Data* _data1_) {
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	g_atomic_int_inc (&_data1_->_ref_count_);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	return _data1_;
 #line 94 "Application.c"
 }
@@ -97,39 +97,39 @@ static Block1Data* block1_data_ref (Block1Data* _data1_) {
 static void block1_data_unref (void * _userdata_) {
 	Block1Data* _data1_;
 	_data1_ = (Block1Data*) _userdata_;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
 #line 103 "Application.c"
 		PlannerPlanner* self;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 		self = _data1_->self;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 		_g_object_unref0 (_data1_->app_window);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 		_g_object_unref0 (self);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 		g_slice_free (Block1Data, _data1_);
 #line 113 "Application.c"
 	}
 }
 
 
-static void __lambda6_ (Block1Data* _data1_) {
+static void __lambda8_ (Block1Data* _data1_) {
 	PlannerPlanner* self;
-#line 17 "/home/alain/Vala/planner/src/Application.vala"
-	self = _data1_->self;
-#line 18 "/home/alain/Vala/planner/src/Application.vala"
-	if (_data1_->app_window != NULL) {
 #line 19 "/home/alain/Vala/planner/src/Application.vala"
+	self = _data1_->self;
+#line 20 "/home/alain/Vala/planner/src/Application.vala"
+	if (_data1_->app_window != NULL) {
+#line 21 "/home/alain/Vala/planner/src/Application.vala"
 		gtk_widget_destroy ((GtkWidget*) _data1_->app_window);
 #line 126 "Application.c"
 	}
 }
 
 
-static void ___lambda6__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self) {
-#line 17 "/home/alain/Vala/planner/src/Application.vala"
-	__lambda6_ (self);
+static void ___lambda8__g_simple_action_activate (GSimpleAction* _sender, GVariant* parameter, gpointer self) {
+#line 19 "/home/alain/Vala/planner/src/Application.vala"
+	__lambda8_ (self);
 #line 134 "Application.c"
 }
 
@@ -140,37 +140,37 @@ static void planner_planner_real_activate (GApplication* base) {
 	PlannerMainWindow* _tmp0_;
 	GSimpleAction* quit_action = NULL;
 	GSimpleAction* _tmp1_;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
-	self = (PlannerPlanner*) base;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
-	_data1_ = g_slice_new0 (Block1Data);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
-	_data1_->_ref_count_ = 1;
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
-	_data1_->self = g_object_ref (self);
-#line 9 "/home/alain/Vala/planner/src/Application.vala"
-	_tmp0_ = planner_main_window_new ((GtkApplication*) self);
-#line 9 "/home/alain/Vala/planner/src/Application.vala"
-	g_object_ref_sink (_tmp0_);
-#line 9 "/home/alain/Vala/planner/src/Application.vala"
-	_data1_->app_window = _tmp0_;
 #line 10 "/home/alain/Vala/planner/src/Application.vala"
+	self = (PlannerPlanner*) base;
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
+	_data1_ = g_slice_new0 (Block1Data);
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
+	_data1_->_ref_count_ = 1;
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
+	_data1_->self = g_object_ref (self);
+#line 11 "/home/alain/Vala/planner/src/Application.vala"
+	_tmp0_ = planner_main_window_new ((GtkApplication*) self);
+#line 11 "/home/alain/Vala/planner/src/Application.vala"
+	g_object_ref_sink (_tmp0_);
+#line 11 "/home/alain/Vala/planner/src/Application.vala"
+	_data1_->app_window = _tmp0_;
+#line 12 "/home/alain/Vala/planner/src/Application.vala"
 	gtk_widget_show_all ((GtkWidget*) _data1_->app_window);
-#line 12 "/home/alain/Vala/planner/src/Application.vala"
-	_tmp1_ = g_simple_action_new ("quit", NULL);
-#line 12 "/home/alain/Vala/planner/src/Application.vala"
-	quit_action = _tmp1_;
 #line 14 "/home/alain/Vala/planner/src/Application.vala"
+	_tmp1_ = g_simple_action_new ("quit", NULL);
+#line 14 "/home/alain/Vala/planner/src/Application.vala"
+	quit_action = _tmp1_;
+#line 16 "/home/alain/Vala/planner/src/Application.vala"
 	g_action_map_add_action ((GActionMap*) self, (GAction*) quit_action);
-#line 15 "/home/alain/Vala/planner/src/Application.vala"
-	gtk_application_add_accelerator ((GtkApplication*) self, "<Control>q", "app.quit", NULL);
 #line 17 "/home/alain/Vala/planner/src/Application.vala"
-	g_signal_connect_data (quit_action, "activate", (GCallback) ___lambda6__g_simple_action_activate, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+	gtk_application_add_accelerator ((GtkApplication*) self, "<Control>q", "app.quit", NULL);
+#line 19 "/home/alain/Vala/planner/src/Application.vala"
+	g_signal_connect_data (quit_action, "activate", (GCallback) ___lambda8__g_simple_action_activate, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	_g_object_unref0 (quit_action);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	block1_data_unref (_data1_);
-#line 8 "/home/alain/Vala/planner/src/Application.vala"
+#line 10 "/home/alain/Vala/planner/src/Application.vala"
 	_data1_ = NULL;
 #line 176 "Application.c"
 }
@@ -183,23 +183,23 @@ static gint planner_planner_main (gchar** args, int args_length1) {
 	gchar** _tmp1_;
 	gint _tmp1__length1;
 	gint _tmp2_;
-#line 26 "/home/alain/Vala/planner/src/Application.vala"
+#line 28 "/home/alain/Vala/planner/src/Application.vala"
 	gtk_init (&args_length1, &args);
-#line 28 "/home/alain/Vala/planner/src/Application.vala"
+#line 30 "/home/alain/Vala/planner/src/Application.vala"
 	_tmp0_ = planner_planner_new ();
-#line 28 "/home/alain/Vala/planner/src/Application.vala"
+#line 30 "/home/alain/Vala/planner/src/Application.vala"
 	app = _tmp0_;
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	_tmp1_ = args;
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	_tmp1__length1 = args_length1;
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	_tmp2_ = g_application_run ((GApplication*) app, _tmp1__length1, _tmp1_);
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	result = _tmp2_;
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	_g_object_unref0 (app);
-#line 29 "/home/alain/Vala/planner/src/Application.vala"
+#line 31 "/home/alain/Vala/planner/src/Application.vala"
 	return result;
 #line 205 "Application.c"
 }
@@ -209,7 +209,7 @@ int main (int argc, char ** argv) {
 #if !GLIB_CHECK_VERSION (2,35,0)
 	g_type_init ();
 #endif
-#line 25 "/home/alain/Vala/planner/src/Application.vala"
+#line 27 "/home/alain/Vala/planner/src/Application.vala"
 	return planner_planner_main (argv, argc);
 #line 215 "Application.c"
 }
