@@ -1,17 +1,4 @@
-/*define-color colorPrimary #0d52bf;*/
 
 .titlebar {
     padding: 3.5 6px;
 }
-/*
-.titlebar .linked .button {
-    border-radius: 0;
-    padding: 12px 10px;
-    border-top-width: 0;
-    box-shadow: none;
-}
-.titlebar .linked .button:checked {
-     box-shadow: inset 0 0 0 1px alpha (#000, 0.05);
- }
-
- /*12px10px; */

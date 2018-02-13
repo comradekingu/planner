@@ -28,7 +28,7 @@ namespace Planner {
 
             // Img
 
-            var icon = new Gtk.Button.from_icon_name("avatar-default", Gtk.IconSize.DND);
+            var icon = new Gtk.Button.from_icon_name("planner-computer", Gtk.IconSize.DND);
             icon.clicked.connect ( () => {
                 var popover = new ProjectPopover (icon);
                 popover.show_all ();
