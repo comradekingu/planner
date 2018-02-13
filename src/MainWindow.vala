@@ -9,21 +9,22 @@ namespace Planner {
         public SqliteDatabase db;
 
         public MainWindow (Gtk.Application application) {
-            GLib.Object (
-                            application: application,
-                            icon_name: "com.github.alainm23.planner",
-                            height_request: 829,
-                            width_request: 1199,
-                            title: "Planner"
-                        );
+            Object (
+                application: application,
+                icon_name: "com.github.alainm23.planner",
+                height_request: 829,
+                width_request: 1199,
+                title: _("Planner"),
+                window_position: Gtk.WindowPosition.CENTER
+            );
         }
 
         construct {
 
-            var provider = new Gtk.CssProvider ();
-            provider.load_from_resource ("/com/github/alainm23/planner/application.css");
-            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-            
+            // Icons Theme
+            weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
+            default_theme.add_resource_path ("/com/github/alainm23/planner");
+
             this.db = new SqliteDatabase ();
 
             build_ui ();

@@ -62,7 +62,6 @@ namespace Planner {
 
             // Buttons Add, Save and Cancel
             add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
-
             add_button.clicked.connect ( ()=> {
             
                 stack.set_visible_child_name("project_new");
@@ -106,8 +105,6 @@ namespace Planner {
             main_grid.attach (v_box, 0, 0, 1, 1);
             main_grid.attach (separator, 0, 1, 2, 1);
             main_grid.attach (stack, 0, 2, 1, 1);
-            
-
         }
     } 
 }

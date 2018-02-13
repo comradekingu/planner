@@ -8,6 +8,7 @@ namespace Planner {
         }
 
         protected override void activate () {
+            
             var app_window = new MainWindow (this);
             app_window.show_all ();
 
@@ -15,6 +16,10 @@ namespace Planner {
 
             add_action (quit_action);
             add_accelerator ("<Control>q", "app.quit", null);
+
+            var provider = new Gtk.CssProvider ();
+            provider.load_from_resource ("/com/github/alainm23/planner/application.css");
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             quit_action.activate.connect (() => {
                 if (app_window != null) {
