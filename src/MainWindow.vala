@@ -12,8 +12,8 @@ namespace Planner {
             Object (
                 application: application,
                 icon_name: "com.github.alainm23.planner",
-                height_request: 829,
-                width_request: 1199,
+                default_height: 829,
+                default_width: 1199,
                 title: _("Planner"),
                 window_position: Gtk.WindowPosition.CENTER
             );
@@ -25,7 +25,7 @@ namespace Planner {
             weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
             default_theme.add_resource_path ("/com/github/alainm23/planner");
 
-            this.db = new SqliteDatabase ();
+            db = new SqliteDatabase ();
 
             build_ui ();
 

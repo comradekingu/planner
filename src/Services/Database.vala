@@ -88,5 +88,37 @@ namespace Planner {
 
             return rc;
         }
+
+        public void add_project (string name, string description, string start_date, string final_date, string avatar) {
+            
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("INSERT INTO PROJECTS (name, " +
+                "description, start_date, final_date, avatar)" + 
+                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
+            
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, name);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (2, description);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (3, start_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (4, final_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (5, avatar);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.DONE) {
+                debug ("Project " + name + " created");
+            }
+        }
     }
 }
