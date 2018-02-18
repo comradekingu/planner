@@ -3,6 +3,9 @@ namespace Planner {
 
         public SqliteDatabase db;
         
+        // Signal enable headerbar buttons
+        public signal void enable_headerbar ();
+
         public WelcomeView () {
             Object (
                 title: _("No Project Open"),
@@ -19,9 +22,14 @@ namespace Planner {
 
             activated.connect ( (i) => {
                 if (i == 0) {
-                    // New project
+                    // Create DB
                     Utils.create_dir_with_parents ("/.local/share/planner/");
                     this.db = new SqliteDatabase ();
+
+                    // Send Signal to enable headerbar buttons
+                    enable_headerbar ();
+
+                    // Destroy Widgtet
                     this.destroy ();
                 }
                 else if (i == 1) {

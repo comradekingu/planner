@@ -4,7 +4,7 @@ namespace Planner {
         //stacks
         //private Gtk.Stack stack;
         //private Gtk.StackSwitcher stack_switcher;
-        ProjectButton projectbutton;
+        private ProjectButton projectbutton;
 
         public Headerbar () {
             set_title ("Planner");
@@ -29,6 +29,18 @@ namespace Planner {
 
             this.set_custom_title (stack_switcher);
             */
+        }
+
+        public void disable_all () {
+            
+            projectbutton.set_sensitive (false);
+            projectbutton.set_opacity (0.5);
+        }
+
+        public void enable_all () {
+
+            projectbutton.set_sensitive (true);
+            projectbutton.set_opacity (1);
         }
     }
 }

@@ -37,7 +37,12 @@ namespace Planner {
             set_titlebar (headerbar);
 
             if ( !Utils.exists_database () ) {
+                headerbar.disable_all ();
                 welcome = new WelcomeView ();
+
+                welcome.enable_headerbar.connect ( () => {
+                    headerbar.enable_all ();
+                });
                 this.add (welcome);  
             } 
             

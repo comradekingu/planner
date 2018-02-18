@@ -42,7 +42,7 @@ namespace Planner {
             "description VARCHAR," +
             "start_date DATE," +
             "final_date DATE," +
-            "avatar VARCHAR)", null, null);
+            "logo VARCHAR)", null, null);
 
             debug ("Table projects created");
 
@@ -89,12 +89,12 @@ namespace Planner {
             return rc;
         }
 
-        public void add_project (string name, string description, string start_date, string final_date, string avatar) {
+        public void add_project (string name, string description, string start_date, string final_date, string logo) {
             
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO PROJECTS (name, " +
-                "description, start_date, final_date, avatar)" + 
+                "description, start_date, final_date, logo)" + 
                 "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
             
             assert (res == Sqlite.OK);
@@ -111,7 +111,7 @@ namespace Planner {
             res = stmt.bind_text (4, final_date);
             assert (res == Sqlite.OK);
             
-            res = stmt.bind_text (5, avatar);
+            res = stmt.bind_text (5, logo);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();

@@ -1,8 +1,6 @@
 namespace Planner {
     public class ProjectNew : Gtk.Grid {
 
-        //public MainWindow window { get; construct; }
-
         private Gtk.Image logo_image;
         private Gtk.Button next_button;
         private Gtk.Button previous_button;
@@ -15,8 +13,8 @@ namespace Planner {
 
         private Array<string> project_types = new Array<string> ();
         
+        // Signal
         public signal void new_project (string name, string description, string start_date, string final_date, string logo);
-        //, string start_date, string final_date, string logo 
 
         private int index = 0;
 
@@ -121,6 +119,7 @@ namespace Planner {
             deadline_datepicker = new Granite.Widgets.DatePicker();
             deadline_datepicker.set_visible (false);
             deadline_datepicker.set_no_show_all (true);
+            deadline_datepicker.changed.connect (update_signal);
 
             var deadline_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             deadline_box.set_margin_top (12);
@@ -135,22 +134,37 @@ namespace Planner {
 
         public void update_signal () {
 
+            var datetime = new GLib.DateTime.now_local ();
+
+            string final_date = "";
+            string start_date = datetime.get_year().to_string() +
+                "-" + datetime.get_month().to_string() + 
+                "-" + datetime.get_day_of_month().to_string();
+
+            if (deadline_switch.get_state ()) {
+                
+                final_date = deadline_datepicker.date.get_year().to_string() + 
+                    "-" + deadline_datepicker.date.get_month().to_string() + 
+                    "-" + deadline_datepicker.date.get_day_of_month().to_string();
+            }
+
             new_project (
                 project_name_entry.get_text (),         // Project Name
                 project_description_entry.get_text (),  // Project Description
-                "",                                     // Start Date
-                "",                                     // Final Date
+                start_date,                                     // Start Date
+                final_date,                                     // Final Date
                 project_types.index (index)             // Logo
             );
-
 
         }
 
         public void clear_entry () {
+            
             // Clear Entrys
             project_name_entry.set_text ("");
             project_description_entry.set_text ("");
-            index = 0;
+            deadline_switch.set_state (false);
+
         }
     }  
 }

@@ -89,6 +89,8 @@ namespace Planner {
 
             save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
             save_button.set_visible (false);
+            save_button.set_sensitive (false);
+            save_button.set_opacity (0.5);
             save_button.set_no_show_all (true);
             save_button.set_has_tooltip (true);
             save_button.set_tooltip_text (_("Save Project"));
@@ -106,16 +108,30 @@ namespace Planner {
                 save_button.set_visible (false);
                 calcel_button.set_visible (false);   
                 add_button.set_visible (true); 
+
+                // Clear Entrys
+                project_new.clear_entry ();
             
             });
 
             // Signal 
             project_new.new_project.connect ( (name, description, start_date, final_date, logo) => {
-                new_name = name;
-                new_description = description;
-                new_start_date = start_date;
-                new_final_date = final_date;
-                new_logo = logo;
+                if (name == "") {
+
+                    save_button.set_sensitive (false);
+                    save_button.set_opacity (0.5);
+                
+                } else {
+                    new_name = name;
+                    new_description = description;
+                    new_start_date = start_date;
+                    new_final_date = final_date;
+                    new_logo = logo;
+
+                    save_button.set_sensitive (true);
+                    save_button.set_opacity (1);
+                }
+
             });
 
             save_button.clicked.connect ( () => {
