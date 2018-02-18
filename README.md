@@ -15,8 +15,8 @@
 ### Dependencies
 These dependencies must be present before building
 
- - `meson (>=0.40)`
- - `valac (>=0.16)`
+ - `meson`
+ - `valac`
  - `libgranite-dev`
  - `libgtk-3-dev`
 
