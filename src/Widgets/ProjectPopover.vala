@@ -6,6 +6,9 @@ namespace Planner {
         ProjectList project_list;
         ProjectNew  project_new;
 
+        private Gtk.ScrolledWindow list_scrolled_window;
+
+        
         Gtk.Stack   stack;
         Gtk.Label   title_label;
         Gtk.Button  add_button;
@@ -51,11 +54,16 @@ namespace Planner {
             stack.set_hexpand(true);
             stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
 
+            // Scrolled WIndow 
+            list_scrolled_window = new Gtk.ScrolledWindow (null, null);
+
             // Project Views
             project_list = new ProjectList ();
+            list_scrolled_window.add (project_list);
+
             project_new = new ProjectNew ();
 
-            stack.add_named (project_list, "project_list");
+            stack.add_named (list_scrolled_window, "project_list");
             stack.add_named (project_new, "project_new");
 
 

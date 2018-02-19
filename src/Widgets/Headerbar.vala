@@ -33,14 +33,18 @@ namespace Planner {
 
         public void disable_all () {
             
+            // Disable buttons
             projectbutton.set_sensitive (false);
             projectbutton.set_opacity (0.5);
+
         }
 
         public void enable_all () {
 
+            // Enable Buttons
             projectbutton.set_sensitive (true);
             projectbutton.set_opacity (1);
+
         }
     }
 }
