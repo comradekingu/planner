@@ -13,7 +13,7 @@ namespace Planner {
 
         private Array<string> project_types = new Array<string> ();
         
-        // Signal
+        // Signal to Create Project
         public signal void new_project (string name, string description, string start_date, string final_date, string logo);
 
         private int index = 0;

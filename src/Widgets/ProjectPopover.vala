@@ -15,7 +15,7 @@ namespace Planner {
         public Gtk.Button  save_button;
         Gtk.Button  calcel_button;
         Granite.Widgets.Toast notification; 
-        public SqliteDatabase db;
+        SqliteDatabase db;
 
         string new_name = "";
         string new_description = ""; 
@@ -40,12 +40,11 @@ namespace Planner {
             // Main Grid
             var main_grid = new Gtk.Grid ();
             main_grid.orientation = Gtk.Orientation.VERTICAL;
-            main_grid.set_margin_bottom (6);
+            //main_grid.set_margin_bottom (6);
             main_grid.set_margin_top (6);
-            main_grid.set_margin_right (12);
-            main_grid.set_margin_left (12);
-            main_grid.set_size_request(280, 350);
-            add (main_grid);
+            main_grid.set_margin_right (6);
+            main_grid.set_margin_left (6);
+            
 
             // Stack
             stack = new Gtk.Stack();
@@ -56,9 +55,16 @@ namespace Planner {
 
             // Scrolled WIndow 
             list_scrolled_window = new Gtk.ScrolledWindow (null, null);
+            list_scrolled_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
+            list_scrolled_window.height_request = 335;
+            list_scrolled_window.width_request = 280;
+            
 
             // Project Views
             project_list = new ProjectList ();
+            project_list.expand = true;
+            project_list.set_margin_top (6);
+
             list_scrolled_window.add (project_list);
 
             project_new = new ProjectNew ();
@@ -79,6 +85,7 @@ namespace Planner {
 
             // Toast Notifications
             notification = new Granite.Widgets.Toast (_("Project was created!"));
+            notification.valign = Gtk.Align.END;
 
             // Buttons Add, Save and Cancel
             add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
@@ -122,14 +129,16 @@ namespace Planner {
             
             });
 
-            // Signal 
+            // Signal to New Project adn List Project Edit and Delete
             project_new.new_project.connect ( (name, description, start_date, final_date, logo) => {
+                
                 if (name == "") {
 
                     save_button.set_sensitive (false);
                     save_button.set_opacity (0.5);
                 
                 } else {
+
                     new_name = name;
                     new_description = description;
                     new_start_date = start_date;
@@ -138,14 +147,18 @@ namespace Planner {
 
                     save_button.set_sensitive (true);
                     save_button.set_opacity (1);
-                }
 
+                }
             });
 
             save_button.clicked.connect ( () => {
 
                 db.add_project (new_name, new_description, new_start_date, new_final_date, new_logo);
+                
+                project_list.create_list ();
 
+                stack.add_named (list_scrolled_window, "project_list");
+            
                 stack.set_transition_type (Gtk.StackTransitionType.SLIDE_RIGHT);
                 stack.set_visible_child_name("project_list");
                 title_label.set_text (_("Projects"));
@@ -158,6 +171,8 @@ namespace Planner {
                 
                 // Send Notification
                 notification.send_notification ();
+
+                project_list.reset_style ();
 
             });
 
@@ -172,7 +187,16 @@ namespace Planner {
             main_grid.attach (v_box, 0, 0, 1, 1);
             main_grid.attach (separator, 0, 1, 2, 1);
             main_grid.attach (stack, 0, 2, 1, 1);
-            main_grid.attach (notification, 0, 3, 1, 1);
+            main_grid.attach (notification, 0, 2, 1, 1);
+
+            add (main_grid);
+
+            add_button.grab_focus ();
+            project_list.row_activated.connect (on_project_selected);
+        }
+
+        void on_project_selected (Gtk.ListBoxRow list_box_row) {
+            hide();
         }
     } 
 }

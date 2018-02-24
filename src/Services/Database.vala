@@ -37,7 +37,7 @@ namespace Planner {
                 Gtk.main_quit ();
             }
 
-            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS PROJECTS (id_project INTEGER PRIMARY KEY AUTOINCREMENT," +
+            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS PROJECTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
             "description VARCHAR," +
             "start_date DATE," +
@@ -46,7 +46,7 @@ namespace Planner {
 
             debug ("Table projects created");
 
-            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS LISTS (id_list INTEGER PRIMARY KEY AUTOINCREMENT," +
+            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS LISTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
             "start_date DATE," +
             "final_date DATE," +
@@ -56,7 +56,7 @@ namespace Planner {
 
             debug ("Table lists created");
 
-            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS TASKS (id_task INTEGER PRIMARY KEY AUTOINCREMENT," +
+            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS TASKS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
             "state VARCHAR," +
             "deadline DATE," +
@@ -66,7 +66,7 @@ namespace Planner {
 
             debug ("Table tasks created");
 
-            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (id_contact INTEGER PRIMARY KEY AUTOINCREMENT," +
+            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
             "position VARCHAR," +
             "email VARCHAR," +
@@ -119,6 +119,31 @@ namespace Planner {
             if (res == Sqlite.DONE) {
                 debug ("Project " + name + " created");
             }
+        }
+
+        
+        public List<Project?> get_all_projects () {
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("SELECT * FROM PROJECTS ORDER BY id",
+            -1, out stmt);
+
+            assert (res == Sqlite.OK);
+
+            List<Project?> all = new List<Project?> ();
+
+            while ((res = stmt.step()) == Sqlite.ROW) {
+                Project project = new Project ();
+                project.id = stmt.column_text (0);
+                project.name = stmt.column_text (1);
+                project.description = stmt.column_text (2);
+                project.start_date = stmt.column_text (3);
+                project.final_date = stmt.column_text (4);
+                project.logo = stmt.column_text (5);
+
+                all.append (project);
+            }
+            return all;
         }
     }
 }

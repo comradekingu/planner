@@ -36,6 +36,7 @@ executable(
     'src/Constants/AppSettings.vala',
     'src/Services/Database.vala',
     'src/Utils/Files.vala',
+    'src/Class/Project.vala',
     dependencies: [
         dependency('glib-2.0'),
         dependency('granite'),

@@ -1,25 +1,28 @@
 namespace Planner { 
     public class ProjectItem : Gtk.ListBoxRow {
 
-        public ProjectItem () {
+        // Signal to Create Project
+        //public signal void delete_project ();
+        
+        public ProjectItem (string name, string description, string logo) {
             
             
-            build_ui ();
+            build_ui (name, description, logo);
         
         }
 
-        public void build_ui () {
+        public void build_ui (string name, string description, string logo) {
             
-            var image = new Gtk.Image.from_icon_name ("planner-code", Gtk.IconSize.DND);
+            var image = new Gtk.Image.from_icon_name (logo, Gtk.IconSize.DND);
             image.pixel_size = 32;
 
-            var title_label = new Gtk.Label ("Planner");
+            var title_label = new Gtk.Label (name);
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
             title_label.ellipsize = Pango.EllipsizeMode.END;
             title_label.xalign = 0;
             title_label.valign = Gtk.Align.END; 
 
-            var description_label = new Gtk.Label ("elementary OS App");
+            var description_label = new Gtk.Label ("<span font_size='small'>" + description + "</span>");
             description_label.use_markup = true;
             description_label.ellipsize = Pango.EllipsizeMode.END;
             description_label.xalign = 0;
@@ -38,9 +41,16 @@ namespace Planner {
             delete_button.valign = Gtk.Align.CENTER;
             delete_button.halign = Gtk.Align.END; 
             delete_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            delete_button.set_focus_on_click (false);
             //delete_button.get_style_context ().add_class ("destructive-action");
             delete_button.set_has_tooltip (true);
             delete_button.set_tooltip_text (_("Delete Project"));
+            delete_button.clicked.connect ( () => {
+                
+                // Send Signal delete Project
+                //delete_project ();
+
+            });
 
             delete_button.set_focus_on_click (false);
 
