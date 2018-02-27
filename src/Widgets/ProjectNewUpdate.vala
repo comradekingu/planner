@@ -1,5 +1,5 @@
 namespace Planner {
-    public class ProjectNew : Gtk.Grid {
+    public class ProjectNewUpdate : Gtk.Grid {
 
         private Gtk.Image logo_image;
         private Gtk.Button next_button;
@@ -14,32 +14,38 @@ namespace Planner {
         private Array<string> project_types = new Array<string> ();
         
         // Signal to Create Project
-        public signal void new_project (string name, string description, string start_date, string final_date, string logo);
+        public signal void send_project_data (Project project);
+
+        private string _type_widget;
 
         private int index = 0;
 
+        private Project actual_project;
 
-        public ProjectNew () {
+        public ProjectNewUpdate () {
             
-            set_margin_top (6);
+            margin_top = 6;
             column_spacing = 12;
             row_spacing = 6;
             column_homogeneous = true;
 
+            actual_project = new Project ();
+                                                                // Index
+            project_types.append_val ("planner-startup");       // 0
+            project_types.append_val ("planner-checklist");     // 1
+            project_types.append_val ("planner-computer");      // 2
+            project_types.append_val ("planner-code");          // 3
+            project_types.append_val ("planner-pen");           // 4
+            project_types.append_val ("planner-web");           // 5
+            project_types.append_val ("planner-video-player");  // 6
+            project_types.append_val ("planner-online-shop");   // 7
+            project_types.append_val ("planner-team");          // 8
+
             build_ui ();
+
         }
 
         private void build_ui () {
-
-            project_types.append_val ("planner-startup");
-            project_types.append_val ("planner-checklist");
-            project_types.append_val ("planner-computer");
-            project_types.append_val ("planner-code");
-            project_types.append_val ("planner-pen");
-            project_types.append_val ("planner-web");
-            project_types.append_val ("planner-video-player");
-            project_types.append_val ("planner-online-shop");
-            project_types.append_val ("planner-team");
             
             // Logo
             logo_image = new Gtk.Image.from_icon_name (project_types.index (index), Gtk.IconSize.DIALOG);
@@ -58,6 +64,7 @@ namespace Planner {
 
                 logo_image.icon_name = project_types.index (index);
                 update_signal ();
+
             });
 
             // Previous button
@@ -74,6 +81,7 @@ namespace Planner {
                 
                 logo_image.icon_name = project_types.index (index);
                 update_signal ();
+
             });
 
             // Avatar box
@@ -109,11 +117,15 @@ namespace Planner {
             deadline_switch.valign = Gtk.Align.CENTER;
             deadline_switch.halign = Gtk.Align.END;
             deadline_switch.notify["active"].connect( () => {
+
                 if (deadline_switch.get_active()) {
                     deadline_datepicker.set_visible (true);
                 } else {
                     deadline_datepicker.set_visible (false);
                 }
+
+                update_signal ();
+
             });
 
             deadline_datepicker = new Granite.Widgets.DatePicker();
@@ -130,41 +142,78 @@ namespace Planner {
             attach (properties_box, 0, 1, 1, 1);
             attach (deadline_box, 0, 2, 1, 1);
             attach (deadline_datepicker, 0, 3, 1, 1);
+
+            project_name_entry.grab_focus ();
         }
 
         public void update_signal () {
 
             var datetime = new GLib.DateTime.now_local ();
-
+            
+            string start_date = datetime.format ("%F");
             string final_date = "";
-            string start_date = datetime.get_year().to_string() +
-                "-" + datetime.get_month().to_string() + 
-                "-" + datetime.get_day_of_month().to_string();
-
+            
             if (deadline_switch.get_state ()) {
                 
-                final_date = deadline_datepicker.date.get_year().to_string() + 
-                    "-" + deadline_datepicker.date.get_month().to_string() + 
-                    "-" + deadline_datepicker.date.get_day_of_month().to_string();
+                final_date = deadline_datepicker.date.format ("%F");
             }
 
-            new_project (
-                project_name_entry.get_text (),         // Project Name
-                project_description_entry.get_text (),  // Project Description
-                start_date,                                     // Start Date
-                final_date,                                     // Final Date
-                project_types.index (index)             // Logo
-            );
+            actual_project.name = project_name_entry.get_text ();
+            actual_project.description = project_description_entry.get_text ();
+            actual_project.logo = project_types.index (index);
+            actual_project.start_date = start_date;
+            actual_project.final_date = final_date;
+
+            send_project_data (actual_project);
 
         }
 
         public void clear_entry () {
             
-            // Clear Entrys
             project_name_entry.set_text ("");
             project_description_entry.set_text ("");
+            index = 0;
             deadline_switch.set_state (false);
 
+        }
+
+        public void update_project (Project project) {
+
+            // Set logo 
+            for (int i = 0; i < project_types.length; i++) {
+                
+                if (project_types.index (i) == project.logo) {
+                    logo_image.icon_name = project_types.index (i);
+                }
+            }
+
+            // Set Name and Description
+            project_name_entry.set_text (project.name);
+            project_description_entry.set_text (project.description);
+
+            // Set Datetime 
+            if (project.final_date == "") {
+                
+                deadline_datepicker.set_visible (false);
+            
+            } else {
+                
+                deadline_switch.set_state (true);
+                deadline_datepicker.set_visible (true);
+
+            }
+
+            actual_project = project;
+        }
+
+        public string type_widget {
+
+            get {
+                return _type_widget;
+            }
+            construct set {
+                _type_widget = value;
+            }
         }
     }  
 }

@@ -89,7 +89,9 @@ namespace Planner {
             return rc;
         }
 
-        public void add_project (string name, string description, string start_date, string final_date, string logo) {
+        public void add_project (Project project) {
+
+        //public void add_project (string name, string description, string start_date, string final_date, string logo) {
             
             Sqlite.Statement stmt;
 
@@ -99,25 +101,25 @@ namespace Planner {
             
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (1, name);
+            res = stmt.bind_text (1, project.name);
             assert (res == Sqlite.OK);
             
-            res = stmt.bind_text (2, description);
+            res = stmt.bind_text (2, project.description);
             assert (res == Sqlite.OK);
             
-            res = stmt.bind_text (3, start_date);
+            res = stmt.bind_text (3, project.start_date);
             assert (res == Sqlite.OK);
             
-            res = stmt.bind_text (4, final_date);
+            res = stmt.bind_text (4, project.final_date);
             assert (res == Sqlite.OK);
             
-            res = stmt.bind_text (5, logo);
+            res = stmt.bind_text (5, project.logo);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
 
             if (res == Sqlite.DONE) {
-                debug ("Project " + name + " created");
+                debug ("Project " + project.name + " created");
             }
         }
 
@@ -144,6 +146,54 @@ namespace Planner {
                 all.append (project);
             }
             return all;
+        }
+
+        public void remove_project ( Project project) {
+            
+            Sqlite.Statement stmt;
+            
+            int res = db.prepare_v2 ("DELETE FROM PROJECTS WHERE id = " +
+                "?", -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, project.id);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.OK)
+                debug ("Project removed: " + project.name);
+
+        }
+
+        public void update_project (Project project) {
+            
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
+                "description = ?, start_date = ?, final_date = ?, logo = ? " + 
+                "WHERE id = ?", -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, project.name);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (2, project.description);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (3, project.start_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (4, project.final_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (5, project.logo);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (6, project.id);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
         }
     }
 }

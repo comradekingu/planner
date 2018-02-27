@@ -31,7 +31,7 @@ executable(
     'src/Widgets/ProjectButton.vala',
     'src/Widgets/ProjectPopover.vala',
     'src/Widgets/ProjectList.vala',
-    'src/Widgets/ProjectNew.vala',
+    'src/Widgets/ProjectNewUpdate.vala',
     'src/Widgets/ProjectItem.vala',
     'src/Constants/AppSettings.vala',
     'src/Services/Database.vala',
