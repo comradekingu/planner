@@ -1,4 +1,7 @@
 <div align="center">
+    <p align="center">
+        <img src="https://cdn.rawgit.com/alainm23/planner/master/data/icons/128/com.github.alainm23.planner.svg" alt="Icon" />
+    </p>
     <h1 align="center">Planner</h1>
     <h3 align="center">
         Project manager designed for elementary OS
