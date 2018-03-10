@@ -1,17 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="com.github.alainm23.planner" path="/com/github/alainm23/planner/" gettext-domain="planner">
+  <schema path="/com/github/alainm23/planner/" id="com.github.alainm23.planner" gettext-domain="com.github.alainm23.planner">
 
     <key name="window-width" type="i">
-      <default>575</default>
+      <default>700</default>
       <summary>Window Width</summary>
       <description>Saves the window width for restoring it later.</description>
     </key>
 
     <key name="window-height" type="i">
-      <default>300</default>
+      <default>1190</default>
       <summary>Window Height</summary>
       <description>Saves the window height for restoring it later.</description>
     </key>
-    
+
+    <key name="window-x" type="i">
+      <default>-1</default>
+      <summary>Window X position</summary>
+      <description>Stores the window's last X position</description>
+    </key>
+
+    <key name="window-y" type="i">
+      <default>-1</default>
+      <summary>Window Y position</summary>
+      <description>Stores the window's last Y position</description>
+    </key>
+
+    <key name="actual-project" type="i">
+      <default>0</default>
+      <summary>Actual Project</summary>
+      <description>Saves the last project for restoring it later.</description>
+    </key>
+
   </schema>
 </schemalist>

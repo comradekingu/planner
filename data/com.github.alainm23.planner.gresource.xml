@@ -3,7 +3,6 @@
 <gresources>
   <gresource prefix="/com/github/alainm23/planner">
     <file alias="application.css" compressed="true">application.css</file>
-
     <file alias="planner-code.svg">resources/planner-code.svg</file>
     <file alias="planner-checklist.svg">resources/planner-checklist.svg</file>
     <file alias="planner-computer.svg">resources/planner-computer.svg</file>
@@ -13,6 +12,7 @@
     <file alias="planner-team.svg">resources/planner-team.svg</file>
     <file alias="planner-video-player.svg">resources/planner-video-player.svg</file>
     <file alias="planner-web.svg">resources/planner-web.svg</file>
+    <file alias="project-new.svg">resources/project-new.svg</file>
   
   </gresource>
 </gresources>

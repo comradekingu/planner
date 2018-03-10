@@ -1,11 +1,12 @@
-namespace Planner { 
+namespace Planner {
 
     public class ProjectList : Gtk.ListBox {
-    
-        SqliteDatabase db;
-        List<Project?> all_projects;
 
-        // Signal to delete a project 
+        SqliteDatabase db;
+
+        Gee.ArrayList<Project?> all_projects;
+
+        // Signal to delete a project
         public signal void delete_project (Project project);
         public signal void edit_project (Project project);
 
@@ -20,33 +21,33 @@ namespace Planner {
             create_list ();
 
         }
-            
+
         private void create_list () {
 
             // get all accounts
-            all_projects = new List<Project?> ();
+            all_projects = new Gee.ArrayList<Project?> ();
             all_projects = db.get_all_projects ();
 
             foreach (var project in all_projects) {
-                
+
                 var row = new ProjectItem (project);
-                
+
                 add (row);
 
                 connect_row_signals (row);
-            
+
             }
 
-            show_all ();        
+            show_all ();
 
         }
 
         private void connect_row_signals (ProjectItem row) {
-            
+
             row.delete_button_active.connect ( (project) => {
-                
+
                 delete_project (project);
-            
+
             });
 
             row.edit_button_active.connect ( (project) => {
@@ -57,12 +58,14 @@ namespace Planner {
         }
 
         public void update_list () {
-            
-            foreach (Gtk.Widget element in get_children ())
+
+            foreach (Gtk.Widget element in get_children ()) {
+                
                 remove (element);
+            }
 
             create_list ();
-        
+
         }
     }
 }

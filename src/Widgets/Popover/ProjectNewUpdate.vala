@@ -11,7 +11,7 @@ namespace Planner {
         private Gtk.Switch deadline_switch;
         private Granite.Widgets.DatePicker deadline_datepicker;
 
-        private Array<string> project_types = new Array<string> ();
+        private Gee.ArrayList<string> project_types = Utils.project_types ();
         
         // Signal to Create Project
         public signal void send_project_data (Project project);
@@ -30,17 +30,8 @@ namespace Planner {
             column_homogeneous = true;
 
             actual_project = new Project ();
-                                                                // Index
-            project_types.append_val ("planner-startup");       // 0
-            project_types.append_val ("planner-checklist");     // 1
-            project_types.append_val ("planner-computer");      // 2
-            project_types.append_val ("planner-code");          // 3
-            project_types.append_val ("planner-pen");           // 4
-            project_types.append_val ("planner-web");           // 5
-            project_types.append_val ("planner-video-player");  // 6
-            project_types.append_val ("planner-online-shop");   // 7
-            project_types.append_val ("planner-team");          // 8
-
+            
+            
             build_ui ();
 
         }
@@ -48,7 +39,7 @@ namespace Planner {
         private void build_ui () {
             
             // Logo
-            logo_image = new Gtk.Image.from_icon_name (project_types.index (index), Gtk.IconSize.DIALOG);
+            logo_image = new Gtk.Image.from_icon_name (project_types[index], Gtk.IconSize.DIALOG);
 
             // Next Button
             next_button = new Gtk.Button.from_icon_name ("pan-end-symbolic", Gtk.IconSize.MENU);
@@ -58,11 +49,11 @@ namespace Planner {
                 
                 index = index + 1;
                 
-                if ( index >= project_types.length ) {
+                if ( index >= project_types.size ) {
                     index = 0;
                 }
 
-                logo_image.icon_name = project_types.index (index);
+                logo_image.icon_name = project_types[index];
                 update_signal ();
 
             });
@@ -76,10 +67,10 @@ namespace Planner {
                 index = index - 1;
                 
                 if (index <= -1) {
-                    index = int.parse (project_types.length.to_string()) - 1;
+                    index = int.parse (project_types.size.to_string()) - 1;
                 }
                 
-                logo_image.icon_name = project_types.index (index);
+                logo_image.icon_name = project_types[index];
                 update_signal ();
 
             });
@@ -160,7 +151,7 @@ namespace Planner {
 
             actual_project.name = project_name_entry.get_text ();
             actual_project.description = project_description_entry.get_text ();
-            actual_project.logo = project_types.index (index);
+            actual_project.logo = project_types[index];
             actual_project.start_date = start_date;
             actual_project.final_date = final_date;
 
@@ -180,11 +171,10 @@ namespace Planner {
         public void update_project (Project project) {
 
             // Set logo 
-            for (int i = 0; i < project_types.length; i++) {
-                
-                if (project_types.index (i) == project.logo) {
-                    logo_image.icon_name = project_types.index (i);
-                }
+            foreach (string name in project_types) {
+                if (project.logo == name)
+
+                logo_image.icon_name = name;
             }
 
             // Set Name and Description

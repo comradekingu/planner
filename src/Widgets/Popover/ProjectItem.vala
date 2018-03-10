@@ -1,9 +1,8 @@
-namespace Planner { 
     
-    public class ProjectItem : Gtk.ListBoxRow {
+    namespace Planner {
+        public class ProjectItem : Gtk.Grid {
 
-        
-        // Project Interface
+        private Project actual_project;
 
         // Signal to Create Project
         public signal void delete_button_active (Project project);
@@ -12,11 +11,16 @@ namespace Planner {
         //public ProjectItem (string id, string name, string description, string logo) {
         public ProjectItem (Project project) {
             
+            actual_project = project;
             build_ui (project);
-        
+    
         }
 
-        //public void build_ui (string name, string description, string logo) {
+        public Project get_project () {
+
+            return actual_project;
+        }
+
         public void build_ui (Project project) {
             
             var image = new Gtk.Image.from_icon_name (project.logo, Gtk.IconSize.DND);
@@ -73,15 +77,14 @@ namespace Planner {
             action_box.pack_start (edit_button, false, false, 3);
             action_box.pack_start (delete_button, false, false, 3);
 
-            var grid = new Gtk.Grid ();
-            grid.margin = 6;
-            grid.column_spacing = 6;
-            grid.attach (image, 0, 0, 1, 2);
-            grid.attach (title_label, 1, 0, 1, 1);
-            grid.attach (description_label, 1, 1, 1, 1);
-            grid.attach (action_box, 2, 0, 1, 2);
+            margin = 6;
+            column_spacing = 12;
+            attach (image, 0, 0, 1, 2);
+            attach (title_label, 1, 0, 1, 1);
+            attach (description_label, 1, 1, 1, 1);
+            attach (action_box, 2, 0, 1, 2);
 
-            this.add (grid);
+            show_all ();
         }
     }
 }
