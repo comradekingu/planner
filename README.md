@@ -22,6 +22,8 @@ These dependencies must be present before building
  - `valac`
  - `libgranite-dev`
  - `libgtk-3-dev`
+ - `libglib2.0-dev`
+ - `libsqlite3-dev`
 
 ### Building
 
