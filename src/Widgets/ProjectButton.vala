@@ -44,7 +44,7 @@ namespace Planner {
         public void set_project (Project project) {
 
             project_title.set_label (project.name);
-            image.icon_name = project.logo;
+            image.icon_name = project.avatar;
 
         }
     }

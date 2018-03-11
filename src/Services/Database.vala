@@ -41,19 +41,26 @@ namespace Planner {
             "name VARCHAR," +
             "description VARCHAR," +
             "start_date DATE," +
-            "final_date DATE," +
-            "logo VARCHAR)", null, null);
-
+            "due_date DATE," +
+            "type VARCHAR, " +
+            "avatar VARCHAR)", null, null);
+            
             debug ("Table projects created");
 
             rc = this.db.exec ("CREATE TABLE IF NOT EXISTS LISTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
-            "start_date DATE," +
-            "final_date DATE," +
-            "progress INTEGER," +
             "id_project INTEGER," +
             "FOREIGN KEY(id_project) REFERENCES PROJECTS(id_project))", null, null);
 
+            debug ("Table lists created");
+
+            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS MILESTONES (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "name VARCHAR," +
+            "start_date DATE," +
+            "due_date DATE," +
+            "id_project INTEGER," +
+            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id_project))", null, null);
+            
             debug ("Table lists created");
 
             rc = this.db.exec ("CREATE TABLE IF NOT EXISTS TASKS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -63,12 +70,12 @@ namespace Planner {
             "priority VARCHAR," +
             "id_list INTEGER," +
             "FOREIGN KEY(id_list) REFERENCES LISTS(id_list))", null, null);
-
+            
             debug ("Table tasks created");
 
             rc = this.db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
-            "position VARCHAR," +
+            "role VARCHAR," +
             "email VARCHAR," +
             "phone VARCHAR," +
             "photo VARCHAR," +
@@ -94,8 +101,8 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO PROJECTS (name, " +
-                "description, start_date, final_date, logo)" +
-                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
+                "description, start_date, due_date, type, avatar)" +
+                "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
 
             assert (res == Sqlite.OK);
 
@@ -108,10 +115,13 @@ namespace Planner {
             res = stmt.bind_text (3, project.start_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, project.final_date);
+            res = stmt.bind_text (4, project.due_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, project.logo);
+            res = stmt.bind_text (5, project.type);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (6, project.avatar);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -144,7 +154,7 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
-                "description = ?, start_date = ?, final_date = ?, logo = ? " +
+                "description = ?, start_date = ?, due_date = ?, type = ?, avatar = ? " +
                 "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
@@ -157,13 +167,16 @@ namespace Planner {
             res = stmt.bind_text (3, project.start_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, project.final_date);
+            res = stmt.bind_text (4, project.due_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, project.logo);
+            res = stmt.bind_text (5, project.type);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (6, project.id);
+            res = stmt.bind_text (6, project.avatar);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (7, project.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -191,39 +204,14 @@ namespace Planner {
                 project.name = stmt.column_text (1);
                 project.description = stmt.column_text (2);
                 project.start_date = stmt.column_text (3);
-                project.final_date = stmt.column_text (4);
-                project.logo = stmt.column_text (5);
+                project.due_date = stmt.column_text (4);
+                project.type = stmt.column_text (5);
+                project.avatar = stmt.column_text (6);
 
                 all.add (project);
             }
 
             return all;
-        }
-
-        public Project? get_project_by_id (int id) {
-
-            Sqlite.Statement stmt;
-            
-            int res = db.prepare_v2 ("SELECT * FROM PROJECTS WHERE id = ? LIMIT 1", 
-                -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, id);
-            assert (res == Sqlite.OK);
-
-            if (stmt.step () != Sqlite.OK)
-                return null;
-
-            Project project = new Project ();
-            
-            project.id = stmt.column_text (0);
-            project.name = stmt.column_text (1);
-            project.description = stmt.column_text (2);
-            project.start_date = stmt.column_text (3);
-            project.final_date = stmt.column_text (4);
-            project.logo = stmt.column_text (5);
-
-            return project;
         }
 
         public int get_project_number () {

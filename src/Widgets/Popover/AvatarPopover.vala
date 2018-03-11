@@ -1,9 +1,9 @@
 namespace Planner {
-	public class LogoPopover : Gtk.Popover {
+	public class AvatarPopover : Gtk.Popover {
 
 		public signal void on_image_select (string name_icon);
         
-		public LogoPopover (Gtk.Widget relative) {
+		public AvatarPopover (Gtk.Widget relative) {
 
 			GLib.Object (
 
@@ -37,14 +37,6 @@ namespace Planner {
         	icon_entry.placeholder_text = _("Icon name");
         	icon_entry.primary_icon_name = "edit-find-symbolic";
 
-        	icon_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "edit-clear-all-symbolic");
-			icon_entry.icon_press.connect ((pos, event) => {
-				if (pos == Gtk.EntryIconPosition.SECONDARY) {
-					icon_entry.text = "";
-				}
-			});
-
-
            	var flow_box = new Gtk.FlowBox ();
            	flow_box.activate_on_single_click = true;
             flow_box.column_spacing = 6;
@@ -76,8 +68,9 @@ namespace Planner {
         		flow_box.select_child (child);
 
         		on_image_select (Utils.project_types()[child.get_index ()]);
+        		
+                hide ();
 
-        		hide ();
                 
         	});
 
@@ -85,13 +78,13 @@ namespace Planner {
 
         		on_image_select (icon_entry.text);
 
-        		hide ();
-        	
+                hide ();
         	});
 
-        	main_grid.attach (title_label, 0, 0, 1, 1);
-        	main_grid.attach (scrolled, 0, 1, 1, 1);	
-        	main_grid.attach (icon_entry, 0, 2, 1, 1);
+        	main_grid.add (title_label);
+        	main_grid.add (icon_entry);
+            main_grid.add (scrolled);	
+        	//main_grid.attach (icon_entry, 0, 2, 1, 1);
 
         	icon_entry.grab_focus ();
         }

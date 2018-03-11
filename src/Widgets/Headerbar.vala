@@ -15,6 +15,7 @@ namespace Planner {
         public Headerbar () {
 
             set_show_close_button (true);
+            get_style_context ().add_class ("compact");
             set_title ("Planner");
 
             build_ui ();

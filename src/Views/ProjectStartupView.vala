@@ -2,15 +2,15 @@ namespace Planner {
 	public class ProjectStartupView : Gtk.EventBox {
 		private Gtk.Label title_label;
     	private Gtk.Label subtitle_label;
-        private Gtk.Image image;
+        private Gtk.Image image_button;
 
-    	private Gtk.Button image_button;
+    	private Gtk.Button avatar_button;
     	private Gtk.Entry name_entry;
     	private Gtk.Entry description_entry;
 
         private Gtk.Button create_button;
 
-		private LogoPopover logo_popover;
+		private AvatarPopover avatar_popover;
 
 
         public signal void on_cancel_button ();
@@ -46,18 +46,18 @@ namespace Planner {
         	var avatar_label = new Granite.HeaderLabel (_("Project Avatar"));
         	avatar_label.margin_top = 24;
 
-        	image_button = new Gtk.Button ();
-        	image_button.halign = Gtk.Align.CENTER;
-        	image_button.margin_top = 24;
-        	image_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        	avatar_button = new Gtk.Button ();
+        	avatar_button.halign = Gtk.Align.CENTER;
+        	avatar_button.margin_top = 24;
+        	avatar_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
-        	image = new Gtk.Image.from_icon_name("planner-startup", Gtk.IconSize.DND);
-            image.pixel_size = 64;
+        	image_button = new Gtk.Image.from_icon_name("planner-startup", Gtk.IconSize.DND);
+            image_button.pixel_size = 64;
         	
-        	image_button.image = image;
+        	avatar_button.image = image_button;
         	
         	//logoPopover
-        	logo_popover = new LogoPopover (image_button);
+        	avatar_popover = new AvatarPopover (avatar_button);
 
         	// Project Name
 
@@ -69,11 +69,13 @@ namespace Planner {
         	name_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         	name_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_TITLE);
             name_entry.changed.connect ( () => {
+
                 if (name_entry.text != "") {
                     create_button.sensitive = true;
                 } else {
                     create_button.sensitive = false;
                 }
+            
             });
         	
         	// Description Widget
@@ -85,17 +87,17 @@ namespace Planner {
         	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_TITLE);
         	
-        	image_button.clicked.connect ( () => {
+        	avatar_button.clicked.connect ( () => {
 
-        		logo_popover.show_all ();
+        		avatar_popover.show_all ();
                 
         	});
         	
-        	logo_popover.on_image_select.connect ( (icon_name) => {
+        	avatar_popover.on_image_select.connect ( (icon_name) => {
 
-        		image.icon_name = icon_name;
-        		image_button.image = image;
-                image_button.can_focus = false;
+        		image_button.icon_name = icon_name;
+        		avatar_button.image = image_button;
+                avatar_button.can_focus = false;
         	});
 
             var cancel_button = new Gtk.Button.with_label (_("Cancel"));
@@ -131,7 +133,7 @@ namespace Planner {
 	        content.add (title_label);
 	        content.add (subtitle_label);
 	        //content.add (avatar_label);
-	        content.add (image_button);
+	        content.add (avatar_button);
 	        content.add (name_entry_label);
 	        content.add (name_entry);
 	        content.add (description_view_label);
@@ -154,8 +156,9 @@ namespace Planner {
 
             new_project.name = name_entry.text;
             new_project.description = description_entry.text;
-            new_project.logo = image.icon_name;
-
+            new_project.avatar = image_button.icon_name;
+            new_project.type = "lists";
+            new_project.start_date = new GLib.DateTime.now_local ().format ("%F");
             on_create_button (new_project);
         }
 	}

@@ -38,16 +38,16 @@ namespace Planner {
             // Main Grid
             var main_grid = new Gtk.Grid ();
             main_grid.orientation = Gtk.Orientation.VERTICAL;
-            main_grid.set_margin_top (6);
-            main_grid.set_margin_right (6);
-            main_grid.set_margin_left (6);
+            main_grid.margin_top = 6;
+            main_grid.margin_right = 6;
+            main_grid.margin_left = 6;
             main_grid.set_size_request(280, 380);
 
             // Stack
             stack = new Gtk.Stack();
             stack.set_transition_duration (400);
-            stack.set_vexpand(true);
-            stack.set_hexpand(true);
+            stack.vexpand = true;
+            stack.hexpand = true;
             stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
 
             // Scrolled WIndow
@@ -69,8 +69,8 @@ namespace Planner {
 
             // Box Title ad butons
             var v_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            v_box.set_margin_bottom (12);
-            v_box.set_margin_top (12);
+            v_box.margin_bottom = 12;
+            v_box.margin_top = 12;
 
             // Title
             title_label = new Gtk.Label (_("Projects"));
@@ -83,40 +83,40 @@ namespace Planner {
 
             // Buttons Add, Save and Cancel
             add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
-            add_button.set_has_tooltip (true);
-            add_button.set_tooltip_text (_("Create a new project"));
+            add_button.width_request = 50;
+            add_button.tooltip_text = _("Create a new project");
             add_button.clicked.connect ( ()=> {
 
-                stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
-                stack.set_visible_child_name("project_new_update");
-                title_label.set_text (_("New Project"));
-                save_button.set_visible (true);
-                calcel_button.set_visible (true);
-                add_button.set_visible (false);
+                stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                stack.visible_child_name = "project_new_update";
+                title_label.label = _("New Project");
+                save_button.visible = true;
+                calcel_button.visible = true;
+                add_button.visible = false;
 
                 project_new_update.type_widget = "new";
 
             });
 
             save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
-            save_button.set_sensitive (false);
+            save_button.sensitive = false;
+            save_button.width_request = 50;
             save_button.set_opacity (0.5);
             save_button.set_no_show_all (true);
-            save_button.set_has_tooltip (true);
-            save_button.set_tooltip_text (_("Save Project"));
+            save_button.tooltip_text = _("Save Project");
 
             calcel_button = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.MENU);
             calcel_button.set_no_show_all (true);
-            calcel_button.set_has_tooltip (true);
-            calcel_button.set_tooltip_text (_("Cancel"));
+            calcel_button.width_request = 50;
+            calcel_button.tooltip_text = _("Cancel");
             calcel_button.clicked.connect ( () => {
 
-                stack.set_transition_type (Gtk.StackTransitionType.SLIDE_RIGHT);
-                stack.set_visible_child_name("project_list");
-                title_label.set_text (_("Projects"));
-                save_button.set_visible (false);
-                calcel_button.set_visible (false);
-                add_button.set_visible (true);
+                stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                stack.visible_child_name = "project_list";
+                title_label.label = _("Projects");
+                save_button.visible = false;
+                calcel_button.visible = false;
+                add_button.visible = true;
 
                 // Type Widget
                 project_new_update.type_widget = "new";
@@ -141,22 +141,23 @@ namespace Planner {
 
             add (main_grid);
 
-            add_button.grab_focus ();
+            update_widget ();
+            calcel_button.grab_focus ();
 
             // ------------ SIGNAL TO CREATE AND EDIT PROJECT -----------
             project_new_update.send_project_data.connect ( (project) => {
 
                 if (project.name == "") {
 
-                    save_button.set_sensitive (false);
-                    save_button.set_opacity (0.5);
+                    save_button.sensitive = false;
+                    save_button.opacity = 0.5;
 
                 } else {
 
                     actual_project = project;
 
-                    save_button.set_sensitive (true);
-                    save_button.set_opacity (1);
+                    save_button.sensitive = true;
+                    save_button.opacity = 1;
 
                 }
             });
@@ -179,12 +180,12 @@ namespace Planner {
                 // Update List
                 project_list.update_list ();
 
-                stack.set_transition_type (Gtk.StackTransitionType.SLIDE_RIGHT);
-                stack.set_visible_child_name("project_list");
-                title_label.set_text (_("Projects"));
-                save_button.set_visible (false);
-                calcel_button.set_visible (false);
-                add_button.set_visible (true);
+                stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                stack.visible_child_name = "project_list";
+                title_label.label = _("Projects");
+                save_button.visible = false;
+                calcel_button.visible = false;
+                add_button.visible = true;
 
                 // Type Widget
                 project_new_update.type_widget = "new";
@@ -200,12 +201,12 @@ namespace Planner {
             // ----------------- Edit Project ------------------------------------
             project_list.edit_project.connect ( (project) => {
 
-                stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
-                stack.set_visible_child_name("project_new_update");
-                title_label.set_text (_("Edit Project"));
-                save_button.set_visible (true);
-                calcel_button.set_visible (true);
-                add_button.set_visible (false);
+                stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                stack.visible_child_name = "project_new_update";
+                title_label.label = _("Edit Project");
+                save_button.visible = true;
+                calcel_button.visible = true;
+                add_button.visible = false;
 
                 actual_project = project;
 
@@ -250,8 +251,11 @@ namespace Planner {
 
             selected_project (project_row.get_project ());
 
-            project_list.update_list ();
             hide ();
+
+            update_widget ();
+
+            calcel_button.grab_focus ();
         }
 
         public void update_widget () {

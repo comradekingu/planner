@@ -23,7 +23,7 @@
 
         public void build_ui (Project project) {
             
-            var image = new Gtk.Image.from_icon_name (project.logo, Gtk.IconSize.DND);
+            var image = new Gtk.Image.from_icon_name (project.avatar, Gtk.IconSize.DND);
             image.pixel_size = 32;
 
             var title_label = new Gtk.Label (project.name);

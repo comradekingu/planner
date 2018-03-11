@@ -62,10 +62,10 @@ namespace Planner {
         public void build_ui () {
 
             main_stack = new Gtk.Stack ();
-            main_stack.set_transition_duration (400);
-            main_stack.set_vexpand(true);
-            main_stack.set_hexpand(true);
-            main_stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
+            main_stack.transition_duration = 400;
+            main_stack.vexpand = true;
+            main_stack.hexpand = true;
+            main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
 
             // Welcome View
             welcome_view = new WelcomeView ();
@@ -90,19 +90,25 @@ namespace Planner {
             headerbar.on_headerbar_change.connect ( (name_bar) => {
 
                 if (name_bar == "Overview") {
-                    main_stack.set_visible_child_name ("overview_view");
+
+                    main_stack.visible_child_name = "overview_view";
+                
                 } else if (name_bar == "Tasks") {
-                    main_stack.set_visible_child_name ("task_view");
+                
+                    main_stack.visible_child_name = "task_view";
+                
                 } else if (name_bar == "Issues") {
-                    main_stack.set_visible_child_name ("issues_view");        
+                
+                    main_stack.visible_child_name = "issues_view";        
+                
                 }
                     
             });
             
             startup_view.on_cancel_button.connect ( () => {
 
-                main_stack.set_transition_type (Gtk.StackTransitionType.SLIDE_RIGHT);
-                main_stack.set_visible_child_name ("welcome_view");
+                main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                main_stack.visible_child_name = "welcome_view";
             
             });
 
@@ -115,15 +121,15 @@ namespace Planner {
 
                 settings.set_int ("actual-project", 1);
 
-                main_stack.set_visible_child_name ("overview_view");
+                main_stack.visible_child_name = "overview_view";
 
             });
 
             welcome_view.on_welcome_select.connect ( (index) => {
 
                 if (index == 0) {
-                    main_stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
-                    main_stack.set_visible_child_name ("startup_view");
+                    main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                    main_stack.visible_child_name = "startup_view";
                 }
                 
             });
@@ -142,7 +148,7 @@ namespace Planner {
 
                 headerbar.disable_all ();
 
-                main_stack.set_visible_child_name ("welcome_view");   
+                main_stack.visible_child_name = "welcome_view";   
 
             } else {
 
@@ -157,7 +163,7 @@ namespace Planner {
                         headerbar.set_project (project);
                 }
 
-                main_stack.set_visible_child_name ("overview_view");
+                main_stack.visible_child_name = "overview_view";
             }
         }
 
