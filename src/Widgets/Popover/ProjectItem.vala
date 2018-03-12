@@ -11,6 +11,7 @@
         //public ProjectItem (string id, string name, string description, string logo) {
         public ProjectItem (Project project) {
             
+            can_focus = false;        
             actual_project = project;
             build_ui (project);
     

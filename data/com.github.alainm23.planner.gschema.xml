@@ -26,7 +26,7 @@
       <description>Stores the window's last Y position</description>
     </key>
 
-    <key name="actual-project" type="i">
+    <key name="last-project-id" type="i">
       <default>0</default>
       <summary>Actual Project</summary>
       <description>Saves the last project for restoring it later.</description>

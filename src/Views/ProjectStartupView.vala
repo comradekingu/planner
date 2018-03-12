@@ -67,7 +67,7 @@ namespace Planner {
         	name_entry = new Gtk.Entry ();
             name_entry.width_request = 100;
         	name_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        	name_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_TITLE);
+        	//name_entry.get_style_context ().add_class ("startupview_entry");
             name_entry.changed.connect ( () => {
 
                 if (name_entry.text != "") {
@@ -85,7 +85,7 @@ namespace Planner {
         	description_entry = new Gtk.Entry ();
             description_entry.width_request = 100;
         	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_TITLE);
+        	//description_entry.get_style_context ().add_class ("startupview_entry");
         	
         	avatar_button.clicked.connect ( () => {
 

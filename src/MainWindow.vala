@@ -119,7 +119,7 @@ namespace Planner {
                 headerbar.enable_all (); 
                 headerbar.set_project (project);
 
-                settings.set_int ("actual-project", 1);
+                settings.set_int ("last-project-id", 1);
 
                 main_stack.visible_child_name = "overview_view";
 
@@ -152,7 +152,7 @@ namespace Planner {
 
             } else {
 
-                int id = settings.get_int ("actual-project");
+                int id = settings.get_int ("last-project-id");
 
                 Gee.ArrayList<Project?> all_projects = new Gee.ArrayList<Project?> ();
                 all_projects = db.get_all_projects ();
@@ -169,7 +169,7 @@ namespace Planner {
 
         private void update_project (Project project) {
 
-            settings.set_int ("actual-project", int.parse(project.id));
+            settings.set_int ("last-project-id", int.parse(project.id));
                 
         }
     }

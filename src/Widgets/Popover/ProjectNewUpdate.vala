@@ -140,12 +140,14 @@ namespace Planner {
             name_entry = new Gtk.Entry ();
             name_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "application-certificate-symbolic");
             name_entry.margin_top = 12;
+            name_entry.max_length = 36;
             name_entry.placeholder_text = _("Name");
             name_entry.changed.connect (update_signal);
 
             description_entry = new Gtk.Entry ();
             description_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "text-x-generic-symbolic");
             description_entry.margin_top = 6;
+            description_entry.max_length = 128;
             description_entry.placeholder_text = _("Description");
             description_entry.changed.connect (update_signal);
 

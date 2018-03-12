@@ -85,18 +85,7 @@ namespace Planner {
             add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
             add_button.width_request = 50;
             add_button.tooltip_text = _("Create a new project");
-            add_button.clicked.connect ( ()=> {
-
-                stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
-                stack.visible_child_name = "project_new_update";
-                title_label.label = _("New Project");
-                save_button.visible = true;
-                calcel_button.visible = true;
-                add_button.visible = false;
-
-                project_new_update.type_widget = "new";
-
-            });
+            add_button.clicked.connect (on_clicked_new);
 
             save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
             save_button.sensitive = false;
@@ -109,22 +98,7 @@ namespace Planner {
             calcel_button.set_no_show_all (true);
             calcel_button.width_request = 50;
             calcel_button.tooltip_text = _("Cancel");
-            calcel_button.clicked.connect ( () => {
-
-                stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
-                stack.visible_child_name = "project_list";
-                title_label.label = _("Projects");
-                save_button.visible = false;
-                calcel_button.visible = false;
-                add_button.visible = true;
-
-                // Type Widget
-                project_new_update.type_widget = "new";
-
-                // Clear Entrys
-                project_new_update.clear_entry ();
-
-            });
+            calcel_button.clicked.connect (on_clicked_cancel);
 
             var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
 
@@ -243,6 +217,14 @@ namespace Planner {
 
             // Event to select to project
             project_list.row_activated.connect (on_project_selected);
+
+            this.closed.connect ( () => {
+
+                update_widget ();
+            
+            });
+
+            update_widget ();
         }
 
         private void on_project_selected (Gtk.ListBoxRow list_box_row) {
@@ -255,13 +237,48 @@ namespace Planner {
 
             update_widget ();
 
-            calcel_button.grab_focus ();
+            
         }
 
         public void update_widget () {
 
             project_list.update_list ();
-        
+            
+            on_clicked_cancel ();
+
+            calcel_button.grab_focus ();
+        }
+
+        private void on_clicked_cancel () {
+
+            stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+            stack.visible_child_name = "project_list";
+            title_label.label = _("Projects");
+            save_button.visible = false;
+            calcel_button.visible = false;
+            add_button.visible = true;
+
+            if (project_new_update.type_widget == "new")
+            {
+                project_new_update.clear_entry ();    
+            }
+            
+            // Type Widget
+            project_new_update.type_widget = "new";
+        }
+
+        private void on_clicked_new () {
+
+            stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+            stack.visible_child_name = "project_new_update";
+            title_label.label = _("New Project");
+            save_button.visible = true;
+            calcel_button.visible = true;
+            add_button.visible = false;
+
+            project_new_update.type_widget = "new";
+
+            project_new_update.clear_entry ();
         }
     }
 }

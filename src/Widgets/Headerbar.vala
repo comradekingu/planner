@@ -24,10 +24,10 @@ namespace Planner {
         private void build_ui () {
 
             project_button = new ProjectButton ();
-
             project_popover = new ProjectPopover (project_button);
             project_button.clicked.connect ( () => {
 
+                project_popover.update_widget ();
                 project_popover.show_all ();
 
             });
