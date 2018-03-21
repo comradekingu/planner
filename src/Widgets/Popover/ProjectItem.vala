@@ -45,8 +45,7 @@
             edit_button.halign = Gtk.Align.END; 
             edit_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             edit_button.set_focus_on_click (false);
-            edit_button.set_has_tooltip (true);
-            edit_button.set_tooltip_text (_("Edit Project"));
+            edit_button.tooltip_text = _("Edit Project");
             edit_button.clicked.connect ( () => {
                 
                 // Send signal to edit a project
@@ -59,9 +58,8 @@
             delete_button.halign = Gtk.Align.END; 
             delete_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             delete_button.set_focus_on_click (false);
-            //delete_button.get_style_context ().add_class ("destructive-action");
-            delete_button.set_has_tooltip (true);
-            delete_button.set_tooltip_text (_("Delete Project"));
+            delete_button.get_style_context ().add_class ("button-red");
+            delete_button.tooltip_text = _("Delete Project");
             delete_button.clicked.connect ( () => {
             
                 // Send signal to delete a project
@@ -78,7 +76,9 @@
             action_box.pack_start (edit_button, false, false, 3);
             action_box.pack_start (delete_button, false, false, 3);
 
-            margin = 6;
+            margin_top = 8;
+            margin_bottom = 8;
+
             column_spacing = 12;
             attach (image, 0, 0, 1, 2);
             attach (title_label, 1, 0, 1, 1);

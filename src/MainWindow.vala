@@ -24,6 +24,9 @@ namespace Planner {
             
             settings = new GLib.Settings ("com.github.alainm23.planner");
 
+
+            //Gtk.Settings.get_default().set("gtk-application-prefer-dark-theme", true);
+            
             var window_x = settings.get_int ("window-x");
             var window_y = settings.get_int ("window-y");
             move (window_x, window_y);

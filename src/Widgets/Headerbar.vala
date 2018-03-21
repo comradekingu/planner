@@ -27,10 +27,10 @@ namespace Planner {
             project_popover = new ProjectPopover (project_button);
             project_button.clicked.connect ( () => {
 
-                project_popover.update_widget ();
                 project_popover.show_all ();
 
             });
+            
             project_popover.selected_project.connect (set_actual_project);
 
             format_bar = new FormatBar ();
@@ -111,7 +111,7 @@ namespace Planner {
 
         private void update_widget () {
 
-            project_popover.update_widget ();
+            //project_popover.update_widget ();
 
         }
 

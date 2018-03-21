@@ -1,6 +1,10 @@
 namespace Planner {
     public class ProjectNewUpdate : Gtk.Grid {
 
+        private Gtk.Button back_button;
+        private Gtk.Button save_button;
+        private Gtk.Label title_label;
+
         private Gtk.Image avatar_image;
         private Gtk.Button avatar_button;
         private Gtk.Button next_button;
@@ -18,32 +22,69 @@ namespace Planner {
         private Granite.Widgets.DatePicker duedate_datepicker;
 
         private Gee.ArrayList<string> project_types = Utils.project_types ();
-        
-        // Signal to Create Project
-        public signal void send_project_data (Project project);
-
-        private string _type_widget;
+    
 
         private int index = 0;
 
         private Project actual_project;
 
+        public signal void create_update_signal (string type);
+        public signal void back_action ();
+
+        private SqliteDatabase db;
+
         public ProjectNewUpdate () {
             
-            margin_top = 6;
-            column_spacing = 12;
-            row_spacing = 6;
-            column_homogeneous = true;
             orientation = Gtk.Orientation.VERTICAL;
+            column_spacing = 12;
+            margin = 12;
+            expand = true;
+            column_homogeneous = true;
 
             actual_project = new Project ();
-            
+
+            db = new SqliteDatabase (true);
+                    
             build_ui ();
 
         }
 
         private void build_ui () {
             
+            back_button = new Gtk.Button.with_label (_("Back"));
+            back_button.valign = Gtk.Align.CENTER;
+            back_button.halign = Gtk.Align.START;
+            back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+            back_button.clicked.connect ( () => {
+                
+                clear_entry ();
+
+                actual_project = new Project ();
+
+                back_action ();
+            
+            });
+
+
+            title_label = new Gtk.Label (_("<b>New</b>"));
+            title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+            title_label.use_markup = true;
+
+            save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
+            save_button.tooltip_text = _("");
+            save_button.valign = Gtk.Align.CENTER;
+            save_button.halign = Gtk.Align.END;
+            save_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+            save_button.sensitive = false;
+            save_button.clicked.connect (add_project);
+
+            var v_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            v_box.homogeneous = true;
+
+            v_box.pack_start (back_button, false, true, 0);
+            v_box.pack_start (title_label, true, true, 0);
+            v_box.pack_end (save_button, false, true, 0);
+
             // avatarar
             avatar_button = new Gtk.Button ();
             avatar_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -85,8 +126,6 @@ namespace Planner {
                 avatar_image.icon_name = project_types[index];
                 avatar_button.image = avatar_image;
 
-                update_signal ();
-
             });
 
             // Previous button
@@ -103,8 +142,6 @@ namespace Planner {
                 
                 avatar_image.icon_name = project_types[index];
                 avatar_button.image = avatar_image;
-                
-                update_signal ();
 
             });
 
@@ -127,8 +164,6 @@ namespace Planner {
                 revealer_icon_entry.reveal_child = false;
 
                 name_entry.grab_focus ();
-
-                update_signal ();
             
             });
 
@@ -142,14 +177,16 @@ namespace Planner {
             name_entry.margin_top = 12;
             name_entry.max_length = 36;
             name_entry.placeholder_text = _("Name");
-            name_entry.changed.connect (update_signal);
+            name_entry.changed.connect (activate_save_button);
+            name_entry.activate.connect (add_project);
 
             description_entry = new Gtk.Entry ();
             description_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "text-x-generic-symbolic");
             description_entry.margin_top = 6;
             description_entry.max_length = 128;
             description_entry.placeholder_text = _("Description");
-            description_entry.changed.connect (update_signal);
+            description_entry.changed.connect (activate_save_button);
+            description_entry.activate.connect (add_project);
 
             var properties_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
             properties_box.pack_start (revealer_icon_entry, true, true, 3);
@@ -167,10 +204,11 @@ namespace Planner {
                     revealer_datepicker.set_reveal_child(!reveal);                    
                     
                 } else {
+
                     revealer_datepicker.reveal_child = false;   
                 }
 
-                update_signal ();
+
             });
             
             var list_label = new Granite.HeaderLabel (_("List"));
@@ -192,7 +230,6 @@ namespace Planner {
 
 
             duedate_datepicker = new Granite.Widgets.DatePicker();
-            duedate_datepicker.changed.connect (update_signal);
 
             revealer_datepicker = new Gtk.Revealer();
             revealer_datepicker.reveal_child = false;
@@ -203,7 +240,8 @@ namespace Planner {
 
             revealer_datepicker.add (datepicker_box);
 
-            add (avatar_box);
+            add (v_box);
+            add (avatar_box);   
             add (properties_box);
             add (new Granite.HeaderLabel (_("Project Type")));
             add (type_box);
@@ -212,29 +250,16 @@ namespace Planner {
             name_entry.grab_focus ();
         }
 
-        public void update_signal () {
+        public void activate_save_button () {
 
-            var datetime = new GLib.DateTime.now_local ();
-            
-            string start_date = datetime.format ("%F");
-            string due_date = "";
+            if (name_entry.text == "") {
 
-            string type_project = "lists";
-            
-            if (type_switch.get_state ()) {
+                save_button.sensitive = false;
 
-                type_project = "milestones";
-                due_date = duedate_datepicker.date.format ("%F");
+            } else {
+
+                save_button.sensitive = true;
             }
-
-            actual_project.name = name_entry.text;
-            actual_project.description = description_entry.text;
-            actual_project.type = type_project;
-            actual_project.avatar = avatar_image.icon_name;
-            actual_project.start_date = start_date;
-            actual_project.due_date = due_date;
-
-            send_project_data (actual_project);
 
         }
 
@@ -253,6 +278,46 @@ namespace Planner {
 
         }
 
+        private void add_project () {
+
+            if (name_entry.text != "") {
+
+                var datetime = new GLib.DateTime.now_local ();
+                
+                string start_date = datetime.format ("%F");
+                string due_date = "";
+
+                string type_project = "lists";
+                
+                if (type_switch.get_state ()) {
+
+                    type_project = "milestones";
+                    due_date = duedate_datepicker.date.format ("%F");
+                }
+
+                actual_project.name = name_entry.text;
+                actual_project.description = description_entry.text;
+                actual_project.type = type_project;
+                actual_project.avatar = avatar_image.icon_name;
+                actual_project.start_date = start_date;
+                actual_project.due_date = due_date;
+
+                if (title_label.label == "<b>New</b>") {
+
+                    db.add_project (actual_project);
+                    create_update_signal ("new");
+
+                } else {
+
+                    db.update_project (actual_project);
+                    create_update_signal ("edit");
+                }
+
+
+                clear_entry ();
+            }
+        }
+
         public void update_project (Project project) {
 
             // Set Avatar
@@ -267,25 +332,25 @@ namespace Planner {
             // Set Datetime 
             if (project.due_date == "") {
                 
-                revealer_datepicker.reveal_child = false;
-            
-            } else {
+                type_switch.set_state (false);
                 
-                revealer_datepicker.reveal_child = true;
+            } else {
+
+                type_switch.set_state (true);
+                
             }
 
             actual_project = project;
-        }
+        }  
 
-        public string type_widget {
+        public void set_title (string title) {
 
-            get {
-                return _type_widget;
-            }
-            construct set {
-                _type_widget = value;
-            }
+            title_label.label = "<b>" + title + "</b>";
+
+            name_entry.grab_focus ();
+
         }
+   
     }  
 }
 /*

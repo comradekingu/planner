@@ -52,7 +52,7 @@ namespace Planner {
         	avatar_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         	image_button = new Gtk.Image.from_icon_name("planner-startup", Gtk.IconSize.DND);
-            image_button.pixel_size = 64;
+            image_button.pixel_size = 96;
         	
         	avatar_button.image = image_button;
         	
@@ -67,6 +67,7 @@ namespace Planner {
         	name_entry = new Gtk.Entry ();
             name_entry.width_request = 100;
         	name_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            name_entry.get_style_context().add_class (Granite.STYLE_CLASS_H3_LABEL);
         	//name_entry.get_style_context ().add_class ("startupview_entry");
             name_entry.changed.connect ( () => {
 
@@ -85,7 +86,7 @@ namespace Planner {
         	description_entry = new Gtk.Entry ();
             description_entry.width_request = 100;
         	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        	//description_entry.get_style_context ().add_class ("startupview_entry");
+        	description_entry.get_style_context().add_class (Granite.STYLE_CLASS_H3_LABEL);
         	
         	avatar_button.clicked.connect ( () => {
 
@@ -132,13 +133,14 @@ namespace Planner {
 	        
 	        content.add (title_label);
 	        content.add (subtitle_label);
-	        //content.add (avatar_label);
 	        content.add (avatar_button);
 	        content.add (name_entry_label);
 	        content.add (name_entry);
 	        content.add (description_view_label);
 	        content.add (description_entry);
             content.add (action_box);
+
+            name_entry.grab_focus ();
 
 	        add (content);
 		}

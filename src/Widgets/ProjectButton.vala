@@ -12,6 +12,7 @@ namespace Planner {
         }
 
         private void build_ui () {
+
             var main_grid = new Gtk.Grid ();
 
             // Title label

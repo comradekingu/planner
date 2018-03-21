@@ -25,17 +25,16 @@ namespace Planner {
 
 		    add (main_grid);
 
-            var title_label = new Gtk.Label (_("Project Avatar"));
+            var title_label = new Gtk.Label (_("<b>Project Avatar</b>"));
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
             title_label.halign = Gtk.Align.START;
             title_label.wrap = true;
         	title_label.xalign = 0;
         	title_label.use_markup = true;
 
-        	var icon_entry = new Gtk.Entry ();
+        	var icon_entry = new Gtk.SearchEntry ();;
         	icon_entry.margin_top = 12;
         	icon_entry.placeholder_text = _("Icon name");
-        	icon_entry.primary_icon_name = "edit-find-symbolic";
 
            	var flow_box = new Gtk.FlowBox ();
            	flow_box.activate_on_single_click = true;
@@ -84,7 +83,6 @@ namespace Planner {
         	main_grid.add (title_label);
         	main_grid.add (icon_entry);
             main_grid.add (scrolled);	
-        	//main_grid.attach (icon_entry, 0, 2, 1, 1);
 
         	icon_entry.grab_focus ();
         }

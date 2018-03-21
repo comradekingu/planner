@@ -1,4 +1,9 @@
-
 .titlebar {
+    
     padding: 3 6px;
+}
+
+.label-white {
+
+	color: white;
 }
