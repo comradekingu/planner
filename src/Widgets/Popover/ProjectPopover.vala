@@ -10,6 +10,9 @@ namespace Planner {
         // Signal
         public signal void selected_project (Project project);
 
+        private string TITLE_NEW = _("New");
+        private string TITLE_EDIT = _("Edit");
+
         public ProjectPopover (Gtk.Widget relative) {
 
             GLib.Object (
@@ -51,7 +54,7 @@ namespace Planner {
                 stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
                 stack.visible_child_name = "project_new_update";
 
-                project_new_update.set_title ("New");
+                project_new_update.set_title (TITLE_NEW);
 
             });
 
@@ -59,8 +62,6 @@ namespace Planner {
 
                 stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 stack.visible_child_name = "project_list";
-
-                project_new_update.set_title ("New");
 
                 project_list.activate_search (false);
 
@@ -111,7 +112,7 @@ namespace Planner {
                 
                 stack.visible_child_name = "project_new_update";
                 
-                project_new_update.set_title ("Edit");
+                project_new_update.set_title (TITLE_EDIT);
 
                 project_new_update.update_project (project);
 
@@ -138,7 +139,7 @@ namespace Planner {
                 stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 stack.visible_child_name = "project_list";
 
-                project_new_update.set_title ("New");
+                project_new_update.set_title (TITLE_NEW);
                 project_new_update.clear_entry ();
 
                 project_list.activate_search (false);
