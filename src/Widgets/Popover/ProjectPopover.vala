@@ -63,8 +63,6 @@ namespace Planner {
                 stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 stack.visible_child_name = "project_list";
 
-                project_list.activate_search (false);
-
             });
 
             project_new_update.create_update_signal.connect ( (type) => {
@@ -83,7 +81,6 @@ namespace Planner {
                 }
             
                 project_list.update_list ();
-                project_list.activate_search (false);
                 
                 notification.send_notification ();
             });
@@ -124,14 +121,6 @@ namespace Planner {
                 
                 selected_project (project);
 
-                project_list.activate_search (false);
-
-            });
-
-            project_list.key_press_event.connect ( (key) => {
-
-                project_list.activate_search (true);
-
             });
 
             this.closed.connect ( () => {
@@ -142,7 +131,7 @@ namespace Planner {
                 project_new_update.set_title (TITLE_NEW);
                 project_new_update.clear_entry ();
 
-                project_list.activate_search (false);
+                project_list.update_list ();
             
             });
 

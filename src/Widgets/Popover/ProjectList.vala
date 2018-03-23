@@ -42,16 +42,18 @@ namespace Planner {
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
             title_label.use_markup = true;
 
+            /*
             search_button = new Gtk.Button.from_icon_name ("system-search-symbolic", Gtk.IconSize.MENU);
             search_button.tooltip_text = _("Search a project");
             search_button.valign = Gtk.Align.CENTER;
             search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+            */
+            //add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
 
-            add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
+            add_button = new Gtk.Button.with_label (_("New"));
             add_button.tooltip_text = _("Create a new project");
             add_button.valign = Gtk.Align.CENTER;
             add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-            add_button.margin_end = 6;
             add_button.clicked.connect ( () => {
 
                 add_project ();
@@ -87,7 +89,21 @@ namespace Planner {
             add (list_scrolled_window);
 
             create_list ();
+        }
+
+        private void activate_search_entry () {
+
+            if (db.get_project_number () < 7) {
+
+                search_entry.visible = false;
+
+            } else {
+                
+                search_entry.visible = true;
             
+            }
+
+            search_entry.text = "";
         }
 
         private void create_list () {
@@ -135,6 +151,8 @@ namespace Planner {
 
             create_list ();
 
+            activate_search_entry ();
+
         }
 
         private void on_project_selected (Gtk.ListBoxRow list_box_row) {
@@ -146,22 +164,6 @@ namespace Planner {
             update_list ();
         }
 
-        public void activate_search (bool value) {
-
-            search_entry.text = "";
-
-            if (value) {
-                
-                search_entry.visible = value;   
-                search_entry.grab_focus ();
-            
-            } else {
-
-                search_entry.visible = false;
-                add_button.grab_focus ();
-
-            }
-        }
 
         private bool filter_function (Gtk.ListBoxRow list_box_row) {
 

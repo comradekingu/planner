@@ -1,25 +1,18 @@
 namespace Planner {
-	public class OverviewView : Gtk.Grid {
-
-		Gtk.Label label;
+	public class OverviewView : Gtk.EventBox {
 
 		public OverviewView () {
 
-			valign = Gtk.Align.CENTER;
-	        halign = Gtk.Align.CENTER;
+			get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
+        	get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
 
 			build_ui ();
 		}
 
 		private void build_ui () {
 
-			label = new Gtk.Label ("Overview");
-			
-			add (label);
+
 		}
 
-		public void text (string text) {
-			label.set_text (text);
-		}
 	}
 }

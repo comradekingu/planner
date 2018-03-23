@@ -70,7 +70,8 @@ namespace Planner {
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
             title_label.use_markup = true;
 
-            save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
+            //save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
+            save_button = new Gtk.Button.with_label (_("Save"));
             save_button.tooltip_text = _("");
             save_button.valign = Gtk.Align.CENTER;
             save_button.halign = Gtk.Align.END;

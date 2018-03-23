@@ -48,10 +48,22 @@ namespace Planner {
 
             // ------- App Menu ---------------------------------
             var menu_grid = new Gtk.Grid ();
-            menu_grid.margin_bottom = 3;
+            menu_grid.margin = 12;
             menu_grid.orientation = Gtk.Orientation.VERTICAL;
             menu_grid.width_request = 200;
-            menu_grid.show_all ();
+            menu_grid.height_request = 200;
+
+            var username = GLib.Environment.get_user_name ();
+
+            var user_label = new Gtk.Label (username);
+
+            var iconfile = @"/var/lib/AccountsService/icons/$username";
+
+            var avatar = new Granite.Widgets.Avatar.from_file (iconfile, 48);
+
+
+            menu_grid.attach (avatar, 0, 0, 1, 2);
+            menu_grid.attach (user_label, 1, 0, 1, 1);
 
             var menu = new Gtk.Popover (null);
             menu.add (menu_grid);
@@ -65,6 +77,8 @@ namespace Planner {
             pack_start (project_button);
             pack_end (app_menu);
             pack_end (team_button);
+
+            menu_grid.show_all ();
         }
 
         public void disable_all () {
