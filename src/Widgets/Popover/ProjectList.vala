@@ -153,6 +153,9 @@ namespace Planner {
 
             activate_search_entry ();
 
+            search_entry.grab_focus ();
+            search_entry.can_focus = true;
+
         }
 
         private void on_project_selected (Gtk.ListBoxRow list_box_row) {

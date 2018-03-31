@@ -5,3 +5,22 @@
     padding: 3 6px;
 }
 
+.Low {
+    background: transparent;
+    color: #00BD47;
+    border-color: transparent;
+}
+
+.Medium {
+    background: transparent;
+  	color:  #F9D500; 
+    border-color: transparent;
+}
+
+.High {
+    background: transparent;
+  	color: #ed5353; 
+    border-color: transparent;
+}
+
+

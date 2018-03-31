@@ -173,6 +173,7 @@ namespace Planner {
         private void update_project (Project project) {
 
             settings.set_int ("last-project-id", int.parse(project.id));
+            task_view.update_widget (); 
                 
         }
     }

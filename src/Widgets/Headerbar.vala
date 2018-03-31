@@ -36,7 +36,9 @@ namespace Planner {
             format_bar = new FormatBar ();
             set_custom_title (format_bar);
             format_bar.on_formarbar_select.connect ( (name_bar) => {
+
                 on_headerbar_change (name_bar);
+            
             });
         
 
@@ -118,14 +120,13 @@ namespace Planner {
         private void set_actual_project (Project project) {
 
             project_button.set_project (project);
-
             update_project (project);
 
         }
 
         private void update_widget () {
 
-            //project_popover.update_widget ();
+            project_popover.update_widget ();
 
         }
 

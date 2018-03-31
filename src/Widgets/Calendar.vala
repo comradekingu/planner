@@ -87,8 +87,10 @@ namespace Planner {
            
             var control_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             control_box.add (left_button);
-            control_box.pack_end (right_button, false, false, 0);
-            control_box.pack_end (center_button, true, true, 0);
+
+            control_box.pack_end (right_button, false, false, 6);
+            control_box.pack_end (center_button, true, true, 6);
+
 
             control_box.set_size_request (-1, 30);
 

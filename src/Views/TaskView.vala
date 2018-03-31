@@ -33,5 +33,10 @@ namespace Planner {
 
 		}
 
+		public void update_widget () {
+
+			milestones_list.update_list ();
+
+		}
 	}
 }

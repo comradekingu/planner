@@ -13,7 +13,7 @@
             
             can_focus = false;        
             actual_project = project;
-            build_ui (project);
+            build_ui ();
     
         }
 
@@ -22,22 +22,22 @@
             return actual_project;
         }
 
-        public void build_ui (Project project) {
+        public void build_ui () {
             
             var grid = new Gtk.Grid ();
             grid.margin_top = 8;
             grid.margin_bottom = 8;
 
-            var image = new Gtk.Image.from_icon_name (project.avatar, Gtk.IconSize.DND);
+            var image = new Gtk.Image.from_icon_name (actual_project.avatar, Gtk.IconSize.DND);
             image.pixel_size = 32;
 
-            var title_label = new Gtk.Label (project.name);
+            var title_label = new Gtk.Label (actual_project.name);
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
             title_label.ellipsize = Pango.EllipsizeMode.END;
             title_label.xalign = 0;
             title_label.valign = Gtk.Align.END; 
 
-            var description_label = new Gtk.Label ("<span font_size='small'>" + project.description + "</span>");
+            var description_label = new Gtk.Label ("<span font_size='small'>" + actual_project.description + "</span>");
             description_label.use_markup = true;
             description_label.ellipsize = Pango.EllipsizeMode.END;
             description_label.xalign = 0;
@@ -52,8 +52,8 @@
             edit_button.tooltip_text = _("Edit Project");
             edit_button.clicked.connect ( () => {
                 
-                // Send signal to edit a project
-                edit_button_active (project);
+                // Send signal to edit atu project
+                edit_button_active (actual_project);
                 
             });
 
@@ -66,7 +66,7 @@
             delete_button.clicked.connect ( () => {
             
                 // Send signal to delete a project
-                delete_button_active (project);
+                delete_button_active (actual_project);
 
             });
 
@@ -86,37 +86,10 @@
             action_revealer.show_all ();
             action_revealer.set_reveal_child (false);
 
-            /*
-            var settings_button = new Gtk.Button.from_icon_name ("open-menu-symbolic", Gtk.IconSize.MENU); 
-            settings_button.valign = Gtk.Align.CENTER;
-            settings_button.halign = Gtk.Align.END; 
-            settings_button.expand = true;
-            settings_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            settings_button.set_focus_on_click (false);
-            settings_button.tooltip_text = _("Settings Project");
 
-            
-            var settings_revealer = new Gtk.Revealer ();
-            settings_revealer.transition_type = Gtk.RevealerTransitionType.CROSSFADE;
-            settings_revealer.add (settings_button);
-            settings_revealer.show_all ();
-            settings_revealer.set_reveal_child (false);
-            */
-            
             this.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
             this.enter_notify_event.connect ( (event) => {
-
-                /*
-                if (action_revealer.reveal_child) {
-
-                    settings_revealer.set_reveal_child (false);   
                 
-                }  else {
-                    
-                    settings_revealer.set_reveal_child (true);
-
-                }
-                */
                 action_revealer.set_reveal_child (true);
                 action_box.visible = true;
 
@@ -138,23 +111,6 @@
 
                 return false;
             });
-
-            /*
-            settings_button.clicked.connect ( () => {
-
-                if (action_revealer.reveal_child) {
-
-                    action_revealer.set_reveal_child (false);
-
-                } else {
-
-                    settings_revealer.set_reveal_child (false);
-                    action_revealer.set_reveal_child (true);
-
-                }
-
-            });
-            */
 
             grid.column_spacing = 12;
             grid.attach (image, 0, 0, 1, 2);

@@ -20,6 +20,8 @@ namespace Planner {
 
             rc = Sqlite.Database.open (db_path, out db);
 
+            rc = db.exec ("PRAGMA foreign_keys=ON");
+
             if (rc != Sqlite.OK) {
                 stderr.printf ("Can't open database: %d, %s\n", rc, db.errmsg ());
                 Gtk.main_quit ();
@@ -49,17 +51,11 @@ namespace Planner {
 
             rc = this.db.exec ("CREATE TABLE IF NOT EXISTS LISTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
-            "id_project INTEGER," +
-            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id_project))", null, null);
-
-            debug ("Table lists created");
-
-            rc = this.db.exec ("CREATE TABLE IF NOT EXISTS MILESTONES (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR," +
             "start_date DATE," +
             "due_date DATE," +
-            "id_project INTEGER," +
-            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id_project))", null, null);
+            "icon VARCHAR," +
+            "id_project INTEGER," + 
+            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id))", null, null);
             
             debug ("Table lists created");
 
@@ -68,6 +64,7 @@ namespace Planner {
             "state VARCHAR," +
             "deadline DATE," +
             "priority VARCHAR," +
+            "note VARCHAR," +
             "id_list INTEGER," +
             "FOREIGN KEY(id_list) REFERENCES LISTS(id_list))", null, null);
             
@@ -92,6 +89,8 @@ namespace Planner {
             "FOREIGN KEY(id_task) REFERENCES TASKS(id_task))", null, null);
 
             debug ("Table assigned created");
+
+            rc = this.db.exec ("PRAGMA foreign_keys=ON");
 
             return rc;
         }
@@ -131,12 +130,51 @@ namespace Planner {
             }
         }
 
+        public void add_list (List list) {
+
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("INSERT INTO LISTS (name, " +
+                "start_date, due_date, icon, id_project)" +
+                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
+
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, list.name);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (2, list.start_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (3, list.due_date);
+            assert (res == Sqlite.OK);
+            
+            res = stmt.bind_text (4, list.icon);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (5, list.id_project);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.DONE) {
+
+                debug ("List " + list.name + " created");
+            }
+
+            stdout.printf(list.name + "\n");
+            stdout.printf(list.icon + "\n");
+            stdout.printf(list.id_project.to_string () + "\n");
+            stdout.printf("Lista Creada \n");
+
+        }
+
         public void remove_project ( Project project) {
 
             Sqlite.Statement stmt;
 
-            int res = db.prepare_v2 ("DELETE FROM PROJECTS WHERE id = " +
-                "?", -1, out stmt);
+            int res = db.prepare_v2 ("DELETE FROM PROJECTS " +
+                "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
             res = stmt.bind_text (1, project.id);
@@ -184,6 +222,38 @@ namespace Planner {
             if (res == Sqlite.OK)
                 debug ("Project updated: " + project.name);
         }
+
+        public Gee.ArrayList<List?> get_all_lists (int id_project) {
+
+            Sqlite.Statement stmt;
+            int res = db.prepare_v2 ("SELECT * FROM LISTS where id_project = ? ORDER BY id",
+                -1, out stmt);
+
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (1, id_project);
+            assert (res == Sqlite.OK);
+        
+            Gee.ArrayList<List?> all = new Gee.ArrayList<List?> ();
+
+            while ((res = stmt.step()) == Sqlite.ROW) {
+
+                List list = new List ();
+
+                list.id = int.parse(stmt.column_text (0));
+                list.name = stmt.column_text (1);
+                list.start_date = stmt.column_text (2);
+                list.due_date = stmt.column_text (3);
+                list.icon = stmt.column_text (4);
+                list.id_project = int.parse(stmt.column_text (5));
+
+                all.add (list);
+                
+            }
+
+            return all;
+        }   
+
 
         public Gee.ArrayList<Project?> get_all_projects () {
 

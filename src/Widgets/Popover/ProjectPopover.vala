@@ -123,17 +123,7 @@ namespace Planner {
 
             });
 
-            this.closed.connect ( () => {
-
-                stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
-                stack.visible_child_name = "project_list";
-
-                project_new_update.set_title (TITLE_NEW);
-                project_new_update.clear_entry ();
-
-                project_list.update_list ();
-            
-            });
+            this.closed.connect (update_widget);
 
             grid.attach (notification, 0, 0, 1, 1);
             grid.attach (stack, 0, 0, 1, 1);
@@ -141,5 +131,18 @@ namespace Planner {
             add (grid);
         }
 
+        public void update_widget () {
+
+            //project_list.update_list ();
+
+            stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+            stack.visible_child_name = "project_list";
+
+            project_new_update.set_title (TITLE_NEW);
+            project_new_update.clear_entry ();
+            
+            hide ();
+            
+        }
     }
 }

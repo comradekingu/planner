@@ -44,8 +44,11 @@ executable(
     'src/Widgets/FormatBar.vala',
     'src/Widgets/Calendar.vala',
     'src/Widgets/ListMilestoneRow.vala',
+    'src/Widgets/TaskListRow.vala',
+    'src/Widgets/PriorityButton.vala',
     'src/Utils/Utils.vala',
     'src/Interfaces/Project.vala',
+    'src/Interfaces/List.vala',
     'src/Services/Database.vala',
     dependencies: [
         dependency('glib-2.0'),

@@ -44,10 +44,10 @@ namespace Planner {
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");
             issues_toggle.text = _("Issues");
 
-            var main = new  Granite.Widgets.ModeButton ();
+            var main = new Granite.Widgets.ModeButton ();
             main.append (overview_toggle);
             main.append (task_toggle);
-            main.append (issues_toggle);
+            //main.append (issues_toggle);
             main.set_active (0);
             main.mode_changed.connect ( (widget) => {
 
