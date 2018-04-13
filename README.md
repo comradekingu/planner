@@ -3,13 +3,16 @@
 </p>
 <h1 align="center">Planner</h1>
 <h3 align="center">Project manager designed for elementary OS</h3>
+<span align="center" style="color:red">* Application in development</span>
 <p align="center">
   <a href="https://appcenter.elementary.io/com.github.alainm23.planner"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
 </p>
+<span align="center" style="color:#8600A9">*Available very soon</span>
 
+<div align="center">
 ![Screenshot](data/screenshot/screenshot-1.png?raw=true)
 ![Screenshot](data/screenshot/screenshot-2.png?raw=true)
-
+</div>
 <br />
 
 ## Installation
