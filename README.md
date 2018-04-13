@@ -9,12 +9,9 @@
 </p>
 <p align="center" style="color:#8600A9">*Available very soon</p>
 
-<p align="center">
 ![Screenshot](data/screenshot/screenshot-1.png?raw=true)
-</p>
-<p align="center">
 ![Screenshot](data/screenshot/screenshot-2.png?raw=true)
-</p>
+
 <br />
 
 ## Installation
