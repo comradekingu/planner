@@ -1,19 +1,21 @@
 namespace Planner {
 
-	public class ListMilestoneRow : Gtk.EventBox {
+	public class ListMilestoneRow : Gtk.Button {
 
 		private Gtk.Image state_image;
 		private Gtk.Label name_label;
 		private Gtk.Label state_label;
 		private Gtk.Image avatar_image;
 
-		private List actual_list;
+		private Interfaces.List actual_list;
 
-		public ListMilestoneRow (List list) {
+		public signal void selected_list (Interfaces.List list);
+
+		public ListMilestoneRow (Interfaces.List list) {
 
 			actual_list = list;
-			//orientation = Gtk.Orientation.HORIZONTAL;
-			//get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+			
+			get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			height_request = 50;
 			expand = true;
 
@@ -48,14 +50,18 @@ namespace Planner {
 			box.pack_end (state_image, false, true, 6);
 			box.pack_end (state_label, false, true, 6);
 
-			
-			//grid.attach (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), 0, 0, 1, 1);
 			grid.attach (box, 0, 0, 1, 1);
+
+			this.clicked.connect ( () => {
+
+				selected_list (actual_list);
+
+			});
 			
 			add (grid);
 		}
 
-		public List get_list () {
+		public Interfaces.List get_list () {
 
 			return actual_list;
 

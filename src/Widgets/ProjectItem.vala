@@ -2,14 +2,14 @@
     namespace Planner {
         public class ProjectItem : Gtk.EventBox {
 
-        private Project actual_project;
+        private Interfaces.Project actual_project;
 
         // Signal to Create Project
-        public signal void delete_button_active (Project project);
-        public signal void edit_button_active (Project edit);
+        public signal void delete_button_active (Interfaces.Project project);
+        public signal void edit_button_active (Interfaces.Project edit);
         
         //public ProjectItem (string id, string name, string description, string logo) {
-        public ProjectItem (Project project) {
+        public ProjectItem (Interfaces.Project project) {
             
             can_focus = false;        
             actual_project = project;
@@ -17,7 +17,7 @@
     
         }
 
-        public Project get_project () {
+        public Interfaces.Project get_project () {
 
             return actual_project;
         }

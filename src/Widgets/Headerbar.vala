@@ -9,7 +9,7 @@ namespace Planner {
 
         private ProjectPopover project_popover;
 
-        public signal void update_project (Project project);
+        public signal void update_project (Interfaces.Project project);
         public signal void on_headerbar_change (string name_bar);
 
         public Headerbar () {
@@ -117,7 +117,7 @@ namespace Planner {
 
         }
 
-        private void set_actual_project (Project project) {
+        private void set_actual_project (Interfaces.Project project) {
 
             project_button.set_project (project);
             update_project (project);
@@ -130,7 +130,7 @@ namespace Planner {
 
         }
 
-        public void set_project (Project project) {
+        public void set_project (Interfaces.Project project) {
 
             project_button.set_project (project);
 

@@ -1,6 +1,6 @@
 namespace Planner {
 
-    public class List { 
+    public class Interfaces.List { 
 
         public int id;
         public string name;

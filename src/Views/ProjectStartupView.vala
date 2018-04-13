@@ -14,10 +14,10 @@ namespace Planner {
 
 
         public signal void on_cancel_button ();
-        public signal void on_create_button (Project new_project);
+        public signal void on_create_button (Interfaces.Project new_project);
 
         // Interface
-        private Project new_project;
+        private Interfaces.Project new_project;
 
 		public ProjectStartupView () {
 
@@ -154,7 +154,7 @@ namespace Planner {
 
         private void create_button_clicked () {
 
-            new_project = new Project ();
+            new_project = new Interfaces.Project ();
 
             new_project.name = name_entry.text;
             new_project.description = description_entry.text;

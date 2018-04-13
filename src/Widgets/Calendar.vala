@@ -32,7 +32,7 @@ namespace Planner {
 			calendar = new Gtk.Calendar ();
    			calendar.margin_top = 6;
    			calendar.show_heading = false;
-   			calendar.expand = true;
+			calendar.expand = true;
 
    			left_button = new Gtk.Button.from_icon_name ("pan-start-symbolic");
    			left_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);

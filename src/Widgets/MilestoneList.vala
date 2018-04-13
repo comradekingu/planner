@@ -9,23 +9,20 @@ namespace Planner {
 		private NewListPopover new_list_popover;
         private Gtk.ScrolledWindow list_scrolled_window;
 
-        private SqliteDatabase db;
+        private Services.Database db;
         private GLib.Settings settings;
 
-        public signal void list_selected (List list);
+        public signal void list_selected (Interfaces.List list);
 
 		public MilestoneList () {
 
-            db = new SqliteDatabase (true);
+            db = new Services.Database (true);
             settings = new GLib.Settings ("com.github.alainm23.planner");
 
 			orientation = Gtk.Orientation.VERTICAL;
-            column_spacing = 12;
-            margin = 25;
-            margin_top = 50;
-            margin_bottom = 50;
+            row_spacing = 12;
+            margin = 50;
             expand = true;
-
 
 			build_ui ();
 		}
@@ -42,6 +39,7 @@ namespace Planner {
             add_button.halign = Gtk.Align.END;
             add_button.valign = Gtk.Align.CENTER;
             add_button.margin_end = 6;
+            add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.clicked.connect ( () => {
 
             	new_list_popover.show_all ();
@@ -60,9 +58,8 @@ namespace Planner {
             title_box.pack_end (add_button, false, false, 0);
 
             levelbar = new Gtk.LevelBar.for_interval (0, 100.0);
-            //levelbar.height_request = 12;
             levelbar.value = 70.5;
-            levelbar.margin_top = 12;
+            levelbar.margin_end = 6;
             levelbar.hexpand = true;
 
 
@@ -70,17 +67,13 @@ namespace Planner {
             //milestone_list.margin_top = 12;
             milestone_list.activate_on_single_click = true;
             milestone_list.selection_mode = Gtk.SelectionMode.NONE;
-            milestone_list.row_activated.connect (on_list_selected);
-      
 
             list_scrolled_window = new Gtk.ScrolledWindow (null, null);
             list_scrolled_window.expand = true;
-            list_scrolled_window.margin_top = 12;
             list_scrolled_window.add (milestone_list);
 
             create_list ();
             
-
             add (title_box);
             add (levelbar);
             add (list_scrolled_window);
@@ -89,7 +82,7 @@ namespace Planner {
 
         private void create_list () {
 
-            Gee.ArrayList<List?> all_list = new Gee.ArrayList<List?> ();
+            var all_list = new Gee.ArrayList<Interfaces.List?> ();
             all_list = db.get_all_lists (settings.get_int ("last-project-id"));
 
             foreach (var list in all_list) {
@@ -98,16 +91,10 @@ namespace Planner {
 
                 milestone_list.add (row);
 
-                //row.button_press_event.connect (row_clicked);
+                row.selected_list.connect (selected_list);
             }
 
             show_all ();
-        }
-
-        private void on_list_selected (Gtk.ListBoxRow list_box_row) {
-
-            stdout.printf ("Lista Seleccionada");
-             
         }
 
         public void update_list () {
@@ -118,11 +105,14 @@ namespace Planner {
             }
 
             create_list ();
+            
+            selected_list (new Interfaces.List());
 	   }
 
-       private void row_clicked (Gdk.EventButton evt) {
-
-            stdout.printf("CLick del elemento xdxd");
-       }
+        private void selected_list (Interfaces.List list) {
+            
+            list_selected (list);
+        
+        }
     }
 }

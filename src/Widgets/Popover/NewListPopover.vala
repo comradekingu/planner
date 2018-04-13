@@ -8,7 +8,7 @@ namespace Planner {
         private Gtk.SpinButton spin_button;
         private string icon_image;
 
-        private SqliteDatabase db;
+        private Services.Database db;
         private GLib.Settings settings;
 
         public signal void created_list ();
@@ -22,7 +22,7 @@ namespace Planner {
                 relative_to: relative
             );
 
-            db = new SqliteDatabase (true);
+            db = new Services.Database (true);
 
             settings = new GLib.Settings ("com.github.alainm23.planner");
 		}
@@ -146,7 +146,7 @@ namespace Planner {
 
         private void create_list () {
 
-            List list = new List ();
+            Interfaces.List list = new Interfaces.List ();
 
             list.name = name_entry.text;
             list.start_date = "";

@@ -10,7 +10,7 @@ namespace Planner {
         private TaskView task_view;
         private IssuesView issues_view;
 
-        private SqliteDatabase db;
+        private Services.Database db;
         private GLib.Settings settings;
 
         public MainWindow (Gtk.Application application) {
@@ -41,8 +41,8 @@ namespace Planner {
 
 
             // Create folder and .sqlite db
-            Utils.create_dir_with_parents ("/.local/share/planner");
-            db = new SqliteDatabase ();
+            Utils.create_dir_with_parents ("/.local/share/com.github.alainm23.planner");
+            db = new Services.Database ();
             
 
             build_ui ();
@@ -157,7 +157,7 @@ namespace Planner {
 
                 int id = settings.get_int ("last-project-id");
 
-                Gee.ArrayList<Project?> all_projects = new Gee.ArrayList<Project?> ();
+                var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
                 all_projects = db.get_all_projects ();
 
 
@@ -170,7 +170,7 @@ namespace Planner {
             }
         }
 
-        private void update_project (Project project) {
+        private void update_project (Interfaces.Project project) {
 
             settings.set_int ("last-project-id", int.parse(project.id));
             task_view.update_widget (); 

@@ -25,6 +25,12 @@ namespace Planner {
 			separator.margin_top = 50;
             separator.margin_bottom = 50;
 
+			milestones_list.list_selected.connect ( (list) => {
+				
+				task_list.set_list (list);
+			
+			});
+
 			main_grid.add (milestones_list);
 			main_grid.add (separator);
 			main_grid.add (task_list);

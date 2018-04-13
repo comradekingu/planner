@@ -4,11 +4,11 @@ namespace Planner {
         private ProjectList project_list;
         private ProjectNewUpdate  project_new_update;
         private Granite.Widgets.Toast notification;
-        private SqliteDatabase db;
+        private Services.Database db;
         private Gtk.Stack   stack;
 
         // Signal
-        public signal void selected_project (Project project);
+        public signal void selected_project (Interfaces.Project project);
 
         private string TITLE_NEW = _("New");
         private string TITLE_EDIT = _("Edit");
@@ -22,7 +22,7 @@ namespace Planner {
                 relative_to: relative
             );
 
-            db = new SqliteDatabase (true);
+            db = new Services.Database (true);
 
             set_size_request(300, 400);
         }

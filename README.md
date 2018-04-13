@@ -8,6 +8,7 @@
 </p>
 
 ![Screenshot](data/screenshot/screenshot-1.png?raw=true)
+![Screenshot](data/screenshot/screenshot-2.png?raw=true)
 
 <br />
 

@@ -1,0 +1,11 @@
+# List of source files containing translatable strings.
+# Copyright (C) 1995 Free Software Foundation, Inc
+# GamePing
+# Copyright (C) 2018 Alain M.
+# This file is distributed under the same license as the com.github.bitseater.weather package.
+# Alain M. <alain23@protonmail.com>, 2018.
+#
+data/com.github.alainm23.planner.appdata.xml.in
+data/com.github.alainm23.planner.desktop.in
+src/Application.vala
+src/MainWindow.vala

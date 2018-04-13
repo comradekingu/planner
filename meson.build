@@ -1,5 +1,4 @@
-project('com.github.alainm23.planner', 'vala', 'c',
-    version: '0.0.1')
+project('com.github.alainm23.planner', 'vala', 'c')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -34,21 +33,22 @@ executable(
     'src/Views/IssuesView.vala',
     'src/Widgets/ProjectButton.vala',
     'src/Widgets/Popover/ProjectPopover.vala',
-    'src/Widgets/Popover/ProjectList.vala',
-    'src/Widgets/Popover/ProjectNewUpdate.vala',
-    'src/Widgets/Popover/NewListPopover.vala',
-    'src/Widgets/Popover/ProjectItem.vala',
     'src/Widgets/Popover/AvatarPopover.vala',
+    'src/Widgets/Popover/NewListPopover.vala',
+    'src/Widgets/ProjectList.vala',
+    'src/Widgets/ProjectNewUpdate.vala',
+    'src/Widgets/ProjectItem.vala',
     'src/Widgets/MilestoneList.vala',
     'src/Widgets/TaskList.vala',
     'src/Widgets/FormatBar.vala',
     'src/Widgets/Calendar.vala',
     'src/Widgets/ListMilestoneRow.vala',
     'src/Widgets/TaskListRow.vala',
-    'src/Widgets/PriorityButton.vala',
+    'src/Widgets/PriorityWidget.vala',
     'src/Utils/Utils.vala',
     'src/Interfaces/Project.vala',
     'src/Interfaces/List.vala',
+    'src/Interfaces/Task.vala',
     'src/Services/Database.vala',
     dependencies: [
         dependency('glib-2.0'),
@@ -59,6 +59,8 @@ executable(
     ],
     install: true
 )
+
 subdir('data')
+subdir('po')
 
 meson.add_install_script('meson/post_install.py')

@@ -26,12 +26,12 @@ namespace Planner {
 
         private int index = 0;
 
-        private Project actual_project;
+        private Interfaces.Project actual_project;
 
         public signal void create_update_signal (string type);
         public signal void back_action ();
 
-        private SqliteDatabase db;
+        private Services.Database db;
 
         public ProjectNewUpdate () {
             
@@ -41,9 +41,9 @@ namespace Planner {
             expand = true;
             column_homogeneous = true;
 
-            actual_project = new Project ();
+            actual_project = new Interfaces.Project ();
 
-            db = new SqliteDatabase (true);
+            db = new Services.Database (true);
                     
             build_ui ();
 
@@ -59,7 +59,7 @@ namespace Planner {
                 
                 clear_entry ();
 
-                actual_project = new Project ();
+                actual_project = new Interfaces.Project ();
 
                 back_action ();
             
@@ -319,7 +319,7 @@ namespace Planner {
             }
         }
 
-        public void update_project (Project project) {
+        public void update_project (Interfaces.Project project) {
 
             // Set Avatar
             avatar_image.icon_name = project.avatar;

@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/github/alainm23/planner">
-    <file alias="application.css" compressed="true">application.css</file>
+    <file alias="stylesheet.css" compressed="true">stylesheet.css</file>
     <file alias="planner-code.svg">resources/planner-code.svg</file>
     <file alias="planner-checklist.svg">resources/planner-checklist.svg</file>
     <file alias="planner-computer.svg">resources/planner-computer.svg</file>

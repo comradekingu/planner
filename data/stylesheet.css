@@ -1,0 +1,20 @@
+.titlebar {
+    padding: 3 6px;
+}
+.None {
+    color: #6a757b; 
+}
+
+.Low {
+    color: #00BD47;
+}
+
+.Medium {
+  	color:  #F9D500; 
+}
+
+.High {
+  	color: #ed5353; 
+}
+
+

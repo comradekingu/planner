@@ -36,7 +36,7 @@ namespace Planner {
             add (main_grid);
         }
 
-        public void set_project (Project project) {
+        public void set_project (Interfaces.Project project) {
 
             project_title.set_label (project.name);
             avatar_image.icon_name = project.avatar;

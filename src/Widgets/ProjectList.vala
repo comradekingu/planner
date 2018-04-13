@@ -10,20 +10,20 @@ namespace Planner {
         private Gtk.ListBox project_listbox;
         private Gtk.ScrolledWindow list_scrolled_window;
         
-        private Gee.ArrayList<Project?> all_projects;
+        private Gee.ArrayList<Interfaces.Project?> all_projects;
 
-        private SqliteDatabase db;
+        private Services.Database db;
 
         // Signal to delete a project
-        public signal void delete_project (Project project);
-        public signal void edit_project (Project project);
-        public signal void selected_project (Project project);
+        public signal void delete_project (Interfaces.Project project);
+        public signal void edit_project (Interfaces.Project project);
+        public signal void selected_project (Interfaces.Project project);
 
         public signal void add_project ();
 
         public ProjectList () {
 
-            db = new SqliteDatabase (true);
+            db = new Services.Database (true);
 
             orientation = Gtk.Orientation.VERTICAL;
             column_spacing = 12;
@@ -109,7 +109,7 @@ namespace Planner {
         private void create_list () {
 
             // get all accounts
-            all_projects = new Gee.ArrayList<Project?> ();
+            all_projects = new Gee.ArrayList<Interfaces.Project?> ();
             all_projects = db.get_all_projects ();
 
             foreach (var project in all_projects) {
