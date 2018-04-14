@@ -13,6 +13,8 @@ namespace Planner {
         private Services.Database db;
         private GLib.Settings settings;
 
+        int index;
+
         public MainWindow (Gtk.Application application) {
 
             Object (
@@ -90,22 +92,30 @@ namespace Planner {
             headerbar = new Headerbar ();
             set_titlebar (headerbar);
             headerbar.update_project.connect (update_project);
-            headerbar.on_headerbar_change.connect ( (name_bar) => {
+            headerbar.on_headerbar_change.connect ( (index_bar) => {
 
-                if (name_bar == "Overview") {
+                if (index > index_bar) {
+                    main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                } else {
+                    main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                }
+
+                if (index_bar == 0) {
 
                     main_stack.visible_child_name = "overview_view";
                 
-                } else if (name_bar == "Tasks") {
+                } else if (index_bar == 1) {
                 
                     main_stack.visible_child_name = "task_view";
                 
-                } else if (name_bar == "Issues") {
+                } else if (index_bar == 2) {
                 
                     main_stack.visible_child_name = "issues_view";        
                 
                 }
-                    
+                                
+                index = index_bar;
+
             });
             
             startup_view.on_cancel_button.connect ( () => {

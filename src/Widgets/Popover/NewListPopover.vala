@@ -31,7 +31,7 @@ namespace Planner {
 
 			var main_grid = new Gtk.Grid ();
         	main_grid.orientation = Gtk.Orientation.VERTICAL;
-        	main_grid.column_spacing = 3;
+        	main_grid.row_spacing = 12;
         	main_grid.margin = 12;
         	main_grid.expand = true;
         	main_grid.width_request = 250;
@@ -65,7 +65,6 @@ namespace Planner {
 
             name_entry = new Gtk.Entry ();
             name_entry.max_length = 36;
-            name_entry.margin_top = 12;
             name_entry.placeholder_text = _("Title List");
             name_entry.changed.connect ( () => {
 
@@ -90,13 +89,12 @@ namespace Planner {
 
             flow_box = new Gtk.FlowBox ();
             flow_box.homogeneous = true;
-            flow_box.column_spacing = 12;
-            flow_box.row_spacing = 12;
+            flow_box.column_spacing = 6;
+            flow_box.row_spacing = 6;
 
 
             var scrolled = new Gtk.ScrolledWindow (null, null);
             scrolled.expand = true;
-            scrolled.margin_top = 12;
             scrolled.height_request = 136;
             scrolled.add (flow_box);
 
@@ -108,7 +106,7 @@ namespace Planner {
 
             foreach (string name in Utils.name_icon_list ()) {
 
-                var icon_image = new Granite.AsyncImage.from_icon_name_async (name, Gtk.IconSize.LARGE_TOOLBAR);
+                var icon_image = new Granite.AsyncImage.from_icon_name_async (name, Gtk.IconSize.DND);
 
                 flow_box.add (icon_image);
                 flow_box.show_all ();
@@ -128,7 +126,6 @@ namespace Planner {
 
             var spin_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             spin_box.hexpand = true;
-            spin_box.margin_top = 12;
 
             spin_box.pack_start (assigned_lavel, false, true, 0);
             spin_box.pack_end (spin_button, false, true, 0);

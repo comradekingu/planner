@@ -3,7 +3,7 @@ namespace Planner {
 
 		private Gtk.Label title_label;
 		private Gtk.Button add_button;
-		private Gtk.LevelBar levelbar;
+		private Gtk.ProgressBar progressbar;
         private Gtk.ListBox milestone_list;
 
 		private NewListPopover new_list_popover;
@@ -57,14 +57,12 @@ namespace Planner {
             title_box.pack_start (title_label, false, false, 0);
             title_box.pack_end (add_button, false, false, 0);
 
-            levelbar = new Gtk.LevelBar.for_interval (0, 100.0);
-            levelbar.value = 70.5;
-            levelbar.margin_end = 6;
-            levelbar.hexpand = true;
-
-
+            progressbar = new Gtk.ProgressBar ();
+            progressbar.fraction = 0.40;
+            progressbar.margin_end = 6;
+            progressbar.text = "10%";
+            
             milestone_list = new Gtk.ListBox ();
-            //milestone_list.margin_top = 12;
             milestone_list.activate_on_single_click = true;
             milestone_list.selection_mode = Gtk.SelectionMode.NONE;
 
@@ -75,7 +73,7 @@ namespace Planner {
             create_list ();
             
             add (title_box);
-            add (levelbar);
+            add (progressbar);
             add (list_scrolled_window);
 		
         }

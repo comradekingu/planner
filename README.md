@@ -29,12 +29,9 @@ These dependencies must be present before building
 ### Building
 
 ```
-git clone https://github.com/alainm23/planner.git
-meson build && cd build
-meson configure -Dprefix=/usr
-ninja
-sudo ninja install
-com.github.alainm23.planner
+$ meson build && cd build
+$ meson configure -Dprefix=/usr
+$ sudo ninja install
 ```
 
 ### Deconstruct

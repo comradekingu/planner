@@ -8,16 +8,16 @@ namespace Planner {
 		private Gtk.ComboBoxText priority_comboboxtext;
 		private Granite.Widgets.DatePicker deadline_picker;
 		private Gtk.Button remove_button;
-
+	
 		private Gtk.TextView note_view;
 		private Gtk.Revealer revealer_noteview;
 		private PriorityWidget priority_view;
 
 		private Gtk.Box main_box;
-
 		private string old_label = "";
-
 		private Interfaces.Task task_actual;
+
+		private Gdk.Cursor cursor;
 
 		public signal void update_task (Interfaces.Task task);
 
@@ -36,19 +36,47 @@ namespace Planner {
 
 		private void build_ui () {
 
-			title_label = new Gtk.Label (task_actual.name);
-			title_label.use_markup = true;
-			title_label.margin_left = 12;
-			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
-
-			var label_event = new Gtk.EventBox();
-			label_event.button_press_event.connect(show_options);
-			label_event.add (title_label);
+			cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.CROSSHAIR);
 
 			state_button = new Gtk.CheckButton ();																			
 			state_button.active = bool.parse (task_actual.state);
 			state_button.halign = Gtk.Align.START;
 
+			title_label = new Gtk.Label (task_actual.name);
+			title_label.use_markup = true;
+			title_label.margin_left = 12;
+			title_label.halign = Gtk.Align.START;
+			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+
+			remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+			remove_button.halign = Gtk.Align.END;
+			remove_button.no_show_all = true;
+			remove_button.tooltip_text = _("Remove Task");
+
+			var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+			box.pack_start (title_label, true, true, 0);
+			box.pack_end (remove_button, false, false, 0);
+
+			var option_event = new Gtk.EventBox();
+			option_event.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+			option_event.add (box);
+
+			// Event Signals
+			option_event.button_press_event.connect (show_options);
+			option_event.enter_notify_event.connect ( (event) => {
+                remove_button.visible = true;
+                return false;
+            });
+
+			option_event.leave_notify_event.connect ((event) => {
+                if (event.detail == Gdk.NotifyType.INFERIOR) {
+                    return false;
+                }
+                remove_button.visible = false;
+                return false;
+			});
+			
 			var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
 
 			note_view = new Gtk.TextView ();
@@ -81,14 +109,11 @@ namespace Planner {
 
 			deadline_picker = new Granite.Widgets.DatePicker ();
 
-			remove_button = new Gtk.Button.with_label (_("Delete"));
-			remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
-
 			task_option_box.pack_start (new Granite.HeaderLabel (_("Priority")), true, false, 0);
 			task_option_box.pack_start (priority_comboboxtext, true, false, 0);
 			task_option_box.pack_start (new Granite.HeaderLabel (_("Deadline")), true, false, 0);
 			task_option_box.pack_start (deadline_picker, true, false, 0);
-			task_option_box.pack_start (remove_button, true, false, 12);
+			//task_option_box.pack_start (remove_button, true, false, 12);
 
 			horizontal_grid.add (scrolled);
 			//horizontal_grid.add (task_option_box);
@@ -103,13 +128,11 @@ namespace Planner {
 			main_box.valign = Gtk.Align.END;
 
 			main_box.pack_start (state_button, false, false, 0);
-			main_box.pack_start (label_event, false, false, 0);
-			//main_box.pack_end (priority_view, false, false, 0);
+			main_box.pack_start (option_event, true, true, 0);
 
 			state_button.toggled.connect ( () => {
 
 				task_actual.state = state_button.active.to_string ();
-
 				update_task (task_actual);
 			});
 

@@ -344,6 +344,7 @@ namespace Planner {
 
                 all.add (project);
             }
+            
 
             return all;
         }

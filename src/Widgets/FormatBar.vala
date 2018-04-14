@@ -6,7 +6,7 @@ namespace Planner {
         private FormatButton issues_toggle;
 
 
-        public signal void on_formarbar_select (string name_bar); 
+        public signal void on_formarbar_select (int index_bar); 
 
         private const string CSS = """
                 .format-bar {
@@ -48,12 +48,10 @@ namespace Planner {
             main.append (overview_toggle);
             main.append (task_toggle);
             //main.append (issues_toggle);
-            main.set_active (0);
+            main.selected = 0;
             main.mode_changed.connect ( (widget) => {
 
-                var bar = widget as FormatButton;
-
-                on_formarbar_select (bar.text);
+                on_formarbar_select (main.selected);
             });
 
             add (main);

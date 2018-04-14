@@ -10,7 +10,7 @@ namespace Planner {
         private ProjectPopover project_popover;
 
         public signal void update_project (Interfaces.Project project);
-        public signal void on_headerbar_change (string name_bar);
+        public signal void on_headerbar_change (int index_bar);
 
         public Headerbar () {
 
@@ -35,9 +35,9 @@ namespace Planner {
 
             format_bar = new FormatBar ();
             set_custom_title (format_bar);
-            format_bar.on_formarbar_select.connect ( (name_bar) => {
+            format_bar.on_formarbar_select.connect ( (index_bar) => {
 
-                on_headerbar_change (name_bar);
+                on_headerbar_change (index_bar);
             
             });
         
