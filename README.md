@@ -29,9 +29,9 @@ These dependencies must be present before building
 ### Building
 
 ```
-$ meson build && cd build
-$ meson configure -Dprefix=/usr
-$ sudo ninja install
+meson build && cd build
+meson configure -Dprefix=/usr
+sudo ninja install
 ```
 
 ### Deconstruct

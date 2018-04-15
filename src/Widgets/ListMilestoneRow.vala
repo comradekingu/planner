@@ -1,5 +1,4 @@
 namespace Planner {
-
 	public class ListMilestoneRow : Gtk.Button {
 
 		private Gtk.Image state_image;
@@ -14,7 +13,7 @@ namespace Planner {
 		public ListMilestoneRow (Interfaces.List list) {
 
 			actual_list = list;
-			
+
 			get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			height_request = 50;
 			expand = true;
@@ -57,7 +56,7 @@ namespace Planner {
 				selected_list (actual_list);
 
 			});
-			
+
 			add (grid);
 		}
 

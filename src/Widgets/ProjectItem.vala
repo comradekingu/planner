@@ -1,5 +1,4 @@
-    
-    namespace Planner {
+namespace Planner {
         public class ProjectItem : Gtk.EventBox {
 
         private Interfaces.Project actual_project;
@@ -7,14 +6,14 @@
         // Signal to Create Project
         public signal void delete_button_active (Interfaces.Project project);
         public signal void edit_button_active (Interfaces.Project edit);
-        
+
         //public ProjectItem (string id, string name, string description, string logo) {
         public ProjectItem (Interfaces.Project project) {
-            
-            can_focus = false;        
+
+            can_focus = false;
             actual_project = project;
             build_ui ();
-    
+
         }
 
         public Interfaces.Project get_project () {
@@ -23,7 +22,7 @@
         }
 
         public void build_ui () {
-            
+
             var grid = new Gtk.Grid ();
             grid.margin_top = 8;
             grid.margin_bottom = 8;
@@ -35,7 +34,7 @@
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
             title_label.ellipsize = Pango.EllipsizeMode.END;
             title_label.xalign = 0;
-            title_label.valign = Gtk.Align.END; 
+            title_label.valign = Gtk.Align.END;
 
             var description_label = new Gtk.Label ("<span font_size='small'>" + actual_project.description + "</span>");
             description_label.use_markup = true;
@@ -46,25 +45,25 @@
 
             var edit_button = new Gtk.Button.from_icon_name ("document-edit-symbolic",  Gtk.IconSize.MENU);
             edit_button.valign = Gtk.Align.CENTER;
-            edit_button.halign = Gtk.Align.END; 
+            edit_button.halign = Gtk.Align.END;
             edit_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             edit_button.set_focus_on_click (false);
             edit_button.tooltip_text = _("Edit Project");
             edit_button.clicked.connect ( () => {
-                
+
                 // Send signal to edit atu project
                 edit_button_active (actual_project);
-                
+
             });
 
             var delete_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.MENU);
             delete_button.valign = Gtk.Align.CENTER;
-            delete_button.halign = Gtk.Align.END; 
+            delete_button.halign = Gtk.Align.END;
             delete_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             delete_button.set_focus_on_click (false);
             delete_button.tooltip_text = _("Delete Project");
             delete_button.clicked.connect ( () => {
-            
+
                 // Send signal to delete a project
                 delete_button_active (actual_project);
 
@@ -89,7 +88,7 @@
 
             this.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
             this.enter_notify_event.connect ( (event) => {
-                
+
                 action_revealer.set_reveal_child (true);
                 action_box.visible = true;
 
@@ -100,11 +99,11 @@
             this.leave_notify_event.connect ((event) => {
 
                 if (event.detail == Gdk.NotifyType.INFERIOR) {
-                
+
                     return false;
 
                 }
-                
+
                 action_revealer.set_reveal_child (false);
                 action_box.visible = false;
                 //settings_revealer.set_reveal_child (false);

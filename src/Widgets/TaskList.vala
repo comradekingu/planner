@@ -6,7 +6,7 @@ namespace Planner {
 		private Gtk.Entry task_entry;
 		private Gtk.Image avatar_image;
 		private Gtk.Box box_title;
-		private Gtk.Button add_button;		
+		private Gtk.Button add_button;
 
 		private Granite.Widgets.AlertView alert;
 
@@ -55,7 +55,7 @@ namespace Planner {
 			list_actual = new Interfaces.List ();
 
 			db = new Services.Database (true);
-			
+
 			build_ui ();
 		}
 
@@ -90,6 +90,8 @@ namespace Planner {
             add_button.tooltip_text = _("Create a new Task");
             add_button.halign = Gtk.Align.END;
 			add_button.valign = Gtk.Align.CENTER;
+			add_button.get_style_context ().add_class ("badge");
+			
 			add_button.clicked.connect ( () => {
 
             	box_title.visible = false;
@@ -112,7 +114,7 @@ namespace Planner {
 			task_entry.set_icon_tooltip_text (Gtk.EntryIconPosition.SECONDARY, _("Add to list..."));
 			task_entry.no_show_all = true;
 			task_entry.max_length = 128;
-			task_entry.margin_left = 12;		
+			task_entry.margin_left = 12;
 			task_entry.placeholder_text = _("Add new task...");
 			task_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			task_entry.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
@@ -122,7 +124,7 @@ namespace Planner {
                 if (task_entry.text == "") {
 
                     task_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "close-symbolic");
-                
+
                 } else {
 
                     task_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "list-add-symbolic");
@@ -134,10 +136,10 @@ namespace Planner {
 
 				add_task ();
 
-			});	
-			
+			});
+
 			task_entry.icon_press.connect ((pos, event) => {
-				
+
 				if (pos == Gtk.EntryIconPosition.SECONDARY) {
 
 					if (task_entry.secondary_icon_name == "close-symbolic") {
@@ -153,6 +155,18 @@ namespace Planner {
 				}
 			});
 
+			task_entry.key_press_event.connect ( (key) => {
+
+				if (key.keyval == Gdk.Key.Escape) {
+
+					task_entry.visible = false;
+					box_title.visible = true;
+					task_entry.text = "";
+				}
+
+				return false;
+			});
+
 			task_container = new Gtk.Grid ();
 			task_container.orientation = Gtk.Orientation.VERTICAL;
 
@@ -160,13 +174,13 @@ namespace Planner {
             task_scrolled_window.expand = true;
 			task_scrolled_window.add (task_container);
 			task_scrolled_window.no_show_all = true;
-			
+
 			add (task_entry);
 			add (box_title);
 			add (task_scrolled_window);
 			add (alert);
-			
-			update_list (); 
+
+			update_list ();
 
 			check_state_alert ();
 		}
@@ -177,14 +191,14 @@ namespace Planner {
 			all_task = db.get_all_tasks (list_actual.id);
 
 			if (all_task.size < 1) {
-			
+
 				none_tasks_bool = true;
 				task_scrolled_window.visible = false;
 
 			} else {
 
 				none_tasks_bool = false;
-				task_scrolled_window.visible = true;			
+				task_scrolled_window.visible = true;
 			}
 
 			foreach (var task in all_task) {
@@ -192,9 +206,9 @@ namespace Planner {
 				if (bool.parse(task.state) != filter_bool) {
 
 					var row = new TaskListRow (task);
-				
+
 					task_container.add (row);
-					
+
 					connect_row_signals (row);
 				}
 
@@ -212,7 +226,7 @@ namespace Planner {
 			foreach (Gtk.Widget element in task_container.get_children ()) {
                 task_container.remove (element);
 			}
-			
+
 			create_list ();
 
 			if (none_tasks_bool) {
@@ -223,24 +237,33 @@ namespace Planner {
 
 			check_state_alert ();
 		}
-		
+
 		private void connect_row_signals (TaskListRow row) {
 
 			row.update_task.connect (update_task);
-		
+			row.remove_task.connect (remove_task);
+
 		}
 
 		private void update_task (Interfaces.Task task) {
-			
+
 			db.update_task (task);
 
 			update_list ();
 		}
 
+		private void remove_task (Interfaces.Task task) {
+
+			db.remove_task (task);
+
+			update_list ();
+
+		}
+
 		private void add_task () {
 
 			var task = new Interfaces.Task ();
-	
+
             task.name = task_entry.text;
             task.state = "false";
             task.deadline = "";
@@ -275,39 +298,39 @@ namespace Planner {
 
 				list_actual = list;
 				title_list_label.label = "<b>"+ list_actual.name +"</b>";
-	
+
 				title_list_label.no_show_all = false;
 				box_title.no_show_all = false;
 				task_scrolled_window.no_show_all = false;
-	
-				update_list ();	
-			
+
+				update_list ();
+
 			}
 		}
 
 		private void check_state_alert () {
-			
+
 			if (db.get_list_length () < 1) {
-				
+
 				alert.title = TITLE_NONE_LIST_ALERT;
 				alert.description = DESCRIPTION_NONE_LIST_ALERT;
 				alert.icon_name = "list-add";
 
 			} else if (list_actual.name == "") {
-			
+
 				alert.title = TITLE_NONE_SELECT_ALERT;
 				alert.description = DESCRIPTION_NONE_SELECTED_ALERT;
 				alert.icon_name = "emblem-default";
-			
+
 			} else if (none_tasks_bool == true) {
-								
+
 				alert.title = TITLE_NONE_TASK_ALERT;
 				alert.description = DESCRIPTION_NONE_TASK_ALERT;
 				alert.icon_name = "list-add";
 
 				task_scrolled_window.visible = false;
-			
-			} 
+
+			}
 		}
-	} 
+	}
 }
