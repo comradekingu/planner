@@ -7,6 +7,9 @@ namespace Planner {
 		private Gtk.Image avatar_image;
 		private Gtk.Box box_title;
 		private Gtk.Button add_button;
+		private Gtk.Button edit_list_button;
+
+		private NewEditListPopover edit_list_popover;
 
 		private Granite.Widgets.AlertView alert;
 
@@ -30,6 +33,8 @@ namespace Planner {
 
 		private bool filter_bool;
 		private bool none_tasks_bool;
+
+		public signal void update_list_all ();
 
 		public TaskList () {
 
@@ -62,12 +67,21 @@ namespace Planner {
 		private void build_ui () {
 
 			alert = new Granite.Widgets.AlertView ("", "", "dialog-warning");
+			//"<b>%s</b>".printf (_("What's New:"));
 
-			title_list_label = new Gtk.Label ("<b>"+ list_actual.name +"</b>");
+			title_list_label = new Gtk.Label ("");
 			title_list_label.use_markup = true;
 			title_list_label.halign = Gtk.Align.START;
 			title_list_label.margin_left = 6;
 			title_list_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+
+			edit_list_button = new Gtk.Button.from_icon_name ("document-edit-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			edit_list_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
+			edit_list_popover = new NewEditListPopover (edit_list_button);
+			edit_list_button.clicked.connect ( () => {
+ 				edit_list_popover.show_all ();
+			});
 
 			task_state_modebutton = new Granite.Widgets.ModeButton ();
 			task_state_modebutton.valign = Gtk.Align.CENTER;
@@ -90,8 +104,7 @@ namespace Planner {
             add_button.tooltip_text = _("Create a new Task");
             add_button.halign = Gtk.Align.END;
 			add_button.valign = Gtk.Align.CENTER;
-			add_button.get_style_context ().add_class ("badge");
-			
+
 			add_button.clicked.connect ( () => {
 
             	box_title.visible = false;
@@ -102,11 +115,13 @@ namespace Planner {
 
             });
 
-			box_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+			box_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+			box_title.margin_left = 6;
 			box_title.no_show_all = true;
 			box_title.hexpand = true;
 
-			box_title.pack_start (title_list_label, false, false, 6);
+			box_title.pack_start (title_list_label, false, false, 0);
+			box_title.pack_start (edit_list_button, false, false, 0);
 			box_title.pack_end (add_button, false, false, 0);
 			box_title.pack_end (task_state_modebutton, false, false, 0);
 
@@ -182,7 +197,7 @@ namespace Planner {
 
 			update_list ();
 
-			check_state_alert ();
+			//check_state_alert ();
 		}
 
 		private void create_list () {
@@ -235,7 +250,7 @@ namespace Planner {
 				alert.visible = false;
 			}
 
-			check_state_alert ();
+			//check_state_alert ();
 		}
 
 		private void connect_row_signals (TaskListRow row) {
@@ -250,6 +265,8 @@ namespace Planner {
 			db.update_task (task);
 
 			update_list ();
+
+			update_list_all ();
 		}
 
 		private void remove_task (Interfaces.Task task) {
@@ -258,6 +275,7 @@ namespace Planner {
 
 			update_list ();
 
+			update_list_all ();
 		}
 
 		private void add_task () {
@@ -277,9 +295,9 @@ namespace Planner {
 			box_title.visible = true;
 			task_entry.text = "";
 
+			update_list_all ();
 			update_list ();
-
-			check_state_alert ();
+			//check_state_alert ();
 		}
 
 		public void set_list (Interfaces.List list) {
@@ -292,7 +310,7 @@ namespace Planner {
 
 				alert.visible = true;
 
-				check_state_alert ();
+				//check_state_alert ();
 
 			} else {
 

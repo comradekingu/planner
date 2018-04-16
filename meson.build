@@ -34,7 +34,7 @@ executable(
     'src/Widgets/ProjectButton.vala',
     'src/Widgets/Popover/ProjectPopover.vala',
     'src/Widgets/Popover/AvatarPopover.vala',
-    'src/Widgets/Popover/NewListPopover.vala',
+    'src/Widgets/Popover/NewEditListPopover.vala',
     'src/Widgets/ProjectList.vala',
     'src/Widgets/ProjectNewUpdate.vala',
     'src/Widgets/ProjectItem.vala',

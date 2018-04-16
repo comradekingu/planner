@@ -77,7 +77,7 @@ namespace Planner {
 			box.pack_start (task_entry, true, true, 0);
 			box.pack_end (action_revealer, false, false, 0);
 
-			var option_event = new Gtk.EventBox();
+			var option_event = new Gtk.EventBox ();
 			option_event.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
 			option_event.add (box);
 
@@ -97,6 +97,7 @@ namespace Planner {
 			revealer_noteview = new Gtk.Revealer();
 			revealer_noteview.reveal_child = false;
 			revealer_noteview.visible = false;
+			revealer_noteview.transition_duration = 500;
 			revealer_noteview.add (scrolled);
 
 			main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -141,12 +142,23 @@ namespace Planner {
 
 				task_actual.state = state_button.active.to_string ();
 
-				/*
-				Timeout.add_seconds (1, () => {
+				/* Test Notification
+				Timeout.add_seconds (4, () => {
 
-					return false;
+					var notification = new GLib.Notification ("");
+					notification.set_title ("Hey Alain, " + task_actual.name + " was completed");
+					notification.set_body ("Quieres hacer algo?");
+					notification.set_priority (GLib.NotificationPriority.URGENT);
+					var image = new Gtk.Image.from_icon_name ("com.github.alainm23.planner", Gtk.IconSize.DIALOG);
+					notification.set_icon (image.gicon);
+					notification.add_button ("Button 1", "Button 1");
+
+					GLib.Application.get_default ().send_notification ("com.github.alainm23.planner", notification);
+
+					return true;
 				});
 				*/
+
 				update_task (task_actual);
 			});
 

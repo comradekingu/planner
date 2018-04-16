@@ -307,6 +307,8 @@ namespace Planner {
         public Gee.ArrayList<Interfaces.List?> get_all_lists (int id_project) {
 
             Sqlite.Statement stmt;
+            int tasks_completed = 0;
+
             int res = db.prepare_v2 ("SELECT * FROM LISTS where id_project = ? ORDER BY id",
                 -1, out stmt);
 
@@ -316,6 +318,7 @@ namespace Planner {
             assert (res == Sqlite.OK);
 
             var all = new Gee.ArrayList<Interfaces.List?> ();
+            var all_tasks = new Gee.ArrayList<Interfaces.Task?> ();
 
             while ((res = stmt.step()) == Sqlite.ROW) {
 
@@ -328,8 +331,19 @@ namespace Planner {
                 list.icon = stmt.column_text (4);
                 list.id_project = int.parse(stmt.column_text (5));
 
-                all.add (list);
+                // Get all task
+                all_tasks = get_all_tasks (list.id);
+                list.task_all = all_tasks.size;
+                // get Task completed
+                foreach (var task in all_tasks) {
+                    if (task.state == "true") {
+                        tasks_completed = tasks_completed + 1;
+                    }
+                }
+                list.tasks_completed = tasks_completed;
 
+                all.add (list);
+                tasks_completed = 0;
             }
 
             return all;

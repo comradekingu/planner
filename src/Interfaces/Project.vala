@@ -1,7 +1,5 @@
-namespace Planner { 
-
-    public class Interfaces.Project { 
-        
+namespace Planner {
+    public class Interfaces.Project {
         public string id;
         public string name;
         public string description;
@@ -14,7 +12,7 @@ namespace Planner {
             string name = "", string description = "",
             string start_date = "", string due_date = "",
             string type = "", string avatar = "") {
-                
+
             this.id = id;
             this.name = name;
             this.description = description;
@@ -23,5 +21,5 @@ namespace Planner {
             this.type = type;
             this.avatar = avatar;
         }
-    } 
+    }
 }

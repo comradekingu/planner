@@ -1,5 +1,5 @@
 namespace Planner {
-	public class ListMilestoneRow : Gtk.Button {
+	public class ListMilestoneRow : Gtk.EventBox {
 
 		private Gtk.Image state_image;
 		private Gtk.Label name_label;
@@ -14,7 +14,6 @@ namespace Planner {
 
 			actual_list = list;
 
-			get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			height_request = 50;
 			expand = true;
 
@@ -35,8 +34,18 @@ namespace Planner {
 			state_label.vexpand = true;
 			state_label.use_markup = true;
 
-			state_image = new Gtk.Image.from_icon_name("user-idle", Gtk.IconSize.SMALL_TOOLBAR);
+			state_image = new Gtk.Image.from_icon_name("", Gtk.IconSize.SMALL_TOOLBAR);
 			state_label.vexpand = true;
+
+			if (actual_list.tasks_completed == 0) {
+				state_image.icon_name = "user-offline";
+			} else if (actual_list.tasks_completed ==  actual_list.task_all) {
+				state_image.icon_name = "user-available";
+			} else if (actual_list.tasks_completed > actual_list.task_all / 2) {
+				state_image.icon_name = "user-idle";
+			} else {
+				state_image.icon_name = "user-busy";
+			}
 
 			var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
 			box.expand = true;
@@ -51,10 +60,10 @@ namespace Planner {
 
 			grid.attach (box, 0, 0, 1, 1);
 
-			this.clicked.connect ( () => {
+			this.button_press_event.connect ( () => {
 
 				selected_list (actual_list);
-
+				return false;
 			});
 
 			add (grid);

@@ -1,6 +1,6 @@
 namespace Planner {
-	
-	public class NewListPopover : Gtk.Popover {
+
+	public class NewEditListPopover : Gtk.Popover {
 
 		private Gtk.Entry name_entry;
         private Gtk.FlowBox flow_box;
@@ -11,23 +11,26 @@ namespace Planner {
         private Services.Database db;
         private GLib.Settings settings;
 
+		private Interfaces.List list_actual;
+
         public signal void created_list ();
 
-		public NewListPopover (Gtk.Widget relative, bool calendar = false) {
-			
-			GLib.Object (
+		public NewEditListPopover (Gtk.Widget relative) {
 
-                modal: true,
-                position: Gtk.PositionType.BOTTOM,
-                relative_to: relative
-            );
+			relative_to = relative;
+            modal = true;
+            position = Gtk.PositionType.BOTTOM;
 
-            db = new Services.Database (true);
+			list_actual = new Interfaces.List ();
+
+			db = new Services.Database (true);
 
             settings = new GLib.Settings ("com.github.alainm23.planner");
+
+			build_ui ();
 		}
 
-		construct {
+		private void build_ui () {
 
 			var main_grid = new Gtk.Grid ();
         	main_grid.orientation = Gtk.Orientation.VERTICAL;
@@ -35,12 +38,17 @@ namespace Planner {
         	main_grid.margin = 12;
         	main_grid.expand = true;
         	main_grid.width_request = 250;
-            //main_grid.set_size_request(250, 300);
 
             var title_label = new Gtk.Label (_("<b>New List</b>"));
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
         	title_label.use_markup = true;
-
+			/*
+			if (list_actual.name == "") {
+				title_label.label = _();
+			} else {
+				title_label.label = _("<b>Edit List</b>");
+			}
+			*/
         	add_button = new Gtk.Button.with_label (_("Save"));
             add_button.tooltip_text = _("Create a new Milestone");
             add_button.halign = Gtk.Align.END;
@@ -54,7 +62,7 @@ namespace Planner {
 
                 // CLear inputs
                 clear_entrys ();
-            	
+
                 // Send signal to update
                 created_list ();
 
@@ -69,7 +77,7 @@ namespace Planner {
             name_entry.changed.connect ( () => {
 
                 if (name_entry.text == "") {
-                    
+
                     add_button.sensitive = false;
 
                 } else {
@@ -101,16 +109,16 @@ namespace Planner {
             flow_box.get_children ().@foreach ((child) => {
 
                 child.destroy ();
-            
+
             });
 
             foreach (string name in Utils.name_icon_list ()) {
 
-                var icon_image = new Granite.AsyncImage.from_icon_name_async (name, Gtk.IconSize.DND);
+                var icon_image = new Granite.AsyncImage.from_icon_name_async (name, Gtk.IconSize.LARGE_TOOLBAR);
 
                 flow_box.add (icon_image);
                 flow_box.show_all ();
-            
+
             }
 
             flow_box.child_activated.connect ( (child) => {
@@ -118,9 +126,9 @@ namespace Planner {
                 flow_box.select_child (child);
 
                 icon_image = Utils.name_icon_list()[child.get_index ()];
-                
+
             });
-   			
+
             var assigned_lavel = new Granite.HeaderLabel (_("Assigned Days"));
             spin_button = new Gtk.SpinButton.with_range (0, 100, 1);
 
@@ -134,11 +142,14 @@ namespace Planner {
             main_grid.add (title_box);
             main_grid.add (name_entry);
             main_grid.add (scrolled);
-            main_grid.add (spin_box);
-
+            //main_grid.add (spin_box);
             add (main_grid);
-
             name_entry.grab_focus ();
+
+		}
+		public void set_list (Interfaces.List list) {
+			list_actual = list;
+			build_ui ();
 		}
 
         private void create_list () {

@@ -1,7 +1,5 @@
 namespace Planner {
-
-    public class Interfaces.List { 
-
+    public class Interfaces.List {
         public int id;
         public string name;
         public string start_date;
@@ -13,9 +11,9 @@ namespace Planner {
 
         public List (int id = 0, string name = "", 
             string start_date = "", string due_date = "",
-            string icon = "", int task_all = 0, 
+            string icon = "", int task_all = 0,
             int tasks_completed = 0, int id_project = 0) {
-                
+
             this.id = id;
             this.name = name;
             this.start_date = start_date;
@@ -24,7 +22,6 @@ namespace Planner {
             this.task_all = task_all;
             this.tasks_completed = tasks_completed;
             this.id_project = id_project;
-
         }
-    } 
+    }
 }
