@@ -264,20 +264,20 @@ namespace Planner {
 
 		}
 
-		private void update_task (Interfaces.Task task) {
+		private void update_task () {
 
-			db.update_task (task);
+			//db.update_task (task);
 
-			update_list ();
+			//update_list ();
 
 			update_list_all ();
 		}
 
-		private void remove_task (Interfaces.Task task) {
+		private void remove_task () {
 
-			db.remove_task (task); // Remove from DB
+			//db.remove_task (task); // Remove from DB
 
-			update_list (); //Actualiza la lista de tareas
+			//update_list (); //Actualiza la lista de tareas
 			update_list_all (); //Actualiza la lista de hitos o lsitas de tareas
 		}
 
@@ -292,14 +292,16 @@ namespace Planner {
             task.note = "";
             task.id_list = list_actual.id;
 
-			db.add_task (task);
+			if (task_entry.text != "") {
+				db.add_task (task);
+				task_entry.visible = false;
+				box_title.visible = true;
+				task_entry.text = "";
 
-			task_entry.visible = false;
-			box_title.visible = true;
-			task_entry.text = "";
+				update_list_all ();
+				update_list ();
+			}
 
-			update_list_all ();
-			update_list ();
 			//check_state_alert ();
 		}
 

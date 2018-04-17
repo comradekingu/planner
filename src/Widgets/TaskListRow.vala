@@ -16,8 +16,8 @@ namespace Planner {
 
 		private bool edit_bool = false;
 
-		public signal void update_task_signal (Interfaces.Task task);
-		public signal void remove_task_signal (Interfaces.Task task);
+		public signal void update_task_signal ();
+		public signal void remove_task_signal ();
 
 		private Services.Database db;
 
@@ -151,7 +151,9 @@ namespace Planner {
 			state_button.toggled.connect ( () => {
 
 				task_actual.state = state_button.active.to_string ();
+				db.update_task (task_actual);
 
+				visible = false;
 				/* Test Notification
 				Timeout.add_seconds (4, () => {
 
@@ -169,12 +171,13 @@ namespace Planner {
 				});
 				*/
 
-				update_task_signal (task_actual);
+				update_task_signal ();
 			});
 
 			remove_button.clicked.connect ( () => {
-
-				remove_task_signal (task_actual);
+				db.remove_task (task_actual);
+				remove_task_signal ();
+				destroy ();
 			});
 
 			edit_button.clicked.connect ( () => {
@@ -192,8 +195,18 @@ namespace Planner {
 			});
 
 			task_entry.activate.connect ( () => {
+
 				task_actual.name = task_entry.text;
-				update_task_signal (task_actual);
+				title_label.label = task_actual.name;
+
+				db.update_task (task_actual);
+
+				title_label.visible = true;
+				task_entry.visible = false;
+
+				edit_bool = false;
+
+				//update_task_signal (task_actual);
 			});
 
 			task_entry.icon_press.connect ((pos, event) => {
@@ -235,15 +248,6 @@ namespace Planner {
 	       	}
 
 	       	return true;
-		}
-
-		public void update_task () {
-
-			task_actual.name = title_label.label;
-			task_actual.note = note_view.buffer.text;
-			task_actual.state = state_button.active.to_string ();
-
-			update_task_signal (task_actual);
 		}
 	}
 }
