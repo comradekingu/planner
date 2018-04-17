@@ -23,12 +23,12 @@ namespace Planner {
                 title: "Planner"
             );
 
-            
+
             settings = new GLib.Settings ("com.github.alainm23.planner");
 
 
             //Gtk.Settings.get_default().set("gtk-application-prefer-dark-theme", true);
-            
+
             var window_x = settings.get_int ("window-x");
             var window_y = settings.get_int ("window-y");
             move (window_x, window_y);
@@ -45,7 +45,7 @@ namespace Planner {
             // Create folder and .sqlite db
             Utils.create_dir_with_parents ("/.local/share/com.github.alainm23.planner");
             db = new Services.Database ();
-            
+
 
             build_ui ();
 
@@ -75,7 +75,7 @@ namespace Planner {
             // Welcome View
             welcome_view = new WelcomeView ();
             //main_stack.set_visible_child_name ("welcome_view");
-            
+
             // Overview
             overview_view = new OverviewView ();
 
@@ -103,33 +103,33 @@ namespace Planner {
                 if (index_bar == 0) {
 
                     main_stack.visible_child_name = "overview_view";
-                
+
                 } else if (index_bar == 1) {
-                
+
                     main_stack.visible_child_name = "task_view";
-                
+
                 } else if (index_bar == 2) {
-                
-                    main_stack.visible_child_name = "issues_view";        
-                
+
+                    main_stack.visible_child_name = "issues_view";
+
                 }
-                                
+
                 index = index_bar;
 
             });
-            
+
             startup_view.on_cancel_button.connect ( () => {
 
                 main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 main_stack.visible_child_name = "welcome_view";
-            
+
             });
 
             startup_view.on_create_button.connect ( (project) => {
 
                 db.add_project (project);
-                
-                headerbar.enable_all (); 
+
+                headerbar.enable_all ();
                 headerbar.set_project (project);
 
                 settings.set_int ("last-project-id", 1);
@@ -144,16 +144,16 @@ namespace Planner {
                     main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
                     main_stack.visible_child_name = "startup_view";
                 }
-                
+
             });
-            
+
             main_stack.add_named (overview_view, "overview_view");
             main_stack.add_named (startup_view, "startup_view");
             main_stack.add_named (welcome_view, "welcome_view");
             main_stack.add_named (task_view, "task_view");
             main_stack.add_named (issues_view, "issues_view");
 
-            add (main_stack); 
+            add (main_stack);
 
             show_all ();
 
@@ -161,7 +161,7 @@ namespace Planner {
 
                 headerbar.disable_all ();
 
-                main_stack.visible_child_name = "welcome_view";   
+                main_stack.visible_child_name = "welcome_view";
 
             } else {
 
@@ -183,8 +183,8 @@ namespace Planner {
         private void update_project (Interfaces.Project project) {
 
             settings.set_int ("last-project-id", int.parse(project.id));
-            task_view.update_widget (); 
-                
+            task_view.update_widget ();
+
         }
     }
 }

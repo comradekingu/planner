@@ -2,9 +2,11 @@ namespace Planner {
 
 	public class NewEditListPopover : Gtk.Popover {
 
+		private Gtk.Label title_label;
 		private Gtk.Entry name_entry;
         private Gtk.FlowBox flow_box;
         private Gtk.Button add_button;
+		private Gtk.Button remove_button;
         private Gtk.SpinButton spin_button;
         private string icon_image;
 
@@ -13,7 +15,11 @@ namespace Planner {
 
 		private Interfaces.List list_actual;
 
+		private bool edit_bool = false;
+
         public signal void created_list ();
+		public signal void update_list (Interfaces.List list);
+		public signal void remove_list ();
 
 		public NewEditListPopover (Gtk.Widget relative) {
 
@@ -22,9 +28,7 @@ namespace Planner {
             position = Gtk.PositionType.BOTTOM;
 
 			list_actual = new Interfaces.List ();
-
 			db = new Services.Database (true);
-
             settings = new GLib.Settings ("com.github.alainm23.planner");
 
 			build_ui ();
@@ -39,36 +43,32 @@ namespace Planner {
         	main_grid.expand = true;
         	main_grid.width_request = 250;
 
-            var title_label = new Gtk.Label (_("<b>New List</b>"));
-            title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+            title_label = new Gtk.Label (_("<b>New List</b>"));
+            title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
         	title_label.use_markup = true;
-			/*
-			if (list_actual.name == "") {
-				title_label.label = _();
-			} else {
-				title_label.label = _("<b>Edit List</b>");
-			}
-			*/
+
+			remove_button = new Gtk.Button.with_label (_("Remove"));
+			remove_button.tooltip_text = _("Create a new List");
+			remove_button.valign = Gtk.Align.CENTER;
+			remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+			remove_button.no_show_all = true;
+			remove_button.clicked.connect ( () => {
+				db.remove_list (list_actual);
+				remove_list ();
+				hide ();
+			});
+
         	add_button = new Gtk.Button.with_label (_("Save"));
-            add_button.tooltip_text = _("Create a new Milestone");
+            add_button.tooltip_text = _("Create a new List");
             add_button.halign = Gtk.Align.END;
             add_button.valign = Gtk.Align.CENTER;
             add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.sensitive = false;
             add_button.clicked.connect ( () => {
-
                 // Create_list to db
                 create_list ();
-
-                // CLear inputs
-                clear_entrys ();
-
-                // Send signal to update
-                created_list ();
-
                 // hide popover
                 hide ();
-
             });
 
             name_entry = new Gtk.Entry ();
@@ -92,7 +92,8 @@ namespace Planner {
             title_box.hexpand = true;
 
             title_box.pack_start (title_label, false, true, 0);
-            title_box.pack_end (add_button, false, true, 0);
+            title_box.pack_end (add_button, false, true, 6);
+			title_box.pack_end (remove_button, false, false, 0);
 
 
             flow_box = new Gtk.FlowBox ();
@@ -124,6 +125,7 @@ namespace Planner {
             flow_box.child_activated.connect ( (child) => {
 
                 flow_box.select_child (child);
+				add_button.sensitive = true;
 
                 icon_image = Utils.name_icon_list()[child.get_index ()];
 
@@ -147,23 +149,25 @@ namespace Planner {
             name_entry.grab_focus ();
 
 		}
-		public void set_list (Interfaces.List list) {
-			list_actual = list;
-			build_ui ();
-		}
 
         private void create_list () {
 
-            Interfaces.List list = new Interfaces.List ();
+			list_actual.name = name_entry.text;
+			list_actual.start_date = "";
+			list_actual.due_date = "";
+			list_actual.icon = icon_image;
+			list_actual.id_project = settings.get_int ("last-project-id");
 
-            list.name = name_entry.text;
-            list.start_date = "";
-            list.due_date = "";
-            list.icon = icon_image;
-            list.id_project = settings.get_int ("last-project-id");
+			if (edit_bool) {
+				db.update_list (list_actual);
+				update_list (list_actual);
+			} else {
+				db.add_list (list_actual);
 
-            db.add_list (list);
+				created_list ();
+			}
 
+			clear_entrys ();
         }
 
         private void clear_entrys () {
@@ -172,5 +176,20 @@ namespace Planner {
             name_entry.grab_focus ();
 
         }
+
+		public void set_list_to_edit (Interfaces.List list) {
+
+			title_label.label = _("<b>Edit List</b>");
+			add_button.label = _("Update");
+
+			name_entry.text = list.name;
+			icon_image = list.icon;
+
+			edit_bool = true;
+			remove_button.visible = true;
+			add_button.sensitive = false;
+
+			list_actual = list;
+		}
 	}
 }

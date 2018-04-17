@@ -235,6 +235,23 @@ namespace Planner {
                 debug ("Task removed: " + task.name);
         }
 
+        public void remove_list (Interfaces.List list) {
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("DELETE FROM LISTS " +
+                "WHERE id = ?", -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (1, list.id);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.OK)
+                debug ("List removed: " + list.name);
+
+        }
+
         public void update_project (Interfaces.Project project) {
 
             Sqlite.Statement stmt;
@@ -302,6 +319,28 @@ namespace Planner {
 
             if (res == Sqlite.OK)
                 debug ("Task updated: " + task.name);
+        }
+
+        public void update_list (Interfaces.List list) {
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("UPDATE LISTS SET name = ?, icon = ? " +
+            "WHERE id = ?", -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, list.name);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (2, list.icon);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (3, list.id);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.OK)
+                debug ("List updated: " + list.name);
         }
 
         public Gee.ArrayList<Interfaces.List?> get_all_lists (int id_project) {

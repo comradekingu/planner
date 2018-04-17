@@ -12,12 +12,14 @@ namespace Planner {
 
 		private Gtk.Box main_box;
 		private string old_label = "";
-		private Interfaces.Task task_actual;
+		public Interfaces.Task task_actual;
 
 		private bool edit_bool = false;
 
-		public signal void update_task (Interfaces.Task task);
-		public signal void remove_task (Interfaces.Task task);
+		public signal void update_task_signal (Interfaces.Task task);
+		public signal void remove_task_signal (Interfaces.Task task);
+
+		private Services.Database db;
 
 		public TaskListRow (Interfaces.Task task) {
 
@@ -27,6 +29,8 @@ namespace Planner {
 			hexpand = true;
 			vexpand = false;
 			task_actual = task;
+
+			db = new Services.Database (true);
 
 			build_ui ();
 		}
@@ -42,6 +46,7 @@ namespace Planner {
 			title_label.margin_left = 12;
 			title_label.halign = Gtk.Align.START;
 			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H4_LABEL);
 
 			task_entry = new Gtk.Entry ();
 			task_entry.no_show_all = true;
@@ -85,10 +90,20 @@ namespace Planner {
 			note_view.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
 			note_view.expand = true;
 			note_view.buffer.text = task_actual.note;
+			note_view.get_style_context ().add_class ("textview");
+
+			note_view.buffer.changed.connect ( () => {
+				task_actual.note = note_view.buffer.text;
+
+				Thread<void*> thread = new Thread<void*>.try("Update note", () => {
+					db.update_task (task_actual);
+					return null;
+				});
+			});
 
 			var scrolled = new Gtk.ScrolledWindow (null, null);
 			scrolled.hexpand = true;
-			scrolled.height_request = 150;
+			scrolled.height_request = 120;
 			scrolled.margin_left = 32;
 			scrolled.margin_top = 12;
 			scrolled.margin_bottom = 12;
@@ -117,6 +132,7 @@ namespace Planner {
 
 				if (edit_bool != true) {
 					action_revealer.reveal_child = true;
+					title_label.get_style_context ().add_class ("label_link");
 				}
 
 				return false;
@@ -125,17 +141,11 @@ namespace Planner {
 			option_event.leave_notify_event.connect ((event) => {
 				if (event.detail == Gdk.NotifyType.INFERIOR) {
 					return false;
-				   }
-
-				   action_revealer.reveal_child = false;
+				}
+				title_label.get_style_context ().remove_class ("label_link");
+				action_revealer.reveal_child = false;
 
 				return false;
-			});
-
-			note_view.buffer.changed.connect ( () => {
-
-				task_actual.note = note_view.buffer.text;
-
 			});
 
 			state_button.toggled.connect ( () => {
@@ -159,30 +169,31 @@ namespace Planner {
 				});
 				*/
 
-				update_task (task_actual);
+				update_task_signal (task_actual);
 			});
 
 			remove_button.clicked.connect ( () => {
 
-				remove_task (task_actual);
+				remove_task_signal (task_actual);
 			});
 
 			edit_button.clicked.connect ( () => {
 
 				edit_bool = true;
 				action_revealer.reveal_child = false;
+				revealer_noteview.reveal_child = false;
+				main_box.margin_top = 0;
 
 				task_entry.visible = true;
 				title_label.visible = false;
+				task_entry.text = title_label.label;
 
 				task_entry.grab_focus ();
-
 			});
 
 			task_entry.activate.connect ( () => {
-
-				 task_actual.name = task_entry.text;
-				 update_task (task_actual);
+				task_actual.name = task_entry.text;
+				update_task_signal (task_actual);
 			});
 
 			task_entry.icon_press.connect ((pos, event) => {
@@ -215,24 +226,24 @@ namespace Planner {
 
 		private bool show_options (Gtk.Widget sender, Gdk.EventButton evt) {
 			if (revealer_noteview.reveal_child) {
-
-	       		revealer_noteview.reveal_child = false;
-	       		main_box.margin_top = 0;
-	       		title_label.label = old_label;
-
-				update_task (task_actual);
+	    		revealer_noteview.reveal_child = false;
 
 	   		} else {
-
 				revealer_noteview.reveal_child = true;
-	            main_box.margin_top = 12;
+	            //main_box.margin_top = 12;
 	            note_view.grab_focus ();
-
-	            old_label = title_label.label;
-	            title_label.label = "<b>" + title_label.label + "</b>";
 	       	}
 
 	       	return true;
+		}
+
+		public void update_task () {
+
+			task_actual.name = title_label.label;
+			task_actual.note = note_view.buffer.text;
+			task_actual.state = state_button.active.to_string ();
+
+			update_task_signal (task_actual);
 		}
 	}
 }

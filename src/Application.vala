@@ -11,7 +11,7 @@ namespace Planner {
             
             var app_window = new MainWindow (this);
             app_window.show_all ();
-
+      
             var quit_action = new SimpleAction ("quit", null);
 
             add_action (quit_action);

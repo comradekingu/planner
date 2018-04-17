@@ -4,12 +4,12 @@ namespace Planner {
 
         private Gtk.Button add_button;
         private Gtk.Button search_button;
-        private Gtk.Label  title_label; 
+        private Gtk.Label  title_label;
         private Gtk.Revealer revealer_searchbar;
         private Gtk.SearchEntry search_entry;
         private Gtk.ListBox project_listbox;
         private Gtk.ScrolledWindow list_scrolled_window;
-        
+
         private Gee.ArrayList<Interfaces.Project?> all_projects;
 
         private Services.Database db;
@@ -62,7 +62,7 @@ namespace Planner {
 
             var v_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
             v_box.hexpand = true;
-            
+
             v_box.pack_start (title_label, false, true, 0);
             v_box.pack_end (add_button, false, true, 0);
             //v_box.pack_end (search_button, false, true, 0);
@@ -98,9 +98,9 @@ namespace Planner {
                 search_entry.visible = false;
 
             } else {
-                
+
                 search_entry.visible = true;
-            
+
             }
 
             search_entry.text = "";
@@ -134,18 +134,18 @@ namespace Planner {
                 delete_project (project);
 
             });
-            
+
             row.edit_button_active.connect ( (project) => {
 
                 edit_project (project);
 
             });
         }
-        
+
         public void update_list () {
 
             foreach (Gtk.Widget element in project_listbox.get_children ()) {
-                
+
                 project_listbox.remove (element);
             }
 
@@ -178,7 +178,7 @@ namespace Planner {
 
         private void apply_filter () {
 
-            project_listbox.set_filter_func (filter_function); 
+            project_listbox.set_filter_func (filter_function);
         }
     }
 }

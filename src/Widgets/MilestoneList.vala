@@ -98,9 +98,8 @@ namespace Planner {
 
                 row.selected_list.connect (selected_list);
             }
-
+			/*
 			// Update ProgressBar
-			progressbar.fraction = all_tasks_completed_progress / all_tasks_progress;
 			var provider = new Gtk.CssProvider ();
 
 			try {
@@ -122,7 +121,7 @@ namespace Planner {
 				} else {
 					colored_css = PROGRESSBAR_CSS.printf (color_completed);
 				}
-				*/
+
 
 				provider.load_from_data (colored_css, colored_css.length);
 				Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -130,6 +129,9 @@ namespace Planner {
 			} catch (GLib.Error e) {
             	return;
         	}
+			*/
+
+			progressbar.fraction = all_tasks_completed_progress / all_tasks_progress;
 
 			all_tasks_completed_progress = 0;
 			all_tasks_progress = 0;

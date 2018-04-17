@@ -43,7 +43,7 @@ namespace Planner {
             row_spacing = 12;
             margin = 50;
             margin_bottom = 50;
-			width_request = 421;
+			width_request = 500;
 
 			filter_bool = true;
 			none_tasks_bool = false;
@@ -79,7 +79,18 @@ namespace Planner {
 			edit_list_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
 			edit_list_popover = new NewEditListPopover (edit_list_button);
+			edit_list_popover.update_list.connect ( (list) => {
+				update_list_all ();
+
+				list_actual = list;
+				title_list_label.label = "<b>" + list_actual.name + "</b>";
+			});
+			edit_list_popover.remove_list.connect ( () => {
+				update_list_all ();
+			});
+
 			edit_list_button.clicked.connect ( () => {
+				edit_list_popover.set_list_to_edit (list_actual);
  				edit_list_popover.show_all ();
 			});
 
@@ -122,7 +133,8 @@ namespace Planner {
 
 			box_title.pack_start (title_list_label, false, false, 0);
 			box_title.pack_start (edit_list_button, false, false, 0);
-			box_title.pack_end (add_button, false, false, 0);
+
+			box_title.pack_end (add_button, false, false, 6);
 			box_title.pack_end (task_state_modebutton, false, false, 0);
 
 			task_entry = new Gtk.Entry ();
@@ -206,27 +218,19 @@ namespace Planner {
 			all_task = db.get_all_tasks (list_actual.id);
 
 			if (all_task.size < 1) {
-
 				none_tasks_bool = true;
 				task_scrolled_window.visible = false;
-
 			} else {
-
 				none_tasks_bool = false;
 				task_scrolled_window.visible = true;
 			}
 
 			foreach (var task in all_task) {
-
 				if (bool.parse(task.state) != filter_bool) {
-
 					var row = new TaskListRow (task);
-
 					task_container.add (row);
-
 					connect_row_signals (row);
 				}
-
 			}
 
 			var last_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
@@ -255,8 +259,8 @@ namespace Planner {
 
 		private void connect_row_signals (TaskListRow row) {
 
-			row.update_task.connect (update_task);
-			row.remove_task.connect (remove_task);
+			row.update_task_signal.connect (update_task);
+			row.remove_task_signal.connect (remove_task);
 
 		}
 
@@ -271,11 +275,10 @@ namespace Planner {
 
 		private void remove_task (Interfaces.Task task) {
 
-			db.remove_task (task);
+			db.remove_task (task); // Remove from DB
 
-			update_list ();
-
-			update_list_all ();
+			update_list (); //Actualiza la lista de tareas
+			update_list_all (); //Actualiza la lista de hitos o lsitas de tareas
 		}
 
 		private void add_task () {
@@ -320,6 +323,8 @@ namespace Planner {
 				title_list_label.no_show_all = false;
 				box_title.no_show_all = false;
 				task_scrolled_window.no_show_all = false;
+
+				edit_list_popover.set_list_to_edit (list_actual);
 
 				update_list ();
 
