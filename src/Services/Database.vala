@@ -208,7 +208,7 @@ namespace Planner {
                 "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (1, project.id);
+            res = stmt.bind_int (1, project.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -253,7 +253,6 @@ namespace Planner {
         }
 
         public void update_project (Interfaces.Project project) {
-
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
@@ -279,7 +278,7 @@ namespace Planner {
             res = stmt.bind_text (6, project.avatar);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (7, project.id);
+            res = stmt.bind_int (7, project.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -360,7 +359,6 @@ namespace Planner {
             var all_tasks = new Gee.ArrayList<Interfaces.Task?> ();
 
             while ((res = stmt.step()) == Sqlite.ROW) {
-
                 Interfaces.List list = new Interfaces.List ();
 
                 list.id = int.parse(stmt.column_text (0));
@@ -370,10 +368,9 @@ namespace Planner {
                 list.icon = stmt.column_text (4);
                 list.id_project = int.parse(stmt.column_text (5));
 
-                // Get all task
                 all_tasks = get_all_tasks (list.id);
                 list.task_all = all_tasks.size;
-                // get Task completed
+
                 foreach (var task in all_tasks) {
                     if (task.state == "true") {
                         tasks_completed = tasks_completed + 1;
@@ -388,9 +385,7 @@ namespace Planner {
             return all;
         }
 
-
         public Gee.ArrayList<Interfaces.Project?> get_all_projects () {
-
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("SELECT * FROM PROJECTS ORDER BY id",
@@ -401,10 +396,9 @@ namespace Planner {
             var all = new Gee.ArrayList<Interfaces.Project?> ();
 
             while ((res = stmt.step()) == Sqlite.ROW) {
-
                 var project = new Interfaces.Project ();
 
-                project.id = stmt.column_text (0);
+                project.id = int.parse (stmt.column_text (0));
                 project.name = stmt.column_text (1);
                 project.description = stmt.column_text (2);
                 project.start_date = stmt.column_text (3);
@@ -414,12 +408,10 @@ namespace Planner {
 
                 all.add (project);
             }
-
-
             return all;
         }
 
-        public Gee.ArrayList<Interfaces.Task?> get_all_tasks (int id_list) {
+        public Gee.ArrayList<Interfaces.Task?> get_all_tasks (int id_list=1) {
 
             Sqlite.Statement stmt;
             int res = db.prepare_v2 ("SELECT * FROM TASKS where id_list = ? ORDER BY id",
@@ -450,7 +442,6 @@ namespace Planner {
         }
 
         public int get_project_number () {
-
             var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
             all_projects = get_all_projects ();
 
@@ -458,9 +449,15 @@ namespace Planner {
         }
 
         public int get_list_length () {
+            var all_lists = new Gee.ArrayList<Interfaces.List?> ();
+            all_lists = get_all_lists (settings.get_int ("last-project-id"));
 
-            var all_tasks = new Gee.ArrayList<Interfaces.List?> ();
-            all_tasks = get_all_lists (settings.get_int ("last-project-id"));
+            return all_lists.size;
+        }
+
+        public int get_tasks_length  (int list_id) {
+            var all_tasks = new Gee.ArrayList<Interfaces.Task?> ();
+            all_tasks = get_all_tasks (list_id);
 
             return all_tasks.size;
         }

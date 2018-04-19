@@ -1,6 +1,6 @@
 namespace Planner {
     public class Interfaces.Project {
-        public string id;
+        public int id;
         public string name;
         public string description;
         public string start_date;
@@ -8,7 +8,7 @@ namespace Planner {
         public string type;
         public string avatar;
 
-        public Project (string id = "", 
+        public Project (int id = 1, 
             string name = "", string description = "",
             string start_date = "", string due_date = "",
             string type = "", string avatar = "") {

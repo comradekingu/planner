@@ -53,9 +53,9 @@ namespace Planner {
 
         	image_button = new Gtk.Image.from_icon_name("planner-startup", Gtk.IconSize.DND);
             image_button.pixel_size = 96;
-        	
+
         	avatar_button.image = image_button;
-        	
+
         	//logoPopover
         	avatar_popover = new AvatarPopover (avatar_button);
 
@@ -76,9 +76,9 @@ namespace Planner {
                 } else {
                     create_button.sensitive = false;
                 }
-            
+
             });
-        	
+
         	// Description Widget
         	var description_view_label = new Granite.HeaderLabel (_("Project Description"));
         	description_view_label.margin_top = 24;
@@ -87,13 +87,13 @@ namespace Planner {
             description_entry.width_request = 100;
         	description_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         	description_entry.get_style_context().add_class (Granite.STYLE_CLASS_H3_LABEL);
-        	
+
         	avatar_button.clicked.connect ( () => {
 
         		avatar_popover.show_all ();
-                
+
         	});
-        	
+
         	avatar_popover.on_image_select.connect ( (icon_name) => {
 
         		image_button.icon_name = icon_name;
@@ -103,7 +103,7 @@ namespace Planner {
 
             var cancel_button = new Gtk.Button.with_label (_("Cancel"));
             cancel_button.clicked.connect ( () => {
-                
+
                 clear_all ();
 
                 on_cancel_button ();
@@ -130,7 +130,7 @@ namespace Planner {
 	        content.valign = Gtk.Align.CENTER;
 	        content.halign = Gtk.Align.CENTER;
 	        content.orientation = Gtk.Orientation.VERTICAL;
-	        
+
 	        content.add (title_label);
 	        content.add (subtitle_label);
 	        content.add (avatar_button);
@@ -149,8 +149,8 @@ namespace Planner {
 
             name_entry.text = "";
             description_entry.text = "";
-            
-        }	
+
+        }
 
         private void create_button_clicked () {
 
@@ -161,7 +161,8 @@ namespace Planner {
             new_project.avatar = image_button.icon_name;
             new_project.type = "lists";
             new_project.start_date = new GLib.DateTime.now_local ().format ("%F");
-            on_create_button (new_project);
+
+			on_create_button (new_project);
         }
 	}
 }

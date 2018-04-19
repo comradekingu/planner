@@ -1,5 +1,4 @@
 namespace Planner {
-
 	public class TaskList : Gtk.Grid {
 
 		private Gtk.Label title_list_label;
@@ -27,6 +26,9 @@ namespace Planner {
 		private string TITLE_NONE_TASK_ALERT;
 		private string DESCRIPTION_NONE_TASK_ALERT;
 
+		private string TITLE_NONE_TASK_COMPLETED_ALERT;
+		private string DESCRIPTION_NONE_TASK_COMPLETED_ALERT;
+
 		private Interfaces.List list_actual;
 
 		private Granite.Widgets.ModeButton task_state_modebutton;
@@ -48,14 +50,17 @@ namespace Planner {
 			filter_bool = true;
 			none_tasks_bool = false;
 
-			TITLE_NONE_LIST_ALERT = _("Create a List");
+			TITLE_NONE_LIST_ALERT = _("No List");
 			DESCRIPTION_NONE_LIST_ALERT = _("To start creating <b>Tasks</b> you must create a first <b>List</b>");
 
 			TITLE_NONE_SELECT_ALERT = _("Select a List");
 			DESCRIPTION_NONE_SELECTED_ALERT = _("Select a <b>List</b> to start viewing and completing <b>Tasks</b>");
 
-			TITLE_NONE_TASK_ALERT = _("Create a Task");
-			DESCRIPTION_NONE_TASK_ALERT = _("Create a task with the <b>+</b> button");
+			TITLE_NONE_TASK_ALERT = _("No homework");
+			DESCRIPTION_NONE_TASK_ALERT = _("Create a <b>Task</b> with the <b>+</b> button");
+
+			TITLE_NONE_TASK_COMPLETED_ALERT = _("No completed task");
+			DESCRIPTION_NONE_TASK_COMPLETED_ALERT = _("Start to complete to fill this space");
 
 			list_actual = new Interfaces.List ();
 
@@ -66,8 +71,13 @@ namespace Planner {
 
 		private void build_ui () {
 
-			alert = new Granite.Widgets.AlertView ("", "", "dialog-warning");
-			//"<b>%s</b>".printf (_("What's New:"));
+			alert = new Granite.Widgets.AlertView (TITLE_NONE_SELECT_ALERT, DESCRIPTION_NONE_SELECTED_ALERT, "dialog-warning");
+			alert.no_show_all = true;
+
+			if (db.get_list_length () < 1) {
+				alert.title = TITLE_NONE_LIST_ALERT;
+				alert.description = DESCRIPTION_NONE_LIST_ALERT;
+			}
 
 			title_list_label = new Gtk.Label ("");
 			title_list_label.use_markup = true;
@@ -113,6 +123,7 @@ namespace Planner {
 
 			add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             add_button.tooltip_text = _("Create a new Task");
+			add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.halign = Gtk.Align.END;
 			add_button.valign = Gtk.Align.CENTER;
 
@@ -128,7 +139,6 @@ namespace Planner {
 
 			box_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 			box_title.margin_left = 6;
-			box_title.no_show_all = true;
 			box_title.hexpand = true;
 
 			box_title.pack_start (title_list_label, false, false, 0);
@@ -144,8 +154,6 @@ namespace Planner {
 			task_entry.margin_left = 12;
 			task_entry.placeholder_text = _("Add new task...");
 			task_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-			task_entry.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
-			task_entry.no_show_all = true;
 			task_entry.changed.connect( () => {
 
                 if (task_entry.text == "") {
@@ -200,7 +208,6 @@ namespace Planner {
 			task_scrolled_window = new Gtk.ScrolledWindow (null, null);
             task_scrolled_window.expand = true;
 			task_scrolled_window.add (task_container);
-			task_scrolled_window.no_show_all = true;
 
 			add (task_entry);
 			add (box_title);
@@ -209,21 +216,14 @@ namespace Planner {
 
 			update_list ();
 
-			//check_state_alert ();
+			box_title.no_show_all = true;
+			task_scrolled_window.visible = false;
 		}
 
 		private void create_list () {
 
 			var all_task = new Gee.ArrayList<Interfaces.Task?> ();
 			all_task = db.get_all_tasks (list_actual.id);
-
-			if (all_task.size < 1) {
-				none_tasks_bool = true;
-				task_scrolled_window.visible = false;
-			} else {
-				none_tasks_bool = false;
-				task_scrolled_window.visible = true;
-			}
 
 			foreach (var task in all_task) {
 				if (bool.parse(task.state) != filter_bool) {
@@ -247,14 +247,6 @@ namespace Planner {
 			}
 
 			create_list ();
-
-			if (none_tasks_bool) {
-				alert.visible = true;
-			} else {
-				alert.visible = false;
-			}
-
-			//check_state_alert ();
 		}
 
 		private void connect_row_signals (TaskListRow row) {
@@ -265,19 +257,10 @@ namespace Planner {
 		}
 
 		private void update_task () {
-
-			//db.update_task (task);
-
-			//update_list ();
-
 			update_list_all ();
 		}
 
 		private void remove_task () {
-
-			//db.remove_task (task); // Remove from DB
-
-			//update_list (); //Actualiza la lista de tareas
 			update_list_all (); //Actualiza la lista de hitos o lsitas de tareas
 		}
 
@@ -301,36 +284,20 @@ namespace Planner {
 				update_list_all ();
 				update_list ();
 			}
-
-			//check_state_alert ();
 		}
 
 		public void set_list (Interfaces.List list) {
+			list_actual = list;
 
-			if (list.name == "") {
+			update_list ();
 
-				title_list_label.visible = false;
-				box_title.visible = false;
-				task_scrolled_window.visible = false;
+			title_list_label.label = "<b>"+ list_actual.name +"</b>";
+			edit_list_popover.set_list_to_edit (list_actual);
 
-				alert.visible = true;
+			box_title.visible = true;
+			task_scrolled_window.visible = true;
 
-				//check_state_alert ();
-
-			} else {
-
-				list_actual = list;
-				title_list_label.label = "<b>"+ list_actual.name +"</b>";
-
-				title_list_label.no_show_all = false;
-				box_title.no_show_all = false;
-				task_scrolled_window.no_show_all = false;
-
-				edit_list_popover.set_list_to_edit (list_actual);
-
-				update_list ();
-
-			}
+			alert.visible = false;
 		}
 
 		private void check_state_alert () {

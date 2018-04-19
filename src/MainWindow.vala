@@ -20,13 +20,11 @@ namespace Planner {
             Object (
                 application: application,
                 icon_name: "com.github.alainm23.planner",
-                title: "Planner"
+                title: _("Planner")
             );
 
 
             settings = new GLib.Settings ("com.github.alainm23.planner");
-
-
             //Gtk.Settings.get_default().set("gtk-application-prefer-dark-theme", true);
 
             var window_x = settings.get_int ("window-x");
@@ -41,16 +39,14 @@ namespace Planner {
             weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
             default_theme.add_resource_path ("/com/github/alainm23/planner");
 
-
             // Create folder and .sqlite db
             Utils.create_dir_with_parents ("/.local/share/com.github.alainm23.planner");
             db = new Services.Database ();
 
-
             build_ui ();
 
+            // Event to save x, y, width height
             this.delete_event.connect ( () => {
-
                 int current_x, current_y, width, height;
                 get_position (out current_x, out current_y);
                 get_size (out width, out height);
@@ -65,16 +61,14 @@ namespace Planner {
         }
 
         public void build_ui () {
-
             main_stack = new Gtk.Stack ();
-            main_stack.transition_duration = 400;
+            //main_stack.transition_duration = 400;
             main_stack.vexpand = true;
             main_stack.hexpand = true;
             main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
 
             // Welcome View
             welcome_view = new WelcomeView ();
-            //main_stack.set_visible_child_name ("welcome_view");
 
             // Overview
             overview_view = new OverviewView ();
@@ -93,7 +87,6 @@ namespace Planner {
             set_titlebar (headerbar);
             headerbar.update_project.connect (update_project);
             headerbar.on_headerbar_change.connect ( (index_bar) => {
-
                 if (index > index_bar) {
                     main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 } else {
@@ -101,50 +94,42 @@ namespace Planner {
                 }
 
                 if (index_bar == 0) {
-
                     main_stack.visible_child_name = "overview_view";
-
                 } else if (index_bar == 1) {
-
                     main_stack.visible_child_name = "task_view";
-
                 } else if (index_bar == 2) {
-
                     main_stack.visible_child_name = "issues_view";
-
                 }
 
                 index = index_bar;
-
             });
 
             startup_view.on_cancel_button.connect ( () => {
-
                 main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 main_stack.visible_child_name = "welcome_view";
-
             });
 
             startup_view.on_create_button.connect ( (project) => {
-
                 db.add_project (project);
 
                 headerbar.enable_all ();
                 headerbar.set_project (project);
 
                 settings.set_int ("last-project-id", 1);
-
                 main_stack.visible_child_name = "overview_view";
 
+                overview_view.set_project (project);
             });
 
             welcome_view.on_welcome_select.connect ( (index) => {
-
                 if (index == 0) {
                     main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
                     main_stack.visible_child_name = "startup_view";
                 }
+            });
 
+            task_view.update_overview.connect ( () => {
+                overview_view.update_widget ();
             });
 
             main_stack.add_named (overview_view, "overview_view");
@@ -158,33 +143,25 @@ namespace Planner {
             show_all ();
 
             if (db.get_project_number () < 1) {
-
                 headerbar.disable_all ();
-
                 main_stack.visible_child_name = "welcome_view";
-
             } else {
-
-                int id = settings.get_int ("last-project-id");
-
                 var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
                 all_projects = db.get_all_projects ();
-
-
                 foreach (var project in all_projects) {
-                    if (project.id == id.to_string ())
+                    if (project.id == settings.get_int ("last-project-id")) {
                         headerbar.set_project (project);
+                        overview_view.set_project (project);
+                    }
                 }
-
                 main_stack.visible_child_name = "overview_view";
             }
         }
 
         private void update_project (Interfaces.Project project) {
-
-            settings.set_int ("last-project-id", int.parse(project.id));
+            settings.set_int ("last-project-id", project.id);
             task_view.update_widget ();
-
+            overview_view.set_project (project);
         }
     }
 }

@@ -55,9 +55,7 @@ namespace Planner {
 
             new_list_popover = new NewEditListPopover (add_button);
             new_list_popover.created_list.connect ( () => {
-
                 update_list ();
-
             });
 
             var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -65,7 +63,6 @@ namespace Planner {
             title_box.pack_end (add_button, false, false, 0);
 
             progressbar = new Gtk.ProgressBar ();
-            progressbar.margin_end = 6;
 
             milestone_list = new Gtk.ListBox ();
             milestone_list.activate_on_single_click = true;
@@ -98,39 +95,6 @@ namespace Planner {
 
                 row.selected_list.connect (selected_list);
             }
-			/*
-			// Update ProgressBar
-			var provider = new Gtk.CssProvider ();
-
-			try {
-				var colored_css = "";
-
-				if (all_tasks_completed_progress == all_tasks_progress) {
-					colored_css = PROGRESSBAR_CSS.printf (color_completed);
-				} else if (all_tasks_completed_progress > all_tasks_progress / 2) {
-					colored_css = PROGRESSBAR_CSS.printf (color_medium);
-				} else {
-					colored_css = PROGRESSBAR_CSS.printf (color_low);
-				}
-				/*
-				if (all_tasks_completed_progress > all_tasks_progress / 2) {
-					colored_css = PROGRESSBAR_CSS.printf (color_medium);
-
-				} else if (all_tasks_completed_progress < all_tasks_progress / 2) {
-					colored_css = PROGRESSBAR_CSS.printf (color_low);
-				} else {
-					colored_css = PROGRESSBAR_CSS.printf (color_completed);
-				}
-
-
-				provider.load_from_data (colored_css, colored_css.length);
-				Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-			} catch (GLib.Error e) {
-            	return;
-        	}
-			*/
-
 			progressbar.fraction = all_tasks_completed_progress / all_tasks_progress;
 
 			all_tasks_completed_progress = 0;
@@ -146,14 +110,10 @@ namespace Planner {
             }
 
             create_list ();
-
-            //selected_list (new Interfaces.List());
 	   }
 
         private void selected_list (Interfaces.List list) {
-
             list_selected (list);
-
         }
     }
 }

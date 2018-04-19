@@ -29,7 +29,7 @@ namespace Planner {
 			name_label.use_markup = true;
 			name_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
-			state_label = new Gtk.Label (actual_list.tasks_completed.to_string () + "/" + actual_list.task_all.to_string ());
+			state_label = new Gtk.Label ("<b>" + actual_list.tasks_completed.to_string () +"</b>" + "/" + actual_list.task_all.to_string ());
 			state_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 			state_label.vexpand = true;
 			state_label.use_markup = true;
@@ -47,16 +47,16 @@ namespace Planner {
 				state_image.icon_name = "user-busy";
 			}
 
-			var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+			var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
 			box.expand = true;
 
 			var grid = new Gtk.Grid ();
 			grid.orientation = Gtk.Orientation.HORIZONTAL;
 
-			box.pack_start (avatar_image, false, true, 6);
-			box.pack_start (name_label, false, true, 6);
-			box.pack_end (state_image, false, true, 6);
-			box.pack_end (state_label, false, true, 6);
+			box.pack_start (avatar_image, false, true, 3);
+			box.pack_start (name_label, false, true, 3);
+			box.pack_end (state_image, false, true, 3);
+			box.pack_end (state_label, false, true, 3);
 
 			grid.attach (box, 0, 0, 1, 1);
 

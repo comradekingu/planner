@@ -9,6 +9,7 @@ namespace Planner {
 
         // Signal
         public signal void selected_project (Interfaces.Project project);
+        public signal void update_project ();
 
         private string TITLE_NEW = _("New");
         private string TITLE_EDIT = _("Edit");
@@ -73,15 +74,16 @@ namespace Planner {
                 if (type == "new") {
 
                     notification.title = _("Project was created");
-                
+
                 } else {
 
                     notification.title = _("Project was updated");
-
+                    // AQui EVEnto de update u actualizar Overview
+                    update_project ();
                 }
-            
+
                 project_list.update_list ();
-                
+
                 notification.send_notification ();
             });
 
@@ -106,9 +108,9 @@ namespace Planner {
             project_list.edit_project.connect ( (project) => {
 
                 stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
-                
+
                 stack.visible_child_name = "project_new_update";
-                
+
                 project_new_update.set_title (TITLE_EDIT);
 
                 project_new_update.update_project (project);
@@ -118,7 +120,7 @@ namespace Planner {
             project_list.selected_project.connect ( (project) => {
 
                 hide ();
-                
+
                 selected_project (project);
 
             });
@@ -127,7 +129,7 @@ namespace Planner {
 
             grid.attach (notification, 0, 0, 1, 1);
             grid.attach (stack, 0, 0, 1, 1);
-    
+
             add (grid);
         }
 
@@ -140,9 +142,9 @@ namespace Planner {
 
             project_new_update.set_title (TITLE_NEW);
             project_new_update.clear_entry ();
-            
+
             hide ();
-            
+
         }
     }
 }

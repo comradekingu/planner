@@ -30,6 +30,7 @@ namespace Planner {
 			list_actual = new Interfaces.List ();
 			db = new Services.Database (true);
             settings = new GLib.Settings ("com.github.alainm23.planner");
+			icon_image = Utils.name_icon_list()[6];
 
 			build_ui ();
 		}
@@ -151,7 +152,6 @@ namespace Planner {
 		}
 
         private void create_list () {
-
 			list_actual.name = name_entry.text;
 			list_actual.start_date = "";
 			list_actual.due_date = "";
@@ -163,7 +163,6 @@ namespace Planner {
 				update_list (list_actual);
 			} else {
 				db.add_list (list_actual);
-
 				created_list ();
 			}
 
@@ -178,18 +177,17 @@ namespace Planner {
         }
 
 		public void set_list_to_edit (Interfaces.List list) {
+			list_actual = list;
 
 			title_label.label = _("<b>Edit List</b>");
 			add_button.label = _("Update");
 
-			name_entry.text = list.name;
-			icon_image = list.icon;
+			name_entry.text = list_actual.name;
+			icon_image = list_actual.icon;
 
 			edit_bool = true;
 			remove_button.visible = true;
 			add_button.sensitive = false;
-
-			list_actual = list;
 		}
 	}
 }

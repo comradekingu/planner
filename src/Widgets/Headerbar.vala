@@ -30,17 +30,20 @@ namespace Planner {
                 project_popover.show_all ();
 
             });
-            
+
             project_popover.selected_project.connect (set_actual_project);
+            project_popover.update_project.connect ( () => {
+
+            });
 
             format_bar = new FormatBar ();
             set_custom_title (format_bar);
             format_bar.on_formarbar_select.connect ( (index_bar) => {
 
                 on_headerbar_change (index_bar);
-            
+
             });
-        
+
 
             // ------- Team Button -------------------------------------
 

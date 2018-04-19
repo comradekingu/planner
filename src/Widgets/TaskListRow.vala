@@ -90,6 +90,11 @@ namespace Planner {
 			note_view.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
 			note_view.expand = true;
 			note_view.buffer.text = task_actual.note;
+
+			//var tabs = new Pango.TabArray (1, true);
+			//tabs.set_tab(0, Pango.TabAlign.TAB_LEFT, 2);
+
+			//note_view.set_tabs (tabs);
 			note_view.get_style_context ().add_class ("textview");
 
 			note_view.buffer.changed.connect ( () => {
@@ -105,7 +110,7 @@ namespace Planner {
 			scrolled.hexpand = true;
 			scrolled.height_request = 120;
 			scrolled.margin_left = 32;
-			scrolled.margin_top = 12;
+			scrolled.margin_top = 6;
 			scrolled.margin_bottom = 12;
 			scrolled.add (note_view);
 

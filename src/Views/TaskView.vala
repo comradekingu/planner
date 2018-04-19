@@ -4,6 +4,8 @@ namespace Planner {
 		private MilestoneList milestones_list;
 		private TaskList task_list;
 
+		public signal void update_overview ();
+
 		public TaskView () {
 
 			get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -26,15 +28,11 @@ namespace Planner {
             separator.margin_bottom = 50;
 
 			milestones_list.list_selected.connect ( (list) => {
-
 				task_list.set_list (list);
-
 			});
-
 			task_list.update_list_all.connect ( () => {
-
 				milestones_list.update_list ();
-
+				update_overview ();
 			});
 
 			main_grid.add (milestones_list);
@@ -42,13 +40,10 @@ namespace Planner {
 			main_grid.add (task_list);
 
 			add (main_grid);
-
 		}
 
 		public void update_widget () {
-
 			milestones_list.update_list ();
-
 		}
 	}
 }
