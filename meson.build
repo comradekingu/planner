@@ -51,6 +51,7 @@ executable(
     'src/Interfaces/Task.vala',
     'src/Services/Database.vala',
     dependencies: [
+        dependency('gee-0.8'),
         dependency('glib-2.0'),
         dependency('granite'),
         dependency('gtk+-3.0'),
