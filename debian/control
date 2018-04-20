@@ -12,7 +12,6 @@ Build-Depends: meson,
 
 Standards-Version: 3.9.3
 Homepage: https://github.com/alainm23/planner
-
 Package: com.github.alainm23.planner
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
