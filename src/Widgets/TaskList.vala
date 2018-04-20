@@ -57,6 +57,8 @@ namespace Planner {
 
 			db = new Services.Database (true);
 
+
+
 			build_ui ();
 		}
 
