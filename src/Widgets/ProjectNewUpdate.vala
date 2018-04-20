@@ -1,6 +1,5 @@
 namespace Planner {
     public class ProjectNewUpdate : Gtk.Grid {
-
         private Gtk.Button back_button;
         private Gtk.Button save_button;
         private Gtk.Label title_label;
@@ -12,7 +11,7 @@ namespace Planner {
 
         private Gtk.Revealer revealer_icon_entry;
 
-        private Gtk.Entry icon_entry;   
+        private Gtk.Entry icon_entry;
         private Gtk.Entry name_entry;
         private Gtk.Entry description_entry;
 
@@ -22,7 +21,7 @@ namespace Planner {
         private Granite.Widgets.DatePicker duedate_datepicker;
 
         private Gee.ArrayList<string> project_types = Utils.project_types ();
-    
+
 
         private int index = 0;
 
@@ -34,7 +33,7 @@ namespace Planner {
         private Services.Database db;
 
         public ProjectNewUpdate () {
-            
+
             orientation = Gtk.Orientation.VERTICAL;
             column_spacing = 12;
             margin = 12;
@@ -44,25 +43,25 @@ namespace Planner {
             actual_project = new Interfaces.Project ();
 
             db = new Services.Database (true);
-                    
+
             build_ui ();
 
         }
 
         private void build_ui () {
-            
+
             back_button = new Gtk.Button.with_label (_("Back"));
             back_button.valign = Gtk.Align.CENTER;
             back_button.halign = Gtk.Align.START;
             back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
             back_button.clicked.connect ( () => {
-                
+
                 clear_entry ();
 
                 actual_project = new Interfaces.Project ();
 
                 back_action ();
-            
+
             });
 
 
@@ -72,7 +71,7 @@ namespace Planner {
 
             //save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
             save_button = new Gtk.Button.with_label (_("Save"));
-            save_button.tooltip_text = _("");
+            save_button.tooltip_text = _("Save Project");
             save_button.valign = Gtk.Align.CENTER;
             save_button.halign = Gtk.Align.END;
             save_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
@@ -90,26 +89,18 @@ namespace Planner {
             avatar_button = new Gtk.Button ();
             avatar_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             avatar_button.clicked.connect ( () => {
-
-            
                 if (revealer_icon_entry.reveal_child) {
-
                     name_entry.grab_focus ();
                     revealer_icon_entry.reveal_child = false;
-                    
-
                 } else {
-
                     icon_entry.grab_focus ();
                     revealer_icon_entry.reveal_child = true;
-                
                 }
-    
             });
 
             avatar_image = new Gtk.Image.from_icon_name (project_types[index], Gtk.IconSize.DND);
             avatar_image.pixel_size = 64;
-            
+
             avatar_button.image = avatar_image;
 
             // Next Button
@@ -117,9 +108,9 @@ namespace Planner {
             next_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             next_button.set_focus_on_click (false);
             next_button.clicked.connect ( () => {
-                
+
                 index = index + 1;
-                
+
                 if ( index >= project_types.size ) {
                     index = 0;
                 }
@@ -134,13 +125,13 @@ namespace Planner {
             previous_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             previous_button.set_focus_on_click (false);
             previous_button.clicked.connect ( () => {
-                
+
                 index = index - 1;
-                
+
                 if (index <= -1) {
                     index = int.parse (project_types.size.to_string()) - 1;
                 }
-                
+
                 avatar_image.icon_name = project_types[index];
                 avatar_button.image = avatar_image;
 
@@ -152,7 +143,7 @@ namespace Planner {
             avatar_box.pack_start (previous_button, true, true, 0);
             avatar_box.pack_start (avatar_button, false, false, 0);
             avatar_box.pack_start (next_button, true, true, 0);
-        
+
             icon_entry = new Gtk.Entry ();
             icon_entry.margin_top = 12;
             icon_entry.placeholder_text = _("Icon name");
@@ -165,7 +156,7 @@ namespace Planner {
                 revealer_icon_entry.reveal_child = false;
 
                 name_entry.grab_focus ();
-            
+
             });
 
             revealer_icon_entry = new Gtk.Revealer();
@@ -198,20 +189,14 @@ namespace Planner {
             type_switch.halign = Gtk.Align.CENTER;
             type_switch.valign = Gtk.Align.CENTER;
             type_switch.notify["active"].connect( () => {
-
                 if (type_switch.active) {
-                    
                     var reveal = revealer_datepicker.get_reveal_child();
-                    revealer_datepicker.set_reveal_child(!reveal);                    
-                    
+                    revealer_datepicker.set_reveal_child(!reveal);
                 } else {
-
-                    revealer_datepicker.reveal_child = false;   
+                    revealer_datepicker.reveal_child = false;
                 }
-
-
             });
-            
+
             var list_label = new Granite.HeaderLabel (_("List"));
             list_label.margin_end = 20;
             list_label.halign = Gtk.Align.END;
@@ -234,7 +219,7 @@ namespace Planner {
 
             revealer_datepicker = new Gtk.Revealer();
             revealer_datepicker.reveal_child = false;
-            
+
             var datepicker_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             datepicker_box.pack_start (new Granite.HeaderLabel (_("Deadline")));
             datepicker_box.pack_start (duedate_datepicker);
@@ -242,7 +227,7 @@ namespace Planner {
             revealer_datepicker.add (datepicker_box);
 
             add (v_box);
-            add (avatar_box);   
+            add (avatar_box);
             add (properties_box);
             add (new Granite.HeaderLabel (_("Project Type")));
             add (type_box);
@@ -252,46 +237,36 @@ namespace Planner {
         }
 
         public void activate_save_button () {
-
             if (name_entry.text == "") {
-
                 save_button.sensitive = false;
-
             } else {
-
                 save_button.sensitive = true;
             }
-
         }
 
         public void clear_entry () {
-            
             name_entry.text = "";
             description_entry.text = "";
             icon_entry.text = "";
-                
+
             index = 0;
             avatar_image.icon_name = project_types[index];
             avatar_button.image = avatar_image;
 
             type_switch.active = false;
             revealer_datepicker.reveal_child = false;
-
         }
 
         private void add_project () {
-
             if (name_entry.text != "") {
-
                 var datetime = new GLib.DateTime.now_local ();
-                
+
                 string start_date = datetime.format ("%F");
                 string due_date = "";
 
                 string type_project = "lists";
-                
-                if (type_switch.get_state ()) {
 
+                if (type_switch.get_state ()) {
                     type_project = "milestones";
                     due_date = duedate_datepicker.date.format ("%F");
                 }
@@ -304,23 +279,18 @@ namespace Planner {
                 actual_project.due_date = due_date;
 
                 if (title_label.label == "<b>New</b>") {
-
                     db.add_project (actual_project);
                     create_update_signal ("new");
-
                 } else {
-
                     db.update_project (actual_project);
                     create_update_signal ("edit");
                 }
-
 
                 clear_entry ();
             }
         }
 
         public void update_project (Interfaces.Project project) {
-
             // Set Avatar
             avatar_image.icon_name = project.avatar;
             icon_entry.text = project.avatar;
@@ -330,34 +300,27 @@ namespace Planner {
             name_entry.text = project.name;
             description_entry.text = project.description;
 
-            // Set Datetime 
+            // Set Datetime
             if (project.due_date == "") {
-                
                 type_switch.set_state (false);
-                
             } else {
-
                 type_switch.set_state (true);
-                
             }
 
             actual_project = project;
-        }  
+        }
 
         public void set_title (string title) {
-
             title_label.label = "<b>" + title + "</b>";
-
             name_entry.grab_focus ();
-
         }
-   
-    }  
+
+    }
 }
 /*
 
 var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (name, description, "dialog-warning", Gtk.ButtonsType.CANCEL);
-            
+
 message_dialog.transient_for = window;
 message_dialog.show_all ();
 message_dialog.run ();

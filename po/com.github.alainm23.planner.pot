@@ -1,0 +1,325 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.alainm23.planner package.
+# FIRST AUTHO <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.alainm23.planner\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-19 23:43-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/com.github.alainm23.planner.appdata.xml.in:7
+#: data/com.github.alainm23.planner.desktop.in:3
+#: data/com.github.alainm23.planner.desktop.in:4 src/MainWindow.vala:23
+#: src/Views/WelcomeView.vala:9
+msgid "Planner"
+msgstr ""
+
+#: data/com.github.alainm23.planner.appdata.xml.in:8
+msgid "The most intuitive project and task management tool"
+msgstr ""
+
+#: data/com.github.alainm23.planner.appdata.xml.in:10
+msgid "Do not waste time managing projects, tasks and deadlines. Use Planner"
+msgstr ""
+
+#: data/com.github.alainm23.planner.appdata.xml.in:26
+msgid "Alain M."
+msgstr ""
+
+#: data/com.github.alainm23.planner.desktop.in:5
+msgid "The most intuitive project and task management tool."
+msgstr ""
+
+#: data/com.github.alainm23.planner.desktop.in:8
+msgid "com.github.alainm23.planner"
+msgstr ""
+
+#: data/com.github.alainm23.planner.desktop.in:12
+msgid "Github;Repositories;Development;"
+msgstr ""
+
+#: src/Widgets/Headerbar.vala:84
+msgid "Menu"
+msgstr ""
+
+#: src/Views/WelcomeView.vala:10
+msgid "Project management, as effective as it gets"
+msgstr ""
+
+#: src/Views/WelcomeView.vala:19
+msgid "New project"
+msgstr ""
+
+#: src/Views/WelcomeView.vala:19
+msgid "Create a new empty project"
+msgstr ""
+
+#: src/Views/WelcomeView.vala:20
+msgid "Open project"
+msgstr ""
+
+#: src/Views/WelcomeView.vala:20
+msgid "Open a saved project"
+msgstr ""
+
+#: src/Views/ProjectStartupView.vala:33
+msgid "First project"
+msgstr ""
+
+#. Project Avatar
+#: src/Views/ProjectStartupView.vala:47
+msgid "Project Avatar"
+msgstr ""
+
+#. logoPopover
+#. Project Name
+#: src/Views/ProjectStartupView.vala:65
+msgid "Project Name"
+msgstr ""
+
+#. Description Widget
+#: src/Views/ProjectStartupView.vala:84
+msgid "Project Description"
+msgstr ""
+
+#: src/Views/ProjectStartupView.vala:105
+msgid "Cancel"
+msgstr ""
+
+#: src/Views/ProjectStartupView.vala:113
+msgid "Create Project"
+msgstr ""
+
+#: src/Views/OverviewView.vala:40 src/Widgets/FormatBar.vala:41
+msgid "Tasks"
+msgstr ""
+
+#: src/Views/OverviewView.vala:41
+msgid "All"
+msgstr ""
+
+#: src/Views/OverviewView.vala:42 src/Widgets/TaskList.vala:99
+msgid "Completed"
+msgstr ""
+
+#: src/Views/OverviewView.vala:43
+msgid "Lists"
+msgstr ""
+
+#.
+#. search_button = new Gtk.Button.from_icon_name ("system-search-symbolic", Gtk.IconSize.MENU);
+#. search_button.tooltip_text = _("Search a project");
+#. search_button.valign = Gtk.Align.CENTER;
+#. search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
+#.
+#. add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
+#: src/Widgets/Popover/ProjectPopover.vala:15 src/Widgets/ProjectList.vala:51
+msgid "New"
+msgstr ""
+
+#: src/Widgets/Popover/ProjectPopover.vala:16
+msgid "Edit"
+msgstr ""
+
+#: src/Widgets/Popover/ProjectPopover.vala:44
+#: src/Widgets/Popover/ProjectPopover.vala:77
+msgid "Project was created"
+msgstr ""
+
+#: src/Widgets/Popover/ProjectPopover.vala:81
+msgid "Project was updated"
+msgstr ""
+
+#: src/Widgets/Popover/ProjectPopover.vala:93
+msgid "Delete this project?"
+msgstr ""
+
+#: src/Widgets/Popover/ProjectPopover.vala:95
+msgid "Yes"
+msgstr ""
+
+#: src/Widgets/Popover/AvatarPopover.vala:28
+msgid "<b>Project Avatar</b>"
+msgstr ""
+
+#: src/Widgets/Popover/AvatarPopover.vala:37
+#: src/Widgets/ProjectNewUpdate.vala:149
+msgid "Icon name"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:47
+msgid "<b>New List</b>"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:51
+msgid "Remove"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:52
+#: src/Widgets/Popover/NewEditListPopover.vala:63
+msgid "Create a new List"
+msgstr ""
+
+#. save_button = new Gtk.Button.from_icon_name ("document-save-as-symbolic", Gtk.IconSize.MENU);
+#: src/Widgets/Popover/NewEditListPopover.vala:62
+#: src/Widgets/ProjectNewUpdate.vala:73
+msgid "Save"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:77
+msgid "Title List"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:135
+msgid "Assigned Days"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:182
+msgid "<b>Edit List</b>"
+msgstr ""
+
+#: src/Widgets/Popover/NewEditListPopover.vala:183
+msgid "Update"
+msgstr ""
+
+#: src/Widgets/ProjectList.vala:39
+msgid "<b>Projects</b>"
+msgstr ""
+
+#: src/Widgets/ProjectList.vala:52
+msgid "Create a new project"
+msgstr ""
+
+#: src/Widgets/ProjectList.vala:71
+msgid "Search Projects"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:53
+msgid "Back"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:68
+msgid "<b>New</b>"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:74
+msgid "Save Project"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:171
+msgid "Name"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:179
+msgid "Description"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:200
+msgid "List"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:204
+msgid "Milestones"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:224
+msgid "Deadline"
+msgstr ""
+
+#: src/Widgets/ProjectNewUpdate.vala:232
+msgid "Project Type"
+msgstr ""
+
+#: src/Widgets/ProjectItem.vala:51
+msgid "Edit Project"
+msgstr ""
+
+#: src/Widgets/ProjectItem.vala:64
+msgid "Delete Project"
+msgstr ""
+
+#: src/Widgets/MilestoneList.vala:50
+msgid "Create a new Milestone"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:44
+msgid "No List"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:45
+msgid "To start creating <b>Tasks</b> you must create a first <b>List</b>"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:47
+msgid "Select a List"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:48
+msgid "Select a <b>List</b> to start viewing and completing <b>Tasks</b>"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:50
+msgid "No homework"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:51
+msgid "Create a <b>Task</b> with the <b>+</b> button"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:53
+msgid "No completed task"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:54
+msgid "Start to complete to fill this space"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:98
+msgid "Open"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:113
+msgid "Create a new Task"
+msgstr ""
+
+#: src/Widgets/TaskList.vala:136
+msgid "Add to list..."
+msgstr ""
+
+#: src/Widgets/TaskList.vala:140
+msgid "Add new task..."
+msgstr ""
+
+#: src/Widgets/FormatBar.vala:37
+msgid "Overview"
+msgstr ""
+
+#: src/Widgets/FormatBar.vala:45
+msgid "Issues"
+msgstr ""
+
+#: src/Widgets/TaskListRow.vala:51
+msgid "Task name"
+msgstr ""
+
+#: src/Widgets/TaskListRow.vala:59
+msgid "Edit Task"
+msgstr ""
+
+#: src/Widgets/TaskListRow.vala:64
+msgid "Remove Task"
+msgstr ""
+
+#: src/Widgets/ProgressWidget.vala:22 src/Widgets/ProgressWidget.vala:31
+msgid "Completed: <b>%s%</b>"
+msgstr ""

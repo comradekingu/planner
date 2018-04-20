@@ -3,9 +3,7 @@ namespace Planner {
     public class ProjectList : Gtk.Grid {
 
         private Gtk.Button add_button;
-        private Gtk.Button search_button;
         private Gtk.Label  title_label;
-        private Gtk.Revealer revealer_searchbar;
         private Gtk.SearchEntry search_entry;
         private Gtk.ListBox project_listbox;
         private Gtk.ScrolledWindow list_scrolled_window;

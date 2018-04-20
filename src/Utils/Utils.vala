@@ -39,29 +39,7 @@ namespace Planner.Utils {
 
         return project_types;
     }
-
-    public Gee.ArrayList<string> name_months () {
-
-        var name_months = new Gee.ArrayList<string> ();
-
-        name_months.add (_("January"));
-        name_months.add (_("February"));
-        name_months.add (_("March"));
-        name_months.add (_("April"));
-        name_months.add (_("May"));
-        name_months.add (_("June"));
-        name_months.add (_("July"));
-        name_months.add (_("August"));
-        name_months.add (_("September"));
-        name_months.add (_("October"));
-        name_months.add (_("November"));
-        name_months.add (_("December"));
-
-        return name_months;
-
-    }
-
-
+    
     public Gee.ArrayList<string> name_icon_list () {
         var name_icon_list = new Gee.ArrayList<string> ();
 

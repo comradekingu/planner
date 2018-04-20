@@ -10,6 +10,7 @@ namespace Planner {
         // Signal
         public signal void selected_project (Interfaces.Project project);
         public signal void update_project ();
+        public signal void go_startup_view ();
 
         private string TITLE_NEW = _("New");
         private string TITLE_EDIT = _("Edit");
@@ -36,7 +37,7 @@ namespace Planner {
 
             // Stack
             stack = new Gtk.Stack();
-            stack.set_transition_duration (400);
+            stack.transition_duration = 400;
             stack.expand = true;
             stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT);
 
@@ -96,12 +97,13 @@ namespace Planner {
                 notification.send_notification ();
 
                 notification.default_action.connect ( () => {
-
                     db.remove_project (project);
-
                     project_list.update_list ();
-
                     notification.set_default_action (null);
+
+                    if (db.get_project_number () < 1) {
+                        go_startup_view ();
+                    }
                 });
             });
 
@@ -131,12 +133,13 @@ namespace Planner {
             grid.attach (stack, 0, 0, 1, 1);
 
             add (grid);
+
+            this.show.connect ( () => {
+                project_list.update_list ();
+            });
         }
 
         public void update_widget () {
-
-            //project_list.update_list ();
-
             stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
             stack.visible_child_name = "project_list";
 

@@ -17,7 +17,6 @@ namespace Planner {
 		private void build_ui () {
 
 			milestones_list = new MilestoneList ();
-
 			task_list = new TaskList ();
 
 			var main_grid = new Gtk.Grid ();
@@ -32,6 +31,14 @@ namespace Planner {
 			});
 			task_list.update_list_all.connect ( () => {
 				milestones_list.update_list ();
+				update_overview ();
+			});
+
+			milestones_list.update_alert.connect ( () => {
+				task_list.update_alert ();
+			});
+
+			milestones_list.update_list_all.connect ( () => {
 				update_overview ();
 			});
 

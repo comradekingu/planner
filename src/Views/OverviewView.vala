@@ -12,7 +12,6 @@ namespace Planner {
 		ProgressWidget all_levelbar;
 
 		private Interfaces.Project project_actual;
-		private InfoPopover info_popover;
 
 		private Services.Database db;
 		private GLib.Settings settings;
@@ -27,8 +26,8 @@ namespace Planner {
 
 			project_actual = new Interfaces.Project ();
 
-			build_ui ();
 
+			build_ui ();
 		}
 
 		private void build_ui () {
@@ -79,13 +78,12 @@ namespace Planner {
 			add (main_grid);
 		}
 
-		public void set_project (Interfaces.Project project) {
+		public void update_widget () {
+			project_actual = db.get_project (settings.get_int ("last-project-id"));
 
-			avatar_image.icon_name = project.avatar;
-			title_label.label = project.name;
-			description_label.label = project.description;
-
-			project_actual = project;
+			avatar_image.icon_name = project_actual.avatar;
+			title_label.label = project_actual.name;
+			description_label.label = project_actual.description;
 
 			if ((db.get_list_length () < 1)) {
 				all_tasks_label.update_value ("0");
@@ -96,43 +94,38 @@ namespace Planner {
 
 				all_levelbar.update_widget ("0");
 			} else {
+				var all_list = new Gee.ArrayList<Interfaces.List?> ();
+				all_list = db.get_all_lists (project_actual.id);
 
-				update_widget ();
-			}
-		}
+				double all_tasks_completed = 0;
+				double all_tasks = 0;
+				double list_completed = 0;
+				double v = 0;
 
-		public void update_widget () {
-			var all_list = new Gee.ArrayList<Interfaces.List?> ();
-			all_list = db.get_all_lists (project_actual.id);
+				foreach (var list in all_list) {
+					all_tasks = all_tasks + list.task_all;
+					all_tasks_completed = all_tasks_completed + list.tasks_completed;
 
-			double all_tasks_completed = 0;
-			double all_tasks = 0;
-			double list_completed = 0;
-			double v = 0;
-
-			foreach (var list in all_list) {
-				all_tasks = all_tasks + list.task_all;
-				all_tasks_completed = all_tasks_completed + list.tasks_completed;
-
-				if (list.task_all == list.tasks_completed) {
-					list_completed = list_completed + 1;
+					if (list.task_all == list.tasks_completed) {
+						list_completed = list_completed + 1;
+					}
 				}
+
+
+				v = all_tasks_completed * 100 / all_tasks;
+
+				if (all_tasks == 0) {
+					v = 0;
+				}
+
+				all_tasks_label.update_value (all_tasks.to_string ());
+				all_tasks_completed_label.update_value (all_tasks_completed.to_string ());
+
+				all_lists_label.update_value (all_list.size.to_string ());
+				all_lists_completed_label.update_value (list_completed.to_string ());
+
+				all_levelbar.update_widget (int.parse (v.to_string ()).to_string ());
 			}
-
-
-			v = all_tasks_completed * 100 / all_tasks;
-
-			if (all_tasks == 0) {
-				v = 0;
-			}
-
-			all_tasks_label.update_value (all_tasks.to_string ());
-			all_tasks_completed_label.update_value (all_tasks_completed.to_string ());
-
-			all_lists_label.update_value (all_list.size.to_string ());
-			all_lists_completed_label.update_value (list_completed.to_string ());
-
-			all_levelbar.update_widget (int.parse (v.to_string ()).to_string ());
 		}
 	}
 }

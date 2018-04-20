@@ -24,6 +24,8 @@ namespace Planner {
 		private const string color_medium = "#f37329";
 		private const string color_completed = "#68b723";
 
+		public signal void update_alert ();
+		public signal void update_list_all ();
 		public MilestoneList () {
 
             db = new Services.Database (true);
@@ -55,6 +57,7 @@ namespace Planner {
 
             new_list_popover = new NewEditListPopover (add_button);
             new_list_popover.created_list.connect ( () => {
+				update_list_all ();
                 update_list ();
             });
 
@@ -81,17 +84,17 @@ namespace Planner {
         }
 
         private void create_list () {
-
             var all_list = new Gee.ArrayList<Interfaces.List?> ();
-            all_list = db.get_all_lists (settings.get_int ("last-project-id"));
 
-            foreach (var list in all_list) {
+			all_list = db.get_all_lists (settings.get_int ("last-project-id"));
 
+			foreach (var list in all_list) {
 				all_tasks_progress = all_tasks_progress + list.task_all;
 				all_tasks_completed_progress = all_tasks_completed_progress + list.tasks_completed;
 
-                var row = new ListMilestoneRow (list);
-                milestone_list.add (row);
+			    var row = new ListMilestoneRow (list);
+
+		        milestone_list.add (row);
 
                 row.selected_list.connect (selected_list);
             }
@@ -99,17 +102,16 @@ namespace Planner {
 
 			all_tasks_completed_progress = 0;
 			all_tasks_progress = 0;
+
 			show_all ();
         }
 
         public void update_list () {
-
             foreach (Gtk.Widget element in milestone_list.get_children ()) {
-
                 milestone_list.remove (element);
             }
-
             create_list ();
+			update_alert ();
 	   }
 
         private void selected_list (Interfaces.List list) {

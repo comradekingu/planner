@@ -11,6 +11,8 @@ namespace Planner {
 
         public signal void update_project (Interfaces.Project project);
         public signal void on_headerbar_change (int index_bar);
+        public signal void update_actual_project ();
+        public signal void go_startup ();
 
         public Headerbar () {
 
@@ -33,7 +35,11 @@ namespace Planner {
 
             project_popover.selected_project.connect (set_actual_project);
             project_popover.update_project.connect ( () => {
+                update_actual_project ();
+            });
 
+            project_popover.go_startup_view.connect ( () => {
+                go_startup ();
             });
 
             format_bar = new FormatBar ();
@@ -80,14 +86,13 @@ namespace Planner {
             app_menu.popover = menu;
 
             pack_start (project_button);
-            pack_end (app_menu);
-            pack_end (team_button);
+            //pack_end (app_menu);
+            //pack_end (team_button);
 
             menu_grid.show_all ();
         }
 
         public void disable_all () {
-
             project_button.set_sensitive (false);
             project_button.set_opacity (0);
 
@@ -100,10 +105,11 @@ namespace Planner {
             app_menu.set_sensitive (false);
             app_menu.set_opacity (0);
 
+            set_custom_title (null);
+
         }
 
         public void enable_all () {
-
             project_button.set_sensitive (true);
             project_button.set_opacity (1);
 
@@ -116,27 +122,22 @@ namespace Planner {
             app_menu.set_sensitive (true);
             app_menu.set_opacity (1);
 
-            update_widget ();
+            set_custom_title (format_bar);
 
+            update_widget ();
         }
 
         private void set_actual_project (Interfaces.Project project) {
-
             project_button.set_project (project);
             update_project (project);
-
         }
 
         private void update_widget () {
-
             project_popover.update_widget ();
-
         }
 
         public void set_project (Interfaces.Project project) {
-
             project_button.set_project (project);
-
             update_widget ();
         }
     }

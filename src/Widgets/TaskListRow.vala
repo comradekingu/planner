@@ -3,21 +3,17 @@ namespace Planner {
 
 		Gtk.CheckButton state_button;
 		private Gtk.Label title_label;
-		private Gtk.Button deadline_button;
 		private Gtk.Button remove_button;
 		private Gtk.Button edit_button;
 		private Gtk.TextView note_view;
 		private Gtk.Revealer revealer_noteview;
 		private Gtk.Entry task_entry;
-
 		private Gtk.Box main_box;
-		private string old_label = "";
 		public Interfaces.Task task_actual;
 
 		private bool edit_bool = false;
 
-		public signal void update_task_signal ();
-		public signal void remove_task_signal ();
+		public signal void update_signal ();
 
 		private Services.Database db;
 
@@ -91,10 +87,10 @@ namespace Planner {
 			note_view.expand = true;
 			note_view.buffer.text = task_actual.note;
 
-			//var tabs = new Pango.TabArray (1, true);
-			//tabs.set_tab(0, Pango.TabAlign.TAB_LEFT, 2);
+			var tabs = new Pango.TabArray (8, true);
+			tabs.set_tab(8, Pango.TabAlign.LEFT, 8);
 
-			//note_view.set_tabs (tabs);
+			note_view.set_tabs (tabs);
 			note_view.get_style_context ().add_class ("textview");
 
 			note_view.buffer.changed.connect ( () => {
@@ -104,6 +100,12 @@ namespace Planner {
 					db.update_task (task_actual);
 					return null;
 				});
+			});
+			note_view.key_press_event.connect ( (key) => {
+				if (key.keyval == Gdk.Key.Escape) {
+					revealer_noteview.reveal_child = false;
+				}
+				return false;
 			});
 
 			var scrolled = new Gtk.ScrolledWindow (null, null);
@@ -175,13 +177,12 @@ namespace Planner {
 					return true;
 				});
 				*/
-
-				update_task_signal ();
+				update_signal ();
 			});
 
 			remove_button.clicked.connect ( () => {
 				db.remove_task (task_actual);
-				remove_task_signal ();
+				update_signal ();
 				destroy ();
 			});
 
@@ -210,8 +211,6 @@ namespace Planner {
 				task_entry.visible = false;
 
 				edit_bool = false;
-
-				//update_task_signal (task_actual);
 			});
 
 			task_entry.icon_press.connect ((pos, event) => {
@@ -247,9 +246,12 @@ namespace Planner {
 	    		revealer_noteview.reveal_child = false;
 
 	   		} else {
-				revealer_noteview.reveal_child = true;
-	            //main_box.margin_top = 12;
-	            note_view.grab_focus ();
+				if (edit_bool) {
+
+				} else {
+					revealer_noteview.reveal_child = true;
+					note_view.grab_focus ();
+				}
 	       	}
 
 	       	return true;

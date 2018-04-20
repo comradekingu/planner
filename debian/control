@@ -1,0 +1,12 @@
+Source: com.github.alainm23.planner
+Section: x11
+Maintainer: Alain M. <alain23@protonmail.com>
+Build-Depends: debhelper (>= 9), libgranite-dev, libsqlite3-dev, libglib2.0-dev, libgee-0.8-dev, libgtk-3-dev, meson, valac
+Standards-Version: 3.9.6
+Homepage: https://github.com/alainm23/planner
+
+Package: com.github.alainm23.planner
+Architecture: any
+Priority: optional
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Do not waste time managing projects, tasks and deadlines. Use Planner

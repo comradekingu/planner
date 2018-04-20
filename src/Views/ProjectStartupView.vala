@@ -3,26 +3,27 @@ namespace Planner {
 		private Gtk.Label title_label;
     	private Gtk.Label subtitle_label;
         private Gtk.Image image_button;
-
     	private Gtk.Button avatar_button;
     	private Gtk.Entry name_entry;
     	private Gtk.Entry description_entry;
-
         private Gtk.Button create_button;
 
 		private AvatarPopover avatar_popover;
-
+		private Services.Database db;
+		private GLib.Settings settings;
 
         public signal void on_cancel_button ();
-        public signal void on_create_button (Interfaces.Project new_project);
+        public signal void on_create_button ();
 
         // Interface
         private Interfaces.Project new_project;
 
 		public ProjectStartupView () {
-
 			get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
 			get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
+
+			settings = new GLib.Settings ("com.github.alainm23.planner");
+			db = new Services.Database (true);
 
 			build_ui ();
 		}
@@ -153,7 +154,6 @@ namespace Planner {
         }
 
         private void create_button_clicked () {
-
             new_project = new Interfaces.Project ();
 
             new_project.name = name_entry.text;
@@ -162,7 +162,10 @@ namespace Planner {
             new_project.type = "lists";
             new_project.start_date = new GLib.DateTime.now_local ().format ("%F");
 
-			on_create_button (new_project);
+			db.add_project (new_project);
+
+			on_create_button ();
+			clear_all ();
         }
 	}
 }

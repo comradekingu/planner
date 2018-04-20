@@ -64,7 +64,6 @@ namespace Planner {
             "name VARCHAR," +
             "state VARCHAR," +
             "deadline DATE," +
-            "priority VARCHAR," +
             "note VARCHAR," +
             "id_list INTEGER," +
             "FOREIGN KEY(id_list) REFERENCES LISTS(id_list) ON DELETE CASCADE)", null, null);
@@ -169,8 +168,8 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO TASKS (name, " +
-                "state, deadline, priority, note, id_list)" +
-                "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
+                "state, deadline, note, id_list)" +
+                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
 
             assert (res == Sqlite.OK);
 
@@ -183,13 +182,10 @@ namespace Planner {
             res = stmt.bind_text (3, task.deadline);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, task.priority);
+            res = stmt.bind_text (4, task.note);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, task.note);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (6, task.id_list);
+            res = stmt.bind_int (5, task.id_list);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -292,7 +288,7 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("UPDATE TASKS SET name = ?, " +
-                "state = ?, deadline = ?, priority = ?, note = ? " +
+                "state = ?, deadline = ?, note = ? " +
                 "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
@@ -305,13 +301,10 @@ namespace Planner {
             res = stmt.bind_text (3, task.deadline);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, task.priority);
+            res = stmt.bind_text (4, task.note);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, task.note);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (6, task.id);
+            res = stmt.bind_int (5, task.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -347,7 +340,7 @@ namespace Planner {
             Sqlite.Statement stmt;
             int tasks_completed = 0;
 
-            int res = db.prepare_v2 ("SELECT * FROM LISTS where id_project = ? ORDER BY id",
+            int res = db.prepare_v2 ("SELECT * FROM LISTS WHERE id_project = ? ORDER BY id",
                 -1, out stmt);
 
             assert (res == Sqlite.OK);
@@ -383,6 +376,51 @@ namespace Planner {
             }
 
             return all;
+        }
+
+        public Interfaces.Project get_fist_project () {
+            Sqlite.Statement stmt;
+            int res = db.prepare_v2 ("SELECT * FROM PROJECTS LIMIT 1",
+                -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            stmt.step ();
+
+            var project = new Interfaces.Project ();
+
+            project.id = int.parse (stmt.column_text (0));
+            project.name = stmt.column_text (1);
+            project.description = stmt.column_text (2);
+            project.start_date = stmt.column_text (3);
+            project.due_date = stmt.column_text (4);
+            project.type = stmt.column_text (5);
+            project.avatar = stmt.column_text (6);
+
+            return project;
+        }
+
+        public Interfaces.Project get_project (int id) {
+            Sqlite.Statement stmt;
+            int res = db.prepare_v2 ("SELECT * FROM PROJECTS WHERE id = ?",
+                -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (1, id);
+            assert (res == Sqlite.OK);
+
+            stmt.step ();
+
+            var project = new Interfaces.Project ();
+
+            project.id = int.parse (stmt.column_text (0));
+            project.name = stmt.column_text (1);
+            project.description = stmt.column_text (2);
+            project.start_date = stmt.column_text (3);
+            project.due_date = stmt.column_text (4);
+            project.type = stmt.column_text (5);
+            project.avatar = stmt.column_text (6);
+
+            return project;
         }
 
         public Gee.ArrayList<Interfaces.Project?> get_all_projects () {
@@ -431,9 +469,8 @@ namespace Planner {
                 task.name = stmt.column_text (1);
                 task.state = stmt.column_text (2);
                 task.deadline = stmt.column_text (3);
-                task.priority = stmt.column_text (4);
-                task.note = stmt.column_text (5);
-                task.id_list = stmt.column_int (6);
+                task.note = stmt.column_text (4);
+                task.id_list = stmt.column_int (5);
 
                 all.add (task);
             }

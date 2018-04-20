@@ -3,29 +3,20 @@ namespace Planner {
 
 		private Gtk.Label title_list_label;
 		private Gtk.Entry task_entry;
-		private Gtk.Image avatar_image;
 		private Gtk.Box box_title;
 		private Gtk.Button add_button;
 		private Gtk.Button edit_list_button;
-
 		private NewEditListPopover edit_list_popover;
-
 		private Granite.Widgets.AlertView alert;
-
 		private Gtk.Grid task_container;
 		private Gtk.ScrolledWindow task_scrolled_window;
-
 		private Services.Database db;
-
 		private string TITLE_NONE_LIST_ALERT;
 		private string DESCRIPTION_NONE_LIST_ALERT;
-
 		private string TITLE_NONE_SELECT_ALERT;
 		private string DESCRIPTION_NONE_SELECTED_ALERT;
-
 		private string TITLE_NONE_TASK_ALERT;
 		private string DESCRIPTION_NONE_TASK_ALERT;
-
 		private string TITLE_NONE_TASK_COMPLETED_ALERT;
 		private string DESCRIPTION_NONE_TASK_COMPLETED_ALERT;
 
@@ -35,11 +26,11 @@ namespace Planner {
 
 		private bool filter_bool;
 		private bool none_tasks_bool;
+		private int count_task = 0;
 
 		public signal void update_list_all ();
 
 		public TaskList () {
-
 			expand = true;
 			orientation = Gtk.Orientation.VERTICAL;
             row_spacing = 12;
@@ -70,14 +61,7 @@ namespace Planner {
 		}
 
 		private void build_ui () {
-
 			alert = new Granite.Widgets.AlertView (TITLE_NONE_SELECT_ALERT, DESCRIPTION_NONE_SELECTED_ALERT, "dialog-warning");
-			alert.no_show_all = true;
-
-			if (db.get_list_length () < 1) {
-				alert.title = TITLE_NONE_LIST_ALERT;
-				alert.description = DESCRIPTION_NONE_LIST_ALERT;
-			}
 
 			title_list_label = new Gtk.Label ("");
 			title_list_label.use_markup = true;
@@ -97,6 +81,10 @@ namespace Planner {
 			});
 			edit_list_popover.remove_list.connect ( () => {
 				update_list_all ();
+
+				alert.visible = true;
+				box_title.visible = false;
+				task_scrolled_window.visible = false;
 			});
 
 			edit_list_button.clicked.connect ( () => {
@@ -128,13 +116,10 @@ namespace Planner {
 			add_button.valign = Gtk.Align.CENTER;
 
 			add_button.clicked.connect ( () => {
-
             	box_title.visible = false;
-
             	task_entry.visible = true;
             	task_entry.grab_focus ();
             	task_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "close-symbolic");
-
             });
 
 			box_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -155,50 +140,35 @@ namespace Planner {
 			task_entry.placeholder_text = _("Add new task...");
 			task_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			task_entry.changed.connect( () => {
-
                 if (task_entry.text == "") {
-
                     task_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "close-symbolic");
-
                 } else {
-
                     task_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.SECONDARY, "list-add-symbolic");
                 }
-
 			});
 
 			task_entry.activate.connect ( () => {
-
 				add_task ();
-
 			});
 
 			task_entry.icon_press.connect ((pos, event) => {
-
 				if (pos == Gtk.EntryIconPosition.SECONDARY) {
-
 					if (task_entry.secondary_icon_name == "close-symbolic") {
-
 						task_entry.visible = false;
 						box_title.visible = true;
 						task_entry.text = "";
-
 					} else {
-
 						add_task ();
 					}
 				}
 			});
 
 			task_entry.key_press_event.connect ( (key) => {
-
 				if (key.keyval == Gdk.Key.Escape) {
-
 					task_entry.visible = false;
 					box_title.visible = true;
 					task_entry.text = "";
 				}
-
 				return false;
 			});
 
@@ -214,22 +184,35 @@ namespace Planner {
 			add (task_scrolled_window);
 			add (alert);
 
-			update_list ();
-
 			box_title.no_show_all = true;
-			task_scrolled_window.visible = false;
+			task_scrolled_window.no_show_all = true;
+
+			update_list ();
+		}
+
+		private void update_list () {
+			foreach (Gtk.Widget element in task_container.get_children ()) {
+				task_container.remove (element);
+			}
+
+			create_list ();
 		}
 
 		private void create_list () {
-
 			var all_task = new Gee.ArrayList<Interfaces.Task?> ();
 			all_task = db.get_all_tasks (list_actual.id);
 
+			count_task = 0;
+
 			foreach (var task in all_task) {
 				if (bool.parse(task.state) != filter_bool) {
+
 					var row = new TaskListRow (task);
+
 					task_container.add (row);
 					connect_row_signals (row);
+
+					count_task = count_task + 1;
 				}
 			}
 
@@ -237,41 +220,25 @@ namespace Planner {
 			last_separator.margin_left = 12;
 			task_container.add (last_separator);
 
+			update_alert ();
+
 			show_all ();
 		}
 
-		private void update_list () {
-
-			foreach (Gtk.Widget element in task_container.get_children ()) {
-                task_container.remove (element);
-			}
-
-			create_list ();
-		}
-
 		private void connect_row_signals (TaskListRow row) {
-
-			row.update_task_signal.connect (update_task);
-			row.remove_task_signal.connect (remove_task);
-
+			row.update_signal.connect (update_task);
 		}
 
 		private void update_task () {
 			update_list_all ();
 		}
 
-		private void remove_task () {
-			update_list_all (); //Actualiza la lista de hitos o lsitas de tareas
-		}
-
 		private void add_task () {
-
 			var task = new Interfaces.Task ();
 
             task.name = task_entry.text;
             task.state = "false";
             task.deadline = "";
-            task.priority = "None";
             task.note = "";
             task.id_list = list_actual.id;
 
@@ -294,34 +261,23 @@ namespace Planner {
 			title_list_label.label = "<b>"+ list_actual.name +"</b>";
 			edit_list_popover.set_list_to_edit (list_actual);
 
-			box_title.visible = true;
-			task_scrolled_window.visible = true;
+			box_title.no_show_all = false;
+			task_scrolled_window.no_show_all = false;
 
+			show_all ();
 			alert.visible = false;
 		}
 
-		private void check_state_alert () {
-
+		public void update_alert () {
 			if (db.get_list_length () < 1) {
-
 				alert.title = TITLE_NONE_LIST_ALERT;
 				alert.description = DESCRIPTION_NONE_LIST_ALERT;
-				alert.icon_name = "list-add";
-
 			} else if (list_actual.name == "") {
-
 				alert.title = TITLE_NONE_SELECT_ALERT;
 				alert.description = DESCRIPTION_NONE_SELECTED_ALERT;
-				alert.icon_name = "emblem-default";
-
-			} else if (none_tasks_bool == true) {
-
-				alert.title = TITLE_NONE_TASK_ALERT;
-				alert.description = DESCRIPTION_NONE_TASK_ALERT;
-				alert.icon_name = "list-add";
-
-				task_scrolled_window.visible = false;
-
+			} else {
+				alert.no_show_all = true;
+				alert.visible = false;
 			}
 		}
 	}

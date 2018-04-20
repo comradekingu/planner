@@ -62,7 +62,7 @@ namespace Planner {
 
         public void build_ui () {
             main_stack = new Gtk.Stack ();
-            //main_stack.transition_duration = 400;
+            main_stack.transition_duration = 400;
             main_stack.vexpand = true;
             main_stack.hexpand = true;
             main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
@@ -86,6 +86,14 @@ namespace Planner {
             headerbar = new Headerbar ();
             set_titlebar (headerbar);
             headerbar.update_project.connect (update_project);
+            headerbar.update_actual_project.connect ( () => {
+                overview_view.update_widget ();
+            });
+            headerbar.go_startup.connect ( () => {
+                headerbar.disable_all ();
+                main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                main_stack.visible_child_name = "startup_view";
+            });
             headerbar.on_headerbar_change.connect ( (index_bar) => {
                 if (index > index_bar) {
                     main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
@@ -109,16 +117,16 @@ namespace Planner {
                 main_stack.visible_child_name = "welcome_view";
             });
 
-            startup_view.on_create_button.connect ( (project) => {
-                db.add_project (project);
-
+            startup_view.on_create_button.connect ( () => {
                 headerbar.enable_all ();
+
+                var project = db.get_fist_project ();
+
                 headerbar.set_project (project);
+                settings.set_int ("last-project-id", project.id);
+                overview_view.update_widget ();
 
-                settings.set_int ("last-project-id", 1);
                 main_stack.visible_child_name = "overview_view";
-
-                overview_view.set_project (project);
             });
 
             welcome_view.on_welcome_select.connect ( (index) => {
@@ -146,14 +154,11 @@ namespace Planner {
                 headerbar.disable_all ();
                 main_stack.visible_child_name = "welcome_view";
             } else {
-                var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
-                all_projects = db.get_all_projects ();
-                foreach (var project in all_projects) {
-                    if (project.id == settings.get_int ("last-project-id")) {
-                        headerbar.set_project (project);
-                        overview_view.set_project (project);
-                    }
-                }
+                var project = db.get_project (settings.get_int ("last-project-id"));
+
+                headerbar.set_project (project);
+                overview_view.update_widget ();
+
                 main_stack.visible_child_name = "overview_view";
             }
         }
@@ -161,7 +166,7 @@ namespace Planner {
         private void update_project (Interfaces.Project project) {
             settings.set_int ("last-project-id", project.id);
             task_view.update_widget ();
-            overview_view.set_project (project);
+            overview_view.update_widget ();
         }
     }
 }

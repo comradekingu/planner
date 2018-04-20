@@ -12,7 +12,7 @@ c_args = [
   '-include', 'config.h'
 ]
 
-add_global_arguments('-DGETTEXT_PACKAGE="' + meson.project_name() + '"', language:'c')
+add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 
 asresources = gnome.compile_resources(
     'as-resources', 'data/' + meson.project_name() + '.gresource.xml',
@@ -35,17 +35,14 @@ executable(
     'src/Widgets/Popover/ProjectPopover.vala',
     'src/Widgets/Popover/AvatarPopover.vala',
     'src/Widgets/Popover/NewEditListPopover.vala',
-    'src/Widgets/Popover/InfoPopover.vala',
     'src/Widgets/ProjectList.vala',
     'src/Widgets/ProjectNewUpdate.vala',
     'src/Widgets/ProjectItem.vala',
     'src/Widgets/MilestoneList.vala',
     'src/Widgets/TaskList.vala',
     'src/Widgets/FormatBar.vala',
-    'src/Widgets/Calendar.vala',
     'src/Widgets/ListMilestoneRow.vala',
     'src/Widgets/TaskListRow.vala',
-    'src/Widgets/PriorityWidget.vala',
     'src/Widgets/ProgressWidget.vala',
     'src/Widgets/LabelWidget.vala',
     'src/Utils/Utils.vala',
