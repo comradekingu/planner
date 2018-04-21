@@ -72,6 +72,13 @@ namespace Planner {
 
             // Overview
             overview_view = new OverviewView ();
+            overview_view.go_taskview_signal.connect ( () => {
+                main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                main_stack.visible_child_name = "task_view";
+                task_view.open_create_list ();
+                index = 1;
+                headerbar.set_item_index (index);
+            });
 
             // Task View
             task_view = new TaskView ();

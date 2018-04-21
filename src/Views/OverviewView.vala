@@ -5,6 +5,9 @@ namespace Planner {
 		private LabelWidget all_lists_label;
 		private LabelWidget all_lists_completed_label;
 
+		private ListProgress list_progress;
+		private NoteGeneralWidget notes;
+
 		private Gtk.Image avatar_image;
 		private Gtk.Label title_label;
 		private Gtk.Label description_label;
@@ -15,6 +18,8 @@ namespace Planner {
 
 		private Services.Database db;
 		private GLib.Settings settings;
+
+		public signal void go_taskview_signal ();
 
 		public OverviewView () {
 
@@ -33,8 +38,11 @@ namespace Planner {
 		private void build_ui () {
 			var main_grid  = new Gtk.Grid ();
 			main_grid.orientation = Gtk.Orientation.VERTICAL;
-			main_grid.row_spacing = 24;
-			main_grid.margin = 50;
+			main_grid.row_spacing = 12;
+			main_grid.margin_left = 100;
+			main_grid.margin_right = 100;
+			main_grid.margin_top = 50;
+
 			main_grid.expand = true;
 
 			string TASKS = _("Tasks");
@@ -46,7 +54,7 @@ namespace Planner {
 			all_tasks_label = new LabelWidget ("0", ALL, "Tasks");
 
 			avatar_image = new Gtk.Image.from_icon_name (project_actual.avatar, Gtk.IconSize.DND);
-			avatar_image.pixel_size = 128;
+			avatar_image.pixel_size = 64;
 
 			all_lists_completed_label = new LabelWidget ("0", LISTS, COMPLETED);
 			all_lists_label = new LabelWidget ("0", ALL, LISTS);
@@ -70,10 +78,27 @@ namespace Planner {
 			all_levelbar = new ProgressWidget ();
 			all_levelbar.margin_top = 12;
 
+			list_progress = new ListProgress ();
+			list_progress.add_list_signal.connect ( () => {
+				go_taskview_signal ();
+			});
+
+			notes = new NoteGeneralWidget ();
+
+			var list_note_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+			list_note_box.expand = true;
+			list_note_box.margin_top = 12;
+			list_note_box.homogeneous = true;
+
+			list_note_box.pack_start (list_progress, true, true, 0);
+			list_note_box.pack_start (notes, true, true, 0);
+
+
 			main_grid.add (box);
 			main_grid.add (title_label);
 			main_grid.add (description_label);
 			main_grid.add (all_levelbar);
+			main_grid.add (list_note_box);
 
 			add (main_grid);
 		}
@@ -85,6 +110,8 @@ namespace Planner {
 			title_label.label = project_actual.name;
 			description_label.label = project_actual.description;
 
+			list_progress.update_list ();
+
 			if ((db.get_list_length () < 1)) {
 				all_tasks_label.update_value ("0");
 				all_tasks_completed_label.update_value ("0");
@@ -92,7 +119,7 @@ namespace Planner {
 				all_lists_label.update_value ("0");
 				all_lists_completed_label.update_value ("0");
 
-				all_levelbar.update_widget ("0");
+				all_levelbar.update_widget (0);
 			} else {
 				var all_list = new Gee.ArrayList<Interfaces.List?> ();
 				all_list = db.get_all_lists (project_actual.id);
@@ -112,7 +139,7 @@ namespace Planner {
 				}
 
 
-				v = all_tasks_completed * 100 / all_tasks;
+				v = all_tasks_completed / all_tasks;
 
 				if (all_tasks == 0) {
 					v = 0;
@@ -124,7 +151,7 @@ namespace Planner {
 				all_lists_label.update_value (all_list.size.to_string ());
 				all_lists_completed_label.update_value (list_completed.to_string ());
 
-				all_levelbar.update_widget (int.parse (v.to_string ()).to_string ());
+				all_levelbar.update_widget (v);
 			}
 		}
 	}

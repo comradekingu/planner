@@ -1,12 +1,12 @@
 namespace Planner {
     public class FormatBar : Gtk.Grid {
-
         private FormatButton overview_toggle;
         private FormatButton task_toggle;
         private FormatButton issues_toggle;
 
+        private Granite.Widgets.ModeButton main;
 
-        public signal void on_formarbar_select (int index_bar); 
+        public signal void on_formarbar_select (int index_bar);
 
         private const string CSS = """
                 .format-bar {
@@ -16,7 +16,6 @@ namespace Planner {
             """;
 
         static construct {
-
             var provider = new Gtk.CssProvider ();
             try {
                 provider.load_from_data (CSS, CSS.length);
@@ -27,7 +26,6 @@ namespace Planner {
         }
 
         construct {
-
             var style_context = get_style_context ();
             style_context.add_class ("format-bar");
             style_context.add_class (Gtk.STYLE_CLASS_LINKED);
@@ -44,22 +42,25 @@ namespace Planner {
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");
             issues_toggle.text = _("Issues");
 
-            var main = new Granite.Widgets.ModeButton ();
+            main = new Granite.Widgets.ModeButton ();
             main.append (overview_toggle);
             main.append (task_toggle);
             //main.append (issues_toggle);
             main.selected = 0;
             main.mode_changed.connect ( (widget) => {
-
                 on_formarbar_select (main.selected);
             });
 
             add (main);
         }
+
+        public void set_item_index (int index) {
+            main.selected = index;
+        }
+
     }
 
     public class FormatButton : Gtk.Box {
-
         public unowned string text {
             set {
                 label_widget.label = value;
@@ -83,9 +84,7 @@ namespace Planner {
         private Gtk.Label label_widget;
 
         construct {
-
             can_focus = false;
-
             width_request = 120;
 
             img = new Gtk.Image ();

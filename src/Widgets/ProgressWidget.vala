@@ -5,17 +5,17 @@ namespace Planner {
 
         public ProgressWidget () {
             hexpand = true;
-            margin_left = 50;
-            margin_right = 50;
+            //margin_left = 50;
+            //margin_right = 50;
 
             build_ui ();
         }
         private void build_ui () {
             var main_grid = new Gtk.Grid ();
 
-            all_levelbar = new Gtk.LevelBar.for_interval (0, 100);
+            all_levelbar = new Gtk.LevelBar.for_interval (0, 1);
             all_levelbar.hexpand = true;
-            all_levelbar.height_request = 20;
+            all_levelbar.height_request = 12;
 
             value_label = new Gtk.Label ("");
             value_label.use_markup = true;
@@ -27,9 +27,14 @@ namespace Planner {
             add (main_grid);
         }
 
-        public void update_widget (string value) {
-            value_label.label = _("Completed: <b>%s%</b>").printf(value);
-            all_levelbar.value = int.parse (value);
+        public void update_widget (double value) {
+            all_levelbar.value = value;
+
+            double v = value * 100;
+            int v2 = (int)v;
+
+            value_label.label = _("Completed: <b>%s%</b>").printf(v.to_string ().substring (0, 2));
+
         }
     }
 }

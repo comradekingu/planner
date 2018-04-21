@@ -3,7 +3,7 @@ namespace Planner {
 
 		private Gtk.Label title_label;
 		private Gtk.Button add_button;
-		private Gtk.ProgressBar progressbar;
+		private Gtk.LevelBar progressbar;
         private Gtk.ListBox milestone_list;
 
 		private NewEditListPopover new_list_popover;
@@ -65,7 +65,7 @@ namespace Planner {
             title_box.pack_start (title_label, false, false, 0);
             title_box.pack_end (add_button, false, false, 0);
 
-            progressbar = new Gtk.ProgressBar ();
+            progressbar = new Gtk.LevelBar.for_interval (0, 1);
 
             milestone_list = new Gtk.ListBox ();
             milestone_list.activate_on_single_click = true;
@@ -98,7 +98,8 @@ namespace Planner {
 
                 row.selected_list.connect (selected_list);
             }
-			progressbar.fraction = all_tasks_completed_progress / all_tasks_progress;
+
+			progressbar.value = all_tasks_completed_progress / all_tasks_progress;
 
 			all_tasks_completed_progress = 0;
 			all_tasks_progress = 0;
@@ -117,5 +118,12 @@ namespace Planner {
         private void selected_list (Interfaces.List list) {
             list_selected (list);
         }
+
+		public void open_create_list () {
+			Timeout.add (500, () => {
+				new_list_popover.show_all ();
+				return false;
+			});
+		}
     }
 }

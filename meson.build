@@ -12,7 +12,7 @@ c_args = [
   '-include', 'config.h'
 ]
 
-add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
+add_global_arguments('-DGETTEXT_PACKAGE="' + meson.project_name() + '"', language:'c')
 
 asresources = gnome.compile_resources(
     'as-resources', 'data/' + meson.project_name() + '.gresource.xml',
@@ -45,6 +45,8 @@ executable(
     'src/Widgets/TaskListRow.vala',
     'src/Widgets/ProgressWidget.vala',
     'src/Widgets/LabelWidget.vala',
+    'src/Widgets/ListProgress.vala',
+    'src/Widgets/NoteGeneralWidget.vala', 
     'src/Utils/Utils.vala',
     'src/Interfaces/Project.vala',
     'src/Interfaces/List.vala',

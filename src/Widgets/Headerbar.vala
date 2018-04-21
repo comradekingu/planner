@@ -1,6 +1,5 @@
 namespace Planner {
     public class Headerbar : Gtk.HeaderBar {
-
         private FormatBar format_bar;
         private ProjectButton project_button;
 
@@ -15,7 +14,6 @@ namespace Planner {
         public signal void go_startup ();
 
         public Headerbar () {
-
             set_show_close_button (true);
             get_style_context ().add_class ("compact");
             set_title ("Planner");
@@ -24,13 +22,10 @@ namespace Planner {
         }
 
         private void build_ui () {
-
             project_button = new ProjectButton ();
             project_popover = new ProjectPopover (project_button);
             project_button.clicked.connect ( () => {
-
                 project_popover.show_all ();
-
             });
 
             project_popover.selected_project.connect (set_actual_project);
@@ -45,14 +40,10 @@ namespace Planner {
             format_bar = new FormatBar ();
             set_custom_title (format_bar);
             format_bar.on_formarbar_select.connect ( (index_bar) => {
-
                 on_headerbar_change (index_bar);
-
             });
 
-
             // ------- Team Button -------------------------------------
-
             team_button = new Gtk.MenuButton ();
             team_button.image = new Gtk.Image.from_icon_name ("system-users", Gtk.IconSize.LARGE_TOOLBAR);
             team_button.set_border_width (4);
@@ -106,7 +97,6 @@ namespace Planner {
             app_menu.set_opacity (0);
 
             set_custom_title (null);
-
         }
 
         public void enable_all () {
@@ -139,6 +129,10 @@ namespace Planner {
         public void set_project (Interfaces.Project project) {
             project_button.set_project (project);
             update_widget ();
+        }
+
+        public void set_item_index (int index) {
+            format_bar.set_item_index (index);
         }
     }
 }

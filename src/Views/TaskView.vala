@@ -52,5 +52,9 @@ namespace Planner {
 		public void update_widget () {
 			milestones_list.update_list ();
 		}
+
+		public void open_create_list () {
+			milestones_list.open_create_list ();
+		}
 	}
 }
