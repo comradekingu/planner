@@ -23,8 +23,8 @@ namespace Planner {
 			main_grid.orientation = Gtk.Orientation.HORIZONTAL;
 
 			var separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
-			separator.margin_top = 50;
-            separator.margin_bottom = 50;
+			separator.margin_top = 25;
+            separator.margin_bottom = 25;
 
 			milestones_list.list_selected.connect ( (list) => {
 				task_list.set_list (list);
@@ -51,6 +51,8 @@ namespace Planner {
 
 		public void update_widget () {
 			milestones_list.update_list ();
+			task_list.update_alert ();
+			task_list.no_select_list ();
 		}
 
 		public void open_create_list () {

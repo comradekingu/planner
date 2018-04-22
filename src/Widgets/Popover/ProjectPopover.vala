@@ -11,9 +11,12 @@ namespace Planner {
         public signal void selected_project (Interfaces.Project project);
         public signal void update_project ();
         public signal void go_startup_view ();
+        public signal void go_fist_project ();
 
         private string TITLE_NEW = _("New");
         private string TITLE_EDIT = _("Edit");
+
+        private GLib.Settings settings;
 
         public ProjectPopover (Gtk.Widget relative) {
 
@@ -25,6 +28,7 @@ namespace Planner {
             );
 
             db = new Services.Database (true);
+            settings = settings = new GLib.Settings ("com.github.alainm23.planner");
 
             set_size_request(300, 400);
         }
@@ -103,6 +107,8 @@ namespace Planner {
 
                     if (db.get_project_number () < 1) {
                         go_startup_view ();
+                    }else if (project.id == settings.get_int ("last-project-id")) {
+                        go_fist_project ();
                     }
                 });
             });

@@ -45,12 +45,12 @@ namespace Planner {
         	main_grid.width_request = 250;
 
             title_label = new Gtk.Label (_("<b>New List</b>"));
-            title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+            title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
         	title_label.use_markup = true;
 
 			remove_button = new Gtk.Button.with_label (_("Remove"));
 			remove_button.tooltip_text = _("Create a new List");
-			remove_button.valign = Gtk.Align.CENTER;
+			//remove_button.valign = Gtk.Align.CENTER;
 			remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
 			remove_button.no_show_all = true;
 			remove_button.clicked.connect ( () => {
@@ -61,8 +61,8 @@ namespace Planner {
 
         	add_button = new Gtk.Button.with_label (_("Save"));
             add_button.tooltip_text = _("Create a new List");
-            add_button.halign = Gtk.Align.END;
-            add_button.valign = Gtk.Align.CENTER;
+            //add_button.halign = Gtk.Align.END;
+            //add_button.valign = Gtk.Align.CENTER;
             add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.sensitive = false;
             add_button.clicked.connect ( () => {
@@ -89,12 +89,13 @@ namespace Planner {
 
             });
 
-            var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            title_box.hexpand = true;
+            var action_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            action_box.hexpand = true;
+			//action_box.homogeneous = true;
 
-            title_box.pack_start (title_label, false, true, 0);
-            title_box.pack_end (add_button, false, true, 6);
-			title_box.pack_end (remove_button, false, false, 0);
+			action_box.pack_start (remove_button, true, true, 0);
+            action_box.pack_start (add_button, true, true, 0);
+
 
 
             flow_box = new Gtk.FlowBox ();
@@ -142,10 +143,10 @@ namespace Planner {
             spin_box.pack_end (spin_button, false, true, 0);
 
 
-            main_grid.add (title_box);
+            main_grid.add (title_label);
             main_grid.add (name_entry);
             main_grid.add (scrolled);
-            //main_grid.add (spin_box);
+            main_grid.add (action_box);
             add (main_grid);
             name_entry.grab_focus ();
 

@@ -1,12 +1,14 @@
 namespace Planner {
 	public class MilestoneList : Gtk.Grid {
-
 		private Gtk.Label title_label;
-		private Gtk.Button add_button;
 		private Gtk.LevelBar progressbar;
         private Gtk.ListBox milestone_list;
 
+		private ModelButton add_button;
+		private Gtk.Button filter_button;
+
 		private NewEditListPopover new_list_popover;
+		private FilterListPopover filter_popover;
         private Gtk.ScrolledWindow list_scrolled_window;
 
         private Services.Database db;
@@ -33,7 +35,8 @@ namespace Planner {
 
 			orientation = Gtk.Orientation.VERTICAL;
             row_spacing = 12;
-            margin = 50;
+            margin = 25;
+			//margin_top = 50;
             expand = true;
 
 			build_ui ();
@@ -46,14 +49,20 @@ namespace Planner {
             title_label.halign = Gtk.Align.START;
             title_label.use_markup = true;
 
-            add_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            add_button.tooltip_text = _("Create a new Milestone");
+			add_button = new ModelButton (_("New list"), "list-add-symbolic");
             add_button.halign = Gtk.Align.END;
             add_button.valign = Gtk.Align.CENTER;
-            add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.clicked.connect ( () => {
             	new_list_popover.show_all ();
             });
+
+			filter_button = new Gtk.Button.from_icon_name ("view-list-compact-symbolic", Gtk.IconSize.MENU);
+			filter_button.tooltip_text = _("Filter lists by");
+			filter_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
+			var actionbar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+			actionbar_box.pack_start (add_button, false, false, 0);
+			actionbar_box.pack_end (filter_button, false, false, 0);
 
             new_list_popover = new NewEditListPopover (add_button);
             new_list_popover.created_list.connect ( () => {
@@ -61,9 +70,10 @@ namespace Planner {
                 update_list ();
             });
 
-            var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-            title_box.pack_start (title_label, false, false, 0);
-            title_box.pack_end (add_button, false, false, 0);
+			filter_popover = new FilterListPopover (filter_button);
+			filter_button.clicked.connect ( () => {
+				filter_popover.show_all ();
+			});
 
             progressbar = new Gtk.LevelBar.for_interval (0, 1);
 
@@ -75,11 +85,17 @@ namespace Planner {
             list_scrolled_window.expand = true;
             list_scrolled_window.add (milestone_list);
 
-            create_list ();
 
-            add (title_box);
+
+            add (title_label);
             add (progressbar);
             add (list_scrolled_window);
+			add (actionbar_box);
+
+			Timeout.add_seconds (1, () => {
+				update_list ();
+				return true;
+			});
 
         }
 

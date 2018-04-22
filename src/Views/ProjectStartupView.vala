@@ -161,6 +161,7 @@ namespace Planner {
             new_project.avatar = image_button.icon_name;
             new_project.type = "lists";
             new_project.start_date = new GLib.DateTime.now_local ().format ("%F");
+			new_project.last_update = new GLib.DateTime.now_local ().format ("%F");
 
 			db.add_project (new_project);
 

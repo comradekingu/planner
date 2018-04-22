@@ -45,6 +45,8 @@ namespace Planner {
             "description VARCHAR," +
             "start_date DATE," +
             "due_date DATE," +
+            "last_update DATE, " +
+            "note VARCHAR, " +
             "type VARCHAR, " +
             "avatar VARCHAR)", null, null);
 
@@ -90,7 +92,10 @@ namespace Planner {
 
             debug ("Table assigned created");
 
-            rc = db.exec ("PRAGMA foreign_keys = ON");
+            string errormsg;
+            if (db.exec ("PRAGMA foreign_keys = ON;", null, out errormsg) != Sqlite.OK) {
+                warning (errormsg);
+            }
 
             return rc;
         }
@@ -100,8 +105,8 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO PROJECTS (name, " +
-                "description, start_date, due_date, type, avatar)" +
-                "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
+                "description, start_date, due_date, last_update, note, type, avatar)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", -1, out stmt);
 
             assert (res == Sqlite.OK);
 
@@ -117,10 +122,16 @@ namespace Planner {
             res = stmt.bind_text (4, project.due_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, project.type);
+            res = stmt.bind_text (5, project.last_update);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (6, project.avatar);
+            res = stmt.bind_text (6, project.note);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (7, project.type);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (8, project.avatar);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -197,7 +208,6 @@ namespace Planner {
         }
 
         public void remove_project (Interfaces.Project project) {
-
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("DELETE FROM PROJECTS " +
@@ -252,7 +262,7 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
-                "description = ?, start_date = ?, due_date = ?, type = ?, avatar = ? " +
+                "description = ?, start_date = ?, due_date = ?, last_update = ?, note = ?, type = ?, avatar = ? " +
                 "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
@@ -268,13 +278,19 @@ namespace Planner {
             res = stmt.bind_text (4, project.due_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, project.type);
+            res = stmt.bind_text (5, project.last_update);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (6, project.avatar);
+            res = stmt.bind_text (6, project.note);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_int (7, project.id);
+            res = stmt.bind_text (7, project.type);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (8, project.avatar);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (9, project.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -393,8 +409,10 @@ namespace Planner {
             project.description = stmt.column_text (2);
             project.start_date = stmt.column_text (3);
             project.due_date = stmt.column_text (4);
-            project.type = stmt.column_text (5);
-            project.avatar = stmt.column_text (6);
+            project.last_update = stmt.column_text (5);
+            project.note = stmt.column_text (6);
+            project.type = stmt.column_text (7);
+            project.avatar = stmt.column_text (8);
 
             return project;
         }
@@ -417,8 +435,10 @@ namespace Planner {
             project.description = stmt.column_text (2);
             project.start_date = stmt.column_text (3);
             project.due_date = stmt.column_text (4);
-            project.type = stmt.column_text (5);
-            project.avatar = stmt.column_text (6);
+            project.last_update = stmt.column_text (5);
+            project.note = stmt.column_text (6);
+            project.type = stmt.column_text (7);
+            project.avatar = stmt.column_text (8);
 
             return project;
         }
@@ -441,8 +461,10 @@ namespace Planner {
                 project.description = stmt.column_text (2);
                 project.start_date = stmt.column_text (3);
                 project.due_date = stmt.column_text (4);
-                project.type = stmt.column_text (5);
-                project.avatar = stmt.column_text (6);
+                project.last_update = stmt.column_text (5);
+                project.note = stmt.column_text (6);
+                project.type = stmt.column_text (7);
+                project.avatar = stmt.column_text (8);
 
                 all.add (project);
             }
@@ -497,6 +519,19 @@ namespace Planner {
             all_tasks = get_all_tasks (list_id);
 
             return all_tasks.size;
+        }
+
+        public bool project_exists (int id) {
+            var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
+            all_projects = get_all_projects ();
+
+            foreach (var project in all_projects) {
+                if (project.id == id) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -40,14 +40,6 @@ namespace Planner {
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
             title_label.use_markup = true;
 
-            /*
-            search_button = new Gtk.Button.from_icon_name ("system-search-symbolic", Gtk.IconSize.MENU);
-            search_button.tooltip_text = _("Search a project");
-            search_button.valign = Gtk.Align.CENTER;
-            search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-            */
-            //add_button = new Gtk.Button.from_icon_name ("folder-new-symbolic", Gtk.IconSize.MENU);
-
             add_button = new Gtk.Button.with_label (_("New"));
             add_button.tooltip_text = _("Create a new project");
             add_button.valign = Gtk.Align.CENTER;
@@ -153,7 +145,6 @@ namespace Planner {
 
             search_entry.grab_focus ();
             search_entry.can_focus = true;
-
         }
 
         private void on_project_selected (Gtk.ListBoxRow list_box_row) {

@@ -111,6 +111,7 @@ namespace Planner {
 			description_label.label = project_actual.description;
 
 			list_progress.update_list ();
+			notes.update_widget ();
 
 			if ((db.get_list_length () < 1)) {
 				all_tasks_label.update_value ("0");

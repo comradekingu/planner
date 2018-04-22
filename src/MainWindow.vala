@@ -95,12 +95,23 @@ namespace Planner {
             headerbar.update_project.connect (update_project);
             headerbar.update_actual_project.connect ( () => {
                 overview_view.update_widget ();
+                task_view.update_widget ();
             });
             headerbar.go_startup.connect ( () => {
                 headerbar.disable_all ();
                 main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
                 main_stack.visible_child_name = "startup_view";
             });
+
+            headerbar.go_fist.connect ( () => {
+                var project = db.get_fist_project ();
+
+                headerbar.set_project (project);
+                settings.set_int ("last-project-id", project.id);
+                overview_view.update_widget ();
+                task_view.update_widget ();
+            });
+
             headerbar.on_headerbar_change.connect ( (index_bar) => {
                 if (index > index_bar) {
                     main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
@@ -116,6 +127,7 @@ namespace Planner {
                     main_stack.visible_child_name = "issues_view";
                 }
 
+                task_view.update_widget ();
                 index = index_bar;
             });
 
@@ -132,6 +144,7 @@ namespace Planner {
                 headerbar.set_project (project);
                 settings.set_int ("last-project-id", project.id);
                 overview_view.update_widget ();
+                task_view.update_widget ();
 
                 main_stack.visible_child_name = "overview_view";
             });
@@ -161,11 +174,17 @@ namespace Planner {
                 headerbar.disable_all ();
                 main_stack.visible_child_name = "welcome_view";
             } else {
-                var project = db.get_project (settings.get_int ("last-project-id"));
+                var project = new Interfaces.Project ();
 
-                headerbar.set_project (project);
+                if (db.project_exists (settings.get_int ("last-project-id"))) {
+                    project = db.get_project (settings.get_int ("last-project-id"));
+                } else {
+                    project = db.get_fist_project ();
+                    settings.set_int ("last-project-id", project.id);
+                }
                 overview_view.update_widget ();
-
+                task_view.update_widget ();
+                headerbar.set_project (project);
                 main_stack.visible_child_name = "overview_view";
             }
         }

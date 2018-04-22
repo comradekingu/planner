@@ -30,10 +30,9 @@ namespace Planner {
         public void update_widget (double value) {
             all_levelbar.value = value;
 
-            double v = value * 100;
-            int v2 = (int)v;
+            int v = int.parse ((value * 100).to_string ());
 
-            value_label.label = _("Completed: <b>%s%</b>").printf(v.to_string ().substring (0, 2));
+            value_label.label = _("Completed: <b>%s%</b>").printf(v.to_string ());
 
         }
     }

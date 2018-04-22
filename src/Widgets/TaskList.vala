@@ -34,7 +34,7 @@ namespace Planner {
 			expand = true;
 			orientation = Gtk.Orientation.VERTICAL;
             row_spacing = 12;
-            margin = 50;
+            margin = 25;
             margin_bottom = 50;
 			width_request = 500;
 
@@ -281,6 +281,12 @@ namespace Planner {
 				alert.no_show_all = true;
 				alert.visible = false;
 			}
+		}
+
+		public void no_select_list () {
+			alert.visible = true;
+			box_title.visible = false;
+			task_scrolled_window.visible = false;
 		}
 	}
 }

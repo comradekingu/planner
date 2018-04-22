@@ -12,6 +12,7 @@ namespace Planner {
         public signal void on_headerbar_change (int index_bar);
         public signal void update_actual_project ();
         public signal void go_startup ();
+        public signal void go_fist ();
 
         public Headerbar () {
             set_show_close_button (true);
@@ -35,6 +36,9 @@ namespace Planner {
 
             project_popover.go_startup_view.connect ( () => {
                 go_startup ();
+            });
+            project_popover.go_fist_project.connect ( () => {
+                go_fist ();
             });
 
             format_bar = new FormatBar ();

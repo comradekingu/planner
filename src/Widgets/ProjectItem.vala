@@ -36,7 +36,8 @@ namespace Planner {
             title_label.xalign = 0;
             title_label.valign = Gtk.Align.END;
 
-            var description_label = new Gtk.Label ("<span font_size='small'>" + actual_project.description + "</span>");
+            var description_label = new Gtk.Label ("");
+            description_label.label = "<small>" + GLib.Markup.escape_text (actual_project.description, -1) + "</small>";
             description_label.use_markup = true;
             description_label.ellipsize = Pango.EllipsizeMode.END;
             description_label.xalign = 0;
@@ -50,10 +51,8 @@ namespace Planner {
             edit_button.set_focus_on_click (false);
             edit_button.tooltip_text = _("Edit Project");
             edit_button.clicked.connect ( () => {
-
                 // Send signal to edit atu project
                 edit_button_active (actual_project);
-
             });
 
             var delete_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.MENU);
@@ -63,10 +62,8 @@ namespace Planner {
             delete_button.set_focus_on_click (false);
             delete_button.tooltip_text = _("Delete Project");
             delete_button.clicked.connect ( () => {
-
                 // Send signal to delete a project
                 delete_button_active (actual_project);
-
             });
 
             delete_button.set_focus_on_click (false);

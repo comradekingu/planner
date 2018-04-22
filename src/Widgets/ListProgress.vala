@@ -4,6 +4,7 @@ namespace Planner {
         private Gtk.ListBox progress_litbox;
         private Gtk.ScrolledWindow list_scrolled_window;
         private Granite.Widgets.AlertView alert;
+        private Gtk.Label add_list_button;
 
         private Services.Database db;
 		private GLib.Settings settings;
@@ -12,8 +13,7 @@ namespace Planner {
 
         public ListProgress () {
             orientation = Gtk.Orientation.VERTICAL;
-            //row_spacing = 12;
-            margin_right = 24;
+            margin_right = 48;
             margin_bottom = 24;
 
             db = new Services.Database (true);
@@ -23,8 +23,8 @@ namespace Planner {
         }
 
         private void build_ui () {
-            alert = new Granite.Widgets.AlertView (_("No List"), _("Para llenar este espacio, empieze a crear listas"), "dialog-warning");
-            alert.show_action (_("Create List"));
+            alert = new Granite.Widgets.AlertView (_("No list"), _("Create a list to fill this space"), "dialog-warning");
+            alert.show_action (_("Create list"));
             alert.no_show_all = true;
 
             alert.action_activated.connect ( () => {
@@ -44,11 +44,26 @@ namespace Planner {
             list_scrolled_window.expand = true;
             list_scrolled_window.add (progress_litbox);
 
+
+            add_list_button = new Gtk.Label (_("New list"));
+            add_list_button.tooltip_text = _("Create a new list");
+            add_list_button.halign = Gtk.Align.END;
+            //add_list_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            add_list_button.get_style_context ().add_class ("label_link");
+
+            var option_event = new Gtk.EventBox ();
+            option_event.add (add_list_button);
+            option_event.button_press_event.connect ( (event) => {
+                add_list_signal ();
+                return true;
+            });
+
             update_list ();
 
             add (title_label);
             add (list_scrolled_window);
             add (alert);
+            add (option_event);
         }
 
         private void create_list () {
@@ -59,11 +74,17 @@ namespace Planner {
                 list_scrolled_window.no_show_all = true;
                 list_scrolled_window.visible = false;
 
+                add_list_button.no_show_all = true;
+                add_list_button.visible = false;
+
                 alert.no_show_all = false;
                 alert.visible = true;
             } else {
                 list_scrolled_window.no_show_all = false;
                 list_scrolled_window.visible = true;
+
+                add_list_button.no_show_all = false;
+                add_list_button.visible = true;
 
                 alert.no_show_all = true;
                 alert.visible = false;
@@ -94,7 +115,6 @@ namespace Planner {
 
         public ProgressRow (Interfaces.List lista) {
             orientation = Gtk.Orientation.HORIZONTAL;
-            //halign = Gtk.Align.CENTER;
             height_request = 50;
 
             lista_actual = lista;
@@ -114,7 +134,7 @@ namespace Planner {
             progressbar.valign = Gtk.Align.CENTER;
             progressbar.margin_left = 12;
             progressbar.halign = Gtk.Align.END;
-            progressbar.width_request = 250;
+            progressbar.width_request = 200;
 
             double all =  lista_actual.task_all;
             double completed = lista_actual.tasks_completed;
