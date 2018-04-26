@@ -39,49 +39,51 @@ namespace Planner.Utils {
 
         return project_types;
     }
-    
+
     public Gee.ArrayList<string> name_icon_list () {
         var name_icon_list = new Gee.ArrayList<string> ();
 
-        name_icon_list.add ("emblem-favorite-symbolic");
-        name_icon_list.add ("emblem-documents-symbolic");
-        name_icon_list.add ("computer-symbolic");
-        name_icon_list.add ("application-xml-symbolic");
-        name_icon_list.add ("emblem-music-symbolic");
-        name_icon_list.add ("preferences-system-symbolic");
-        name_icon_list.add ("emblem-default-symbolic");
-        name_icon_list.add ("edit-symbolic");
-        name_icon_list.add ("edit-find-symbolic");
-        name_icon_list.add ("help-contents-symbolic");
-        name_icon_list.add ("insert-link-symbolic");
-        name_icon_list.add ("help-info-symbolic");
-        name_icon_list.add ("appointment-symbolic");
-        name_icon_list.add ("go-home-symbolic");
-        name_icon_list.add ("find-location-symbolic");
-        name_icon_list.add ("browser-download-symbolic");
-        name_icon_list.add ("x-office-calendar-symbolic");
-        name_icon_list.add ("x-office-presentation-symbolic");
-        name_icon_list.add ("alarm-symbolic");
-        name_icon_list.add ("printer-symbolic");
-        name_icon_list.add ("phone-symbolic");
-        name_icon_list.add ("system-software-install-symbolic");
-        name_icon_list.add ("system-run-symbolic");
-        name_icon_list.add ("applications-games-symbolic");
-        name_icon_list.add ("applications-science-symbolic");
-        name_icon_list.add ("view-paged-symbolic");
-        name_icon_list.add ("send-to-symbolic");
-        name_icon_list.add ("bug-symbolic");
-        name_icon_list.add ("view-list-images-symbolic");
-        name_icon_list.add ("internet-mail-symbolic");
-        name_icon_list.add ("applications-development-symbolic");
-        name_icon_list.add ("emblem-videos-symbolic");
-        name_icon_list.add ("folder-templates-symbolic");
-        name_icon_list.add ("preferences-desktop-online-accounts-symbolic");
-        name_icon_list.add ("edit-flag-symbolic");
-        name_icon_list.add ("help-about-symbolic");
-        name_icon_list.add ("event-birthday-symbolic");
-        name_icon_list.add ("applications-multimedia-symbolic");
-        name_icon_list.add ("preferences-color-symbolic");
+        name_icon_list.add ("process-completed");
+        name_icon_list.add ("document-open");
+        name_icon_list.add ("document-page-setup");
+        name_icon_list.add ("help-about");
+        name_icon_list.add ("help-contents");
+        name_icon_list.add ("dialog-information");
+        name_icon_list.add ("avatar-default");
+        name_icon_list.add ("dialog-error");
+        name_icon_list.add ("dialog-information");
+        name_icon_list.add ("dialog-warning");
+        name_icon_list.add ("network-server");
+        name_icon_list.add ("user-trash");
+        name_icon_list.add ("distributor-logo");
+        name_icon_list.add ("text-x-sql");
+        name_icon_list.add ("vcard");
+        name_icon_list.add ("printer");
+        name_icon_list.add ("phone");
+        name_icon_list.add ("applications-internet");
+        name_icon_list.add ("preferences-system-time");
+        name_icon_list.add ("applications-development");
+        name_icon_list.add ("applications-webbrowsers");
+        name_icon_list.add ("preferences-system");
+        name_icon_list.add ("multimedia-audio-player");
+        name_icon_list.add ("multimedia-video-player");
+        name_icon_list.add ("internet-mail");
+        name_icon_list.add ("accessories-camera");
+        name_icon_list.add ("internet-news-reader");
+        name_icon_list.add ("accessories-text-editor");
+        name_icon_list.add ("internet-chat");
+        name_icon_list.add ("system-users");
+        name_icon_list.add ("system-software-install");
+        name_icon_list.add ("utilities-terminal");
+        name_icon_list.add ("office-address-book");
+        name_icon_list.add ("edit-paste");
+        name_icon_list.add ("insert-link");
+        name_icon_list.add ("mail-archive");
+        name_icon_list.add ("document-edit");
+        name_icon_list.add ("builder");
+        name_icon_list.add ("chrome-hmjkmjkepdijhoojdojkdfohbdgmmhki-Default");
+        name_icon_list.add ("Pencil");
+        name_icon_list.add ("bug");
 
         return name_icon_list;
     }

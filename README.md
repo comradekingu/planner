@@ -26,9 +26,14 @@ These dependencies must be present before building
 ### Building
 
 ```
-meson build && cd build
-meson configure -Dprefix=/usr
+meson build --prefix=/usr
+cd build
+ninja test
+```
+To install, use `ninja install`, then execute with `com.github.alainm23.planner`
+```
 sudo ninja install
+com.github.alainm23.planner
 ```
 
 ### Deconstruct

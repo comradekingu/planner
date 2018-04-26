@@ -13,6 +13,5 @@
     <file alias="planner-video-player.svg">resources/planner-video-player.svg</file>
     <file alias="planner-web.svg">resources/planner-web.svg</file>
     <file alias="project-new.svg">resources/project-new.svg</file>
-  
   </gresource>
 </gresources>

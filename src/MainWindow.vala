@@ -105,10 +105,10 @@ namespace Planner {
 
             headerbar.go_fist.connect ( () => {
                 var project = db.get_fist_project ();
-
-                headerbar.set_project (project);
                 settings.set_int ("last-project-id", project.id);
+
                 overview_view.update_widget ();
+                headerbar.update_widget ();
                 task_view.update_widget ();
             });
 
@@ -140,9 +140,9 @@ namespace Planner {
                 headerbar.enable_all ();
 
                 var project = db.get_fist_project ();
-
-                headerbar.set_project (project);
                 settings.set_int ("last-project-id", project.id);
+
+                headerbar.update_widget ();
                 overview_view.update_widget ();
                 task_view.update_widget ();
 
@@ -184,7 +184,7 @@ namespace Planner {
                 }
                 overview_view.update_widget ();
                 task_view.update_widget ();
-                headerbar.set_project (project);
+                headerbar.update_widget ();
                 main_stack.visible_child_name = "overview_view";
             }
         }

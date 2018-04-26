@@ -3,22 +3,25 @@
 }
 
 .label_link {
-    color: #0d52bf;
+    color: #3689e6;
 }
 .textview {
     font-style: italic;
+}
+.color_label {
+    background-color : #3689e6;
 }
 .badge {
     background-image:
         linear-gradient(
             to bottom,
             shade (
-                @error_color,
+            #c6262e,
                 1.3
             ),
-            @error_color
+            #c6262e
         );
-    border: 1px solid shade (@error_color, 0.9);
+    border: 1px solid shade (#c6262e, 0.9);
     border-radius: 12px;
     box-shadow:
         inset 0 0 0 1px alpha (#fff, 0.05),

@@ -36,7 +36,7 @@ namespace Planner {
 
             task_toggle = new FormatButton ();
             task_toggle.icon = new ThemedIcon ("emblem-default-symbolic");
-            task_toggle.text = _("Tasks");
+            task_toggle.text = _("Homework");
 
             issues_toggle = new FormatButton ();
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");

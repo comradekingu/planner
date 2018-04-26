@@ -1,12 +1,12 @@
 namespace Planner {
 	public class TaskList : Gtk.Grid {
-
 		private Gtk.Label title_list_label;
+		private Gtk.Label note_label;
+
 		private Gtk.Entry task_entry;
 		private Gtk.Box box_title;
 		private Gtk.Button add_button;
 		private Gtk.Button edit_list_button;
-		private NewEditListPopover edit_list_popover;
 		private Granite.Widgets.AlertView alert;
 		private Gtk.Grid task_container;
 		private Gtk.ScrolledWindow task_scrolled_window;
@@ -36,7 +36,7 @@ namespace Planner {
             row_spacing = 12;
             margin = 25;
             margin_bottom = 50;
-			width_request = 500;
+			//width_request = 500;
 
 			filter_bool = true;
 			none_tasks_bool = false;
@@ -57,8 +57,6 @@ namespace Planner {
 
 			db = new Services.Database (true);
 
-
-
 			build_ui ();
 		}
 
@@ -69,30 +67,33 @@ namespace Planner {
 			title_list_label.use_markup = true;
 			title_list_label.halign = Gtk.Align.START;
 			title_list_label.margin_left = 6;
+			title_list_label.ellipsize = Pango.EllipsizeMode.END;
 			title_list_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+
+			note_label = new Gtk.Label (list_actual.note);
+			note_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+			note_label.margin_left = 6;
+			note_label.halign = Gtk.Align.START;
+
+			var note_view = new Gtk.TextView ();
+			note_view.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+
+			note_view.buffer.changed.connect ( () => {
+				list_actual.note = note_view.buffer.text;
+
+				Thread<void*> thread = new Thread<void*>.try("Update note", () => {
+					db.update_list (list_actual);
+					return null;
+				});
+			});
+
+			var scrolled = new Gtk.ScrolledWindow (null, null);
+			scrolled.margin_left = 6;
+			scrolled.height_request = 100;
+			scrolled.add (note_view);
 
 			edit_list_button = new Gtk.Button.from_icon_name ("document-edit-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			edit_list_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-
-			edit_list_popover = new NewEditListPopover (edit_list_button);
-			edit_list_popover.update_list.connect ( (list) => {
-				update_list_all ();
-
-				list_actual = list;
-				title_list_label.label = "<b>" + list_actual.name + "</b>";
-			});
-			edit_list_popover.remove_list.connect ( () => {
-				update_list_all ();
-
-				alert.visible = true;
-				box_title.visible = false;
-				task_scrolled_window.visible = false;
-			});
-
-			edit_list_button.clicked.connect ( () => {
-				edit_list_popover.set_list_to_edit (list_actual);
- 				edit_list_popover.show_all ();
-			});
 
 			task_state_modebutton = new Granite.Widgets.ModeButton ();
 			task_state_modebutton.valign = Gtk.Align.CENTER;
@@ -126,17 +127,16 @@ namespace Planner {
 
 			box_title = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 			box_title.margin_left = 6;
-			box_title.hexpand = true;
 
-			box_title.pack_start (title_list_label, false, false, 0);
-			box_title.pack_start (edit_list_button, false, false, 0);
+			//box_title.pack_start (title_list_label, false, false, 0);
+			//box_title.pack_start (edit_list_button, false, false, 0);
 
-			box_title.pack_end (add_button, false, false, 6);
-			box_title.pack_end (task_state_modebutton, false, false, 0);
+			//box_title.pack_end (add_button, false, false, 6);
+			//box_title.pack_end (task_state_modebutton, false, false, 0);
 
 			task_entry = new Gtk.Entry ();
 			task_entry.set_icon_tooltip_text (Gtk.EntryIconPosition.SECONDARY, _("Add to list..."));
-			task_entry.no_show_all = true;
+			//task_entry.no_show_all = true;
 			task_entry.max_length = 128;
 			task_entry.margin_left = 12;
 			task_entry.placeholder_text = _("Add new task...");
@@ -181,10 +181,11 @@ namespace Planner {
             task_scrolled_window.expand = true;
 			task_scrolled_window.add (task_container);
 
-			add (task_entry);
-			add (box_title);
+			add (title_list_label);
+			add (note_label);
+			//add (scrolled);
 			add (task_scrolled_window);
-			add (alert);
+			add (task_entry);
 
 			box_title.no_show_all = true;
 			task_scrolled_window.no_show_all = true;
@@ -207,7 +208,7 @@ namespace Planner {
 			count_task = 0;
 
 			foreach (var task in all_task) {
-				if (bool.parse(task.state) != filter_bool) {
+				//if (bool.parse(task.state) != filter_bool) {
 
 					var row = new TaskListRow (task);
 
@@ -215,12 +216,12 @@ namespace Planner {
 					connect_row_signals (row);
 
 					count_task = count_task + 1;
-				}
+				//}
 			}
 
 			var last_separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
 			last_separator.margin_left = 12;
-			task_container.add (last_separator);
+			//task_container.add (last_separator);
 
 			update_alert ();
 
@@ -260,8 +261,16 @@ namespace Planner {
 
 			update_list ();
 
+			if (list_actual.note == "") {
+				note_label.no_show_all = true;
+				note_label.visible = false;
+			} else {
+				note_label.no_show_all = false;
+				note_label.visible = true;
+			}
+
 			title_list_label.label = "<b>"+ list_actual.name +"</b>";
-			edit_list_popover.set_list_to_edit (list_actual);
+			note_label.label = list_actual.note;
 
 			box_title.no_show_all = false;
 			task_scrolled_window.no_show_all = false;

@@ -1,10 +1,13 @@
 namespace Planner {
-	public class TaskListRow : Gtk.Grid {
-
+	public class TaskListRow : Gtk.Revealer {
 		Gtk.CheckButton state_button;
 		private Gtk.Label title_label;
+
 		private Gtk.Button remove_button;
 		private Gtk.Button edit_button;
+		private Gtk.Button tag_new_button;
+		private Gtk.Button calendar_button;
+
 		private Gtk.TextView note_view;
 		private Gtk.Revealer revealer_noteview;
 		private Gtk.Entry task_entry;
@@ -18,13 +21,15 @@ namespace Planner {
 		private Services.Database db;
 
 		public TaskListRow (Interfaces.Task task) {
-
-			orientation = Gtk.Orientation.VERTICAL;
-			height_request = 50;
-			margin_left = 12;
+			reveal_child = true;
+			transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
+			transition_duration = 500;
+			height_request = 35;
+			margin_left = 6;
 			hexpand = true;
 			vexpand = false;
 			task_actual = task;
+			tooltip_text = task_actual.name;
 
 			db = new Services.Database (true);
 
@@ -32,7 +37,6 @@ namespace Planner {
 		}
 
 		private void build_ui () {
-
 			state_button = new Gtk.CheckButton ();
 			state_button.active = bool.parse (task_actual.state);
 			state_button.halign = Gtk.Align.START;
@@ -41,8 +45,8 @@ namespace Planner {
 			title_label.use_markup = true;
 			title_label.margin_left = 12;
 			title_label.halign = Gtk.Align.START;
+			title_label.ellipsize = Pango.EllipsizeMode.END;
 			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
-			title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H4_LABEL);
 
 			task_entry = new Gtk.Entry ();
 			task_entry.no_show_all = true;
@@ -53,19 +57,41 @@ namespace Planner {
 			task_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			task_entry.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
-			edit_button = new Gtk.Button.from_icon_name ("document-edit-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			edit_button = new Gtk.Button.from_icon_name ("document-edit", Gtk.IconSize.MENU);
 			edit_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			edit_button.halign = Gtk.Align.END;
 			edit_button.tooltip_text = _("Edit Task");
 
-			remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			remove_button = new Gtk.Button.from_icon_name ("edit-delete", Gtk.IconSize.MENU);
 			remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			remove_button.halign = Gtk.Align.END;
 			remove_button.tooltip_text = _("Remove Task");
 
+			tag_new_button = new Gtk.Button.from_icon_name ("tag-new", Gtk.IconSize.MENU);
+			tag_new_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+			tag_new_button.tooltip_text = _("Add Tags");
+
+			calendar_button = new Gtk.Button.from_icon_name ("office-calendar", Gtk.IconSize.MENU);
+			calendar_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+			calendar_button.tooltip_text = _("Add Duedate");
+
+			var option_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+			option_box.halign = Gtk.Align.END;
+
+			option_box.pack_start (calendar_button, false, false, 0);
+			option_box.pack_start (tag_new_button, false, false, 0);
+			option_box.pack_start (edit_button, false, false, 0);
+			option_box.pack_start (remove_button, false, false, 0);
+
+			var image_button = new Gtk.Image.from_icon_name("pan-down-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+
+			var show_option_button = new Gtk.Button ();
+			show_option_button.image = image_button;
+			show_option_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
 			var action_grid = new Gtk.Grid ();
-			action_grid.add (edit_button);
-			action_grid.add (remove_button);
+			action_grid.add (show_option_button);
+			//action_grid.add (remove_button);
 
 			var action_revealer = new Gtk.Revealer ();
             action_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
@@ -110,17 +136,23 @@ namespace Planner {
 
 			var scrolled = new Gtk.ScrolledWindow (null, null);
 			scrolled.hexpand = true;
-			scrolled.height_request = 120;
+			scrolled.height_request = 100;
 			scrolled.margin_left = 32;
 			scrolled.margin_top = 6;
 			scrolled.margin_bottom = 12;
 			scrolled.add (note_view);
 
+			var grid = new Gtk.Grid ();
+			grid.orientation = Gtk.Orientation.VERTICAL;
+
+			grid.add (scrolled);
+			grid.add (option_box);
+
 			revealer_noteview = new Gtk.Revealer();
 			revealer_noteview.reveal_child = false;
 			revealer_noteview.visible = false;
 			revealer_noteview.transition_duration = 500;
-			revealer_noteview.add (scrolled);
+			revealer_noteview.add (grid);
 
 			main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 			main_box.expand = true;
@@ -129,11 +161,31 @@ namespace Planner {
 			main_box.pack_start (state_button, false, false, 0);
 			main_box.pack_start (option_event, true, true, 0);
 
-			add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-			add (main_box);
-			add (revealer_noteview);
+			var g = new Gtk.Grid ();
+			g.orientation = Gtk.Orientation.VERTICAL;
+
+			g.add (main_box);
+			g.add (revealer_noteview);
+
+			add (g);
+			//add (revealer_noteview);
 
 			// Event Signals
+			show_option_button.clicked.connect ( () => {
+				if (revealer_noteview.reveal_child) {
+					image_button.icon_name = "pan-down-symbolic";
+					show_option_button.image = image_button;
+
+					revealer_noteview.reveal_child = false;
+				} else {
+					image_button.icon_name = "pan-up-symbolic";
+					show_option_button.image = image_button;
+
+					revealer_noteview.reveal_child = true;
+					note_view.grab_focus ();
+				}
+			});
+
 			option_event.button_press_event.connect (show_options);
 			option_event.enter_notify_event.connect ( (event) => {
 
@@ -160,7 +212,7 @@ namespace Planner {
 				task_actual.state = state_button.active.to_string ();
 				db.update_task (task_actual);
 
-				visible = false;
+				//visible = false;
 				/* Test Notification
 				Timeout.add_seconds (4, () => {
 
@@ -183,7 +235,12 @@ namespace Planner {
 			remove_button.clicked.connect ( () => {
 				db.remove_task (task_actual);
 				update_signal ();
-				destroy ();
+				revealer_noteview.reveal_child = false;
+				Timeout.add (400, () => {
+					reveal_child = false;
+					destroy ();
+					return false;
+				});
 			});
 
 			edit_button.clicked.connect ( () => {
@@ -201,7 +258,6 @@ namespace Planner {
 			});
 
 			task_entry.activate.connect ( () => {
-
 				task_actual.name = task_entry.text;
 				title_label.label = task_actual.name;
 

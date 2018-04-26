@@ -1,5 +1,7 @@
 namespace Planner {
     public class ProjectNewUpdate : Gtk.Grid {
+        public Gtk.Window window { get; construct; }
+
         private Gtk.Button back_button;
         private Gtk.Button save_button;
         private Gtk.Label title_label;
@@ -149,14 +151,11 @@ namespace Planner {
             icon_entry.placeholder_text = _("Icon name");
             icon_entry.primary_icon_name = "edit-find-symbolic";
             icon_entry.activate.connect ( () => {
-
                 avatar_image.icon_name = icon_entry.text;
                 avatar_button.image = avatar_image;
 
                 revealer_icon_entry.reveal_child = false;
-
                 name_entry.grab_focus ();
-
             });
 
             revealer_icon_entry = new Gtk.Revealer();
@@ -165,7 +164,7 @@ namespace Planner {
 
             // Properties project
             name_entry = new Gtk.Entry ();
-            name_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "application-certificate-symbolic");
+            //name_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "application-certificate-symbolic");
             name_entry.margin_top = 12;
             name_entry.max_length = 36;
             name_entry.placeholder_text = _("Name");
@@ -173,7 +172,7 @@ namespace Planner {
             name_entry.activate.connect (add_project);
 
             description_entry = new Gtk.Entry ();
-            description_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "text-x-generic-symbolic");
+            //description_entry.set_icon_from_icon_name (Gtk.EntryIconPosition.PRIMARY, "text-x-generic-symbolic");
             description_entry.margin_top = 6;
             description_entry.max_length = 128;
             description_entry.placeholder_text = _("Description");

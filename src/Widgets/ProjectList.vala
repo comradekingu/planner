@@ -20,7 +20,6 @@ namespace Planner {
         public signal void add_project ();
 
         public ProjectList () {
-
             db = new Services.Database (true);
 
             orientation = Gtk.Orientation.VERTICAL;
@@ -35,7 +34,6 @@ namespace Planner {
         }
 
         private void buid_ui () {
-
             title_label = new Gtk.Label (_("<b>Projects</b>"));
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
             title_label.use_markup = true;
@@ -45,9 +43,7 @@ namespace Planner {
             add_button.valign = Gtk.Align.CENTER;
             add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
             add_button.clicked.connect ( () => {
-
                 add_project ();
-
             });
 
             var v_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
@@ -82,65 +78,44 @@ namespace Planner {
         }
 
         private void activate_search_entry () {
-
             if (db.get_project_number () < 7) {
-
                 search_entry.visible = false;
-
             } else {
-
                 search_entry.visible = true;
-
             }
 
             search_entry.text = "";
         }
 
         private void create_list () {
-
             // get all accounts
             all_projects = new Gee.ArrayList<Interfaces.Project?> ();
             all_projects = db.get_all_projects ();
 
             foreach (var project in all_projects) {
-
                 var row = new ProjectItem (project);
-
                 project_listbox.add (row);
-
                 connect_row_signals (row);
-
             }
-
             add_button.grab_focus ();
-
             show_all ();
         }
 
         private void connect_row_signals (ProjectItem row) {
-
             row.delete_button_active.connect ( (project) => {
-
                 delete_project (project);
-
             });
-
             row.edit_button_active.connect ( (project) => {
-
                 edit_project (project);
-
             });
         }
 
         public void update_list () {
-
             foreach (Gtk.Widget element in project_listbox.get_children ()) {
-
                 project_listbox.remove (element);
             }
 
             create_list ();
-
             activate_search_entry ();
 
             search_entry.grab_focus ();

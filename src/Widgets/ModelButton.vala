@@ -11,11 +11,11 @@ namespace Planner {
             main_grid.orientation = Gtk.Orientation.HORIZONTAL;
 
             icon = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.SMALL_TOOLBAR);
-            icon.opacity = 0.80;
+            //icon.opacity = 0.60;
 
-            label = new Gtk.Label ("<b>" + text + "</b>");
+            label = new Gtk.Label ("<b>%s</b>".printf(text));
             label.use_markup = true;
-            label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+            //label.get_style_context ().add_class (Granite.STYLE_CLASS_H4_LABEL);
 
             main_grid.add (icon);
             main_grid.add (label);

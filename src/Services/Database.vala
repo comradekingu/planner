@@ -10,7 +10,7 @@ namespace Planner {
 
             int rc = 0;
 
-            db_path = Environment.get_home_dir () + "/.local/share/com.github.alainm23.planner/database.db";
+            db_path = Environment.get_home_dir () + "/.local/share/com.github.alainm23.planner/planner.db";
 
             if (!skip_tables) {
                 if (create_tables () != Sqlite.OK) {
@@ -57,10 +57,18 @@ namespace Planner {
             "start_date DATE," +
             "due_date DATE," +
             "icon VARCHAR," +
+            "note VARCHAR, " +
             "id_project INTEGER," +
             "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
 
             debug ("Table lists created");
+
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS TAGS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "name VARCHAR, " +
+            "description VARCHAR, " +
+            "color VARCHAR)", null, null);
+
+            debug ("Table tags created");
 
             rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
@@ -72,23 +80,27 @@ namespace Planner {
 
             debug ("Table tasks created");
 
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS_TAGS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "id_tag INTEGER, " +
+            "id_task INTEGER, " +
+            "FOREIGN KEY(id_tag) REFERENCES TAGS(id) ON DELETE CASCADE, " +
+            "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
+
             rc = db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name VARCHAR," +
             "role VARCHAR," +
             "email VARCHAR," +
             "phone VARCHAR," +
             "photo VARCHAR," +
-            "address VARCHAR," +
-            "id_project INTEGER," +
-            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id_project) ON DELETE CASCADE)", null, null);
+            "address VARCHAR)", null, null);
 
             debug ("Table contacts created");
 
             rc = db.exec ("CREATE TABLE IF NOT EXISTS ASSIGNED (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "id_contact INTEGER," +
             "id_task INTEGER," +
-            "FOREIGN KEY(id_contact) REFERENCES CONTACTS(id_contact) ON DELETE CASCADE," +
-            "FOREIGN KEY(id_task) REFERENCES TASKS(id_task) ON DELETE CASCADE)", null, null);
+            "FOREIGN KEY(id_contact) REFERENCES CONTACTS(id) ON DELETE CASCADE," +
+            "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
 
             debug ("Table assigned created");
 
@@ -146,8 +158,8 @@ namespace Planner {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO LISTS (name, " +
-                "start_date, due_date, icon, id_project)" +
-                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
+                "start_date, due_date, icon, note, id_project)" +
+                "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
 
             assert (res == Sqlite.OK);
 
@@ -163,7 +175,10 @@ namespace Planner {
             res = stmt.bind_text (4, list.icon);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_int (5, list.id_project);
+            res = stmt.bind_text (5, list.note);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (6, list.id_project);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -332,7 +347,7 @@ namespace Planner {
         public void update_list (Interfaces.List list) {
             Sqlite.Statement stmt;
 
-            int res = db.prepare_v2 ("UPDATE LISTS SET name = ?, icon = ? " +
+            int res = db.prepare_v2 ("UPDATE LISTS SET name = ?, icon = ?, note = ?" +
             "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
@@ -342,7 +357,10 @@ namespace Planner {
             res = stmt.bind_text (2, list.icon);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_int (3, list.id);
+            res = stmt.bind_text (3, list.note);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (4, list.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -375,7 +393,8 @@ namespace Planner {
                 list.start_date = stmt.column_text (2);
                 list.due_date = stmt.column_text (3);
                 list.icon = stmt.column_text (4);
-                list.id_project = int.parse(stmt.column_text (5));
+                list.note = stmt.column_text (5);
+                list.id_project = int.parse(stmt.column_text (6));
 
                 all_tasks = get_all_tasks (list.id);
                 list.task_all = all_tasks.size;

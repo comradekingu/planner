@@ -14,10 +14,18 @@ namespace Planner {
         public signal void go_startup ();
         public signal void go_fist ();
 
+        private Interfaces.Project project_actual;
+        private GLib.Settings settings;
+        private Services.Database db;
+
         public Headerbar () {
             set_show_close_button (true);
             get_style_context ().add_class ("compact");
-            set_title ("Planner");
+            set_title (_("Planner"));
+
+            db = new Services.Database (true);
+			settings = new GLib.Settings ("com.github.alainm23.planner");
+			project_actual = new Interfaces.Project ();
 
             build_ui ();
         }
@@ -32,6 +40,7 @@ namespace Planner {
             project_popover.selected_project.connect (set_actual_project);
             project_popover.update_project.connect ( () => {
                 update_actual_project ();
+                update_widget ();
             });
 
             project_popover.go_startup_view.connect ( () => {
@@ -126,13 +135,10 @@ namespace Planner {
             update_project (project);
         }
 
-        private void update_widget () {
+        public void update_widget () {
+            project_actual = db.get_project (settings.get_int ("last-project-id"));
+            project_button.set_project (project_actual);
             project_popover.update_widget ();
-        }
-
-        public void set_project (Interfaces.Project project) {
-            project_button.set_project (project);
-            update_widget ();
         }
 
         public void set_item_index (int index) {

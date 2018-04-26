@@ -30,16 +30,10 @@ namespace Planner {
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
             title_label.halign = Gtk.Align.START;
 
-            var l = new Gtk.Label ("");
-
             note_view = new Gtk.TextView ();
             note_view.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
             note_view.expand = true;
             note_view.buffer.text = project_actual.note;
-            note_view.enter_notify_event.connect ( (event) => {
-                l.label = "Cursor se movio";
-                return false;
-            });
 
             var tag_bold = note_view.buffer.create_tag ("bold");
             var tag_italic = note_view.buffer.create_tag ("italic");
@@ -49,26 +43,18 @@ namespace Planner {
             scrolled.expand = true;
             scrolled.add (note_view);
 
-            format_popover = new TextFormatPopover (null);
+            var format_button = new Gtk.Button.from_icon_name ("format-text-larger-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            format_button.halign = Gtk.Align.START;
+            format_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
-
-             /*
-            var n = new Gtk.Button.with_label ("Negrita");
-
-            n.clicked.connect ( () => {
-                Gtk.TextIter start;
-                Gtk.TextIter end;
-
-                note_view.buffer.get_selection_bounds (out start, out end);
-                note_view.buffer.apply_tag_by_name ("bold", start, end);
-                l.label = note_view.buffer.get_text (start, end, true);
-
+            format_popover = new TextFormatPopover (format_button);
+            format_button.clicked.connect ( () => {
+                format_popover.show_all ();
             });
-            */
 
             add (title_label);
             add (scrolled);
-            add (l);
+            //add (format_button);
         }
 
         public void update_widget () {

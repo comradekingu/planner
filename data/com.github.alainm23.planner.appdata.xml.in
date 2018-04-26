@@ -25,7 +25,7 @@
     </screenshots>
     <developer_name>Alain M.</developer_name>
     <url type="homepage">https://github.com/alainm23/planner</url>
-    <url type="bugtracker">https://github.com/alainm23/planeer/issues</url>
+    <url type="bugtracker">https://github.com/alainm23/planner/issues</url>
     <custom>
         <value key="x-appcenter-color-primary">#fff394</value>
         <value key="x-appcenter-color-primary-text">#000328</value>

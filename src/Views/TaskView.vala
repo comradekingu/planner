@@ -1,5 +1,5 @@
 namespace Planner {
-	public class TaskView : Gtk.EventBox {
+	public class TaskView : Gtk.Paned {
 
 		private MilestoneList milestones_list;
 		private TaskList task_list;
@@ -7,6 +7,7 @@ namespace Planner {
 		public signal void update_overview ();
 
 		public TaskView () {
+			orientation = Gtk.Orientation.HORIZONTAL;
 
 			get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         	get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
@@ -18,13 +19,6 @@ namespace Planner {
 
 			milestones_list = new MilestoneList ();
 			task_list = new TaskList ();
-
-			var main_grid = new Gtk.Grid ();
-			main_grid.orientation = Gtk.Orientation.HORIZONTAL;
-
-			var separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
-			separator.margin_top = 25;
-            separator.margin_bottom = 25;
 
 			milestones_list.list_selected.connect ( (list) => {
 				task_list.set_list (list);
@@ -42,11 +36,8 @@ namespace Planner {
 				update_overview ();
 			});
 
-			main_grid.add (milestones_list);
-			main_grid.add (separator);
-			main_grid.add (task_list);
-
-			add (main_grid);
+			pack1 (milestones_list, false, false);
+			pack2 (task_list, true, true);
 		}
 
 		public void update_widget () {

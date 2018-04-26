@@ -48,8 +48,9 @@ namespace Planner {
             add_list_button = new Gtk.Label (_("New list"));
             add_list_button.tooltip_text = _("Create a new list");
             add_list_button.halign = Gtk.Align.END;
-            //add_list_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             add_list_button.get_style_context ().add_class ("label_link");
+
+
 
             var option_event = new Gtk.EventBox ();
             option_event.add (add_list_button);
@@ -118,6 +119,7 @@ namespace Planner {
             height_request = 50;
 
             lista_actual = lista;
+            tooltip_text = lista_actual.name;
 
             build_ui ();
         }
@@ -128,6 +130,7 @@ namespace Planner {
             title_label.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
             title_label.use_markup = true;
             title_label.margin_right = 12;
+            title_label.ellipsize = Pango.EllipsizeMode.END;
 
             progressbar = new Gtk.LevelBar.for_interval (0, 1);
             progressbar.expand = true;
