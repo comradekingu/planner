@@ -1,12 +1,14 @@
+
 .titlebar {
-    padding: 3 6px;
+    padding: 6 6px;
 }
 
 .label_link {
     color: #3689e6;
 }
-.textview {
+.add_note {
     font-style: italic;
+    color: #aab1b6;
 }
 .color_label {
     background-color : #3689e6;

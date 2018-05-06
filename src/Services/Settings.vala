@@ -20,26 +20,16 @@
 */
 
 namespace Planner {
-    public class Widgets.ModelButton : Gtk.ToggleButton {
-        private Gtk.Image icon;
-        private Gtk.Label text_label;
+    public class Services.Settings : Granite.Services.Settings {
+        public int window_width { get; set; }
+        public int window_height { get; set; }
+        public int window_x { get; set; }
+        public int window_y { get; set; }
+        public int project_sidebar_width { get; set; }
 
-        public ModelButton (string text = "", string tooltip = "", string icon_name = "") {
-            get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            tooltip_text = tooltip;
 
-            var main_grid = new Gtk.Grid ();
-            main_grid.orientation = Gtk.Orientation.HORIZONTAL;
-
-            icon = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.SMALL_TOOLBAR);
-
-            text_label = new Gtk.Label ("<b>%s</b>".printf(text));
-            text_label.use_markup = true;
-
-            main_grid.add (icon);
-            main_grid.add (text_label);
-
-            add (main_grid);
+        public Settings () {
+            base ("com.github.alainm23.planner");
         }
     }
 }

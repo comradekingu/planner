@@ -1,7 +1,4 @@
 namespace Planner.Utils {
-
-    // creates a directory with all needed parents, relative to home
-
     public void create_dir_with_parents (string dir) {
 
         string path = Environment.get_home_dir () + dir;
@@ -11,31 +8,29 @@ namespace Planner.Utils {
         }
     }
 
-    public bool exists_database () {
-
-        string path = Environment.get_home_dir () + "/.local/share/planner/planner.db";
-
-        File file = File.new_for_path (path);
-
-        bool tmp = file.query_exists ();
-
-        return tmp;
-
-    }
-
     public Gee.ArrayList<string> project_types () {
-
         var project_types = new Gee.ArrayList<string> ();
 
-        project_types.add ("planner-startup");       // 0
-        project_types.add ("planner-checklist");     // 1
-        project_types.add ("planner-computer");      // 2
-        project_types.add ("planner-code");          // 3
-        project_types.add ("planner-pen");           // 4
-        project_types.add ("planner-web");           // 5
-        project_types.add ("planner-video-player");  // 6
-        project_types.add ("planner-online-shop");   // 7
-        project_types.add ("planner-team");          // 8
+        project_types.add ("planner-startup");
+        project_types.add ("planner-team");
+        project_types.add ("planner-checklist");
+        project_types.add ("planner-calendar");
+        project_types.add ("planner-chat");
+        project_types.add ("planner-cloud");
+        project_types.add ("planner-science");
+        project_types.add ("planner-development");
+        project_types.add ("planner-hearts");
+        project_types.add ("planner-star");
+        project_types.add ("planner-power");
+        project_types.add ("planner-elementary");
+        project_types.add ("planner-computer");
+        project_types.add ("planner-code");
+        project_types.add ("planner-pen");
+        project_types.add ("planner-economy");
+        project_types.add ("planner-games");
+        project_types.add ("planner-prototype");
+        project_types.add ("planner-web");
+        project_types.add ("planner-online-shop");
 
         return project_types;
     }
@@ -86,5 +81,27 @@ namespace Planner.Utils {
         name_icon_list.add ("bug");
 
         return name_icon_list;
+    }
+
+    public bool is_avatar_icon (string icon_name) {
+        Gee.ArrayList<string> project_types = project_types ();
+
+        foreach (string name in project_types) {
+            if (icon_name == name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int days_ago (string date) {
+        /*
+        var date_now = new GLib.DateTime.now_local ();
+        var date_to_compare = new GLib.DateTime
+        //string date_now = datetime.format ("%F");
+
+        datetime.difference
+        */
+        return 0;
     }
 }

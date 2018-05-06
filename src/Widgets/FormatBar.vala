@@ -1,19 +1,17 @@
 namespace Planner {
-    public class FormatBar : Gtk.Grid {
+    public class Widgets.FormatBar : Gtk.Grid {
         private FormatButton overview_toggle;
         private FormatButton task_toggle;
         private FormatButton issues_toggle;
 
-        private Granite.Widgets.ModeButton main;
-
         public signal void on_formarbar_select (int index_bar);
 
         private const string CSS = """
-                .format-bar {
-                    background-color: @bg_color;
-                    border-radius: 3px;
-                }
-            """;
+            .format-bar {
+                background-color: @bg_color;
+                border-radius: 3px;
+            }
+        """;
 
         static construct {
             var provider = new Gtk.CssProvider ();
@@ -24,7 +22,6 @@ namespace Planner {
                 critical (e.message);
             }
         }
-
         construct {
             var style_context = get_style_context ();
             style_context.add_class ("format-bar");
@@ -36,16 +33,16 @@ namespace Planner {
 
             task_toggle = new FormatButton ();
             task_toggle.icon = new ThemedIcon ("emblem-default-symbolic");
-            task_toggle.text = _("Homework");
+            task_toggle.text = _("Tasks");
 
             issues_toggle = new FormatButton ();
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");
             issues_toggle.text = _("Issues");
 
-            main = new Granite.Widgets.ModeButton ();
+            var main = new Granite.Widgets.ModeButton ();
             main.append (overview_toggle);
             main.append (task_toggle);
-            //main.append (issues_toggle);
+            main.append (issues_toggle);
             main.selected = 0;
             main.mode_changed.connect ( (widget) => {
                 on_formarbar_select (main.selected);
@@ -53,13 +50,7 @@ namespace Planner {
 
             add (main);
         }
-
-        public void set_item_index (int index) {
-            main.selected = index;
-        }
-
     }
-
     public class FormatButton : Gtk.Box {
         public unowned string text {
             set {
@@ -84,7 +75,9 @@ namespace Planner {
         private Gtk.Label label_widget;
 
         construct {
+
             can_focus = false;
+
             width_request = 120;
 
             img = new Gtk.Image ();

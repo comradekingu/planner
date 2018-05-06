@@ -20,26 +20,29 @@
 */
 
 namespace Planner {
-    public class Widgets.ModelButton : Gtk.ToggleButton {
-        private Gtk.Image icon;
-        private Gtk.Label text_label;
+    public class Objects.Project {
+        public int id;
+        public string name;
+        public string description;
+        public string start_date;
+        public string final_date;
+        public string last_update;
+        public string note;
+        public string avatar;
 
-        public ModelButton (string text = "", string tooltip = "", string icon_name = "") {
-            get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            tooltip_text = tooltip;
+        public Project (int id = 1,
+            string name = "", string description = "",
+            string start_date = "", string final_date = "", string last_update = "",
+            string note = "", string avatar = "") {
 
-            var main_grid = new Gtk.Grid ();
-            main_grid.orientation = Gtk.Orientation.HORIZONTAL;
-
-            icon = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.SMALL_TOOLBAR);
-
-            text_label = new Gtk.Label ("<b>%s</b>".printf(text));
-            text_label.use_markup = true;
-
-            main_grid.add (icon);
-            main_grid.add (text_label);
-
-            add (main_grid);
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.start_date = start_date;
+            this.final_date = final_date;
+            this.last_update = last_update;
+            this.note = note;
+            this.avatar = avatar;
         }
     }
 }

@@ -1,10 +1,28 @@
+/*
+* Copyright (c) 2018 Alain M. (https://github.com/alainm23/planner)
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation; either
+* version 2 of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public
+* License along with this program; if not, write to the
+* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301 USA
+*
+* Authored by: Alain M. <alain23@protonmail.com>
+*/
+
 namespace Planner {
-
     public class Services.Database : GLib.Object {
-
         private Sqlite.Database db;
         private string db_path;
-        private GLib.Settings settings;
 
         public Database (bool skip_tables = false) {
 
@@ -25,12 +43,9 @@ namespace Planner {
                 stderr.printf ("Can't open database: %d, %s\n", rc, db.errmsg ());
                 Gtk.main_quit ();
             }
-
-            settings = new GLib.Settings ("com.github.alainm23.planner");
         }
 
         private int create_tables () {
-
             int rc;
 
             rc = Sqlite.Database.open (db_path, out db);
@@ -40,69 +55,71 @@ namespace Planner {
                 Gtk.main_quit ();
             }
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS PROJECTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR," +
-            "description VARCHAR," +
-            "start_date DATE," +
-            "due_date DATE," +
-            "last_update DATE, " +
-            "note VARCHAR, " +
-            "type VARCHAR, " +
-            "avatar VARCHAR)", null, null);
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS PROJECTS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name VARCHAR, " +
+                "description VARCHAR, " +
+                "start_date DATE, " +
+                "final_date DATE, " +
+                "last_update DATE, " +
+                "note VARCHAR, " +
+                "avatar VARCHAR)", null, null);
+            debug ("Table PROJECTS created");
 
-            debug ("Table projects created");
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS LISTS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name VARCHAR, " +
+                "note VARCHAR, " +
+                "color VARCHAR, " +
+                "avatar VARCHAR, " +
+                "id_project INTEGER, " +
+                "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
+            debug ("Table LISTS created");
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS LISTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR," +
-            "start_date DATE," +
-            "due_date DATE," +
-            "icon VARCHAR," +
-            "note VARCHAR, " +
-            "id_project INTEGER," +
-            "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS TAGS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name VARCHAR, " +
+                "description VARCHAR, " +
+                "color VARCHAR)", null, null);
+            debug ("Table TAGS created");
 
-            debug ("Table lists created");
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name VARCHAR," +
+                "state VARCHAR," +
+                "deadline DATETIME," +
+                "note VARCHAR," +
+                "id_list INTEGER," +
+                "FOREIGN KEY(id_list) REFERENCES LISTS(id) ON DELETE CASCADE)", null, null);
+            debug ("Table TASKS created");
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS TAGS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR, " +
-            "description VARCHAR, " +
-            "color VARCHAR)", null, null);
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS_TAGS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "id_tag INTEGER, " +
+                "id_task INTEGER, " +
+                "FOREIGN KEY(id_tag) REFERENCES TAGS(id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
+            debug ("Table TASKS_TAGS created");
 
-            debug ("Table tags created");
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name VARCHAR, " +
+                "role VARCHAR, " +
+                "email VARCHAR, " +
+                "phone VARCHAR, " +
+                "photo VARCHAR, " +
+                "address VARCHAR, " +
+                "id_project INTEGER, " +
+                "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
+            debug ("Table CONTACTS created");
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR," +
-            "state VARCHAR," +
-            "deadline DATE," +
-            "note VARCHAR," +
-            "id_list INTEGER," +
-            "FOREIGN KEY(id_list) REFERENCES LISTS(id_list) ON DELETE CASCADE)", null, null);
-
-            debug ("Table tasks created");
-
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS_TAGS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "id_tag INTEGER, " +
-            "id_task INTEGER, " +
-            "FOREIGN KEY(id_tag) REFERENCES TAGS(id) ON DELETE CASCADE, " +
-            "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
-
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS CONTACTS (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "name VARCHAR," +
-            "role VARCHAR," +
-            "email VARCHAR," +
-            "phone VARCHAR," +
-            "photo VARCHAR," +
-            "address VARCHAR)", null, null);
-
-            debug ("Table contacts created");
-
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS ASSIGNED (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "id_contact INTEGER," +
-            "id_task INTEGER," +
-            "FOREIGN KEY(id_contact) REFERENCES CONTACTS(id) ON DELETE CASCADE," +
-            "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
-
-            debug ("Table assigned created");
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS SUBTASK (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name VARCHAR, " +
+                "state VARCHAR, " +
+                "id_task INTEGER, " +
+                "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
+            debug ("Table SUBTASK created");
 
             string errormsg;
             if (db.exec ("PRAGMA foreign_keys = ON;", null, out errormsg) != Sqlite.OK) {
@@ -112,13 +129,12 @@ namespace Planner {
             return rc;
         }
 
-        public void add_project (Interfaces.Project project) {
-
+        public void add_project (Objects.Project project) {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("INSERT INTO PROJECTS (name, " +
-                "description, start_date, due_date, last_update, note, type, avatar)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", -1, out stmt);
+                "description, start_date, final_date, last_update, note, avatar)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)", -1, out stmt);
 
             assert (res == Sqlite.OK);
 
@@ -131,7 +147,7 @@ namespace Planner {
             res = stmt.bind_text (3, project.start_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, project.due_date);
+            res = stmt.bind_text (4, project.final_date);
             assert (res == Sqlite.OK);
 
             res = stmt.bind_text (5, project.last_update);
@@ -140,10 +156,7 @@ namespace Planner {
             res = stmt.bind_text (6, project.note);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (7, project.type);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (8, project.avatar);
+            res = stmt.bind_text (7, project.avatar);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -152,77 +165,96 @@ namespace Planner {
                 debug ("Project " + project.name + " created");
             }
         }
-
-        public void add_list (Interfaces.List list) {
-
+        public Gee.ArrayList<Objects.Project?> get_all_projects () {
             Sqlite.Statement stmt;
 
-            int res = db.prepare_v2 ("INSERT INTO LISTS (name, " +
-                "start_date, due_date, icon, note, id_project)" +
-                "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
+            int res = db.prepare_v2 ("SELECT * FROM PROJECTS ORDER BY id",
+                -1, out stmt);
 
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (1, list.name);
+            var all = new Gee.ArrayList<Objects.Project?> ();
+
+            while ((res = stmt.step()) == Sqlite.ROW) {
+                var project = new Objects.Project ();
+
+                project.id = int.parse (stmt.column_text (0));
+                project.name = stmt.column_text (1);
+                project.description = stmt.column_text (2);
+                project.start_date = stmt.column_text (3);
+                project.final_date = stmt.column_text (4);
+                project.last_update = stmt.column_text (5);
+                project.note = stmt.column_text (6);
+                project.avatar = stmt.column_text (7);
+
+                all.add (project);
+            }
+            return all;
+        }
+        public void update_project (Objects.Project project) {
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
+                "description = ?, start_date = ?, final_date = ?, last_update = ?, note = ?, avatar = ? " +
+                "WHERE id = ?", -1, out stmt);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (2, list.start_date);
+            res = stmt.bind_text (1, project.name);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (3, list.due_date);
+            res = stmt.bind_text (2, project.description);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (4, list.icon);
+            res = stmt.bind_text (3, project.start_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (5, list.note);
+            res = stmt.bind_text (4, project.final_date);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_int (6, list.id_project);
+            res = stmt.bind_text (5, project.last_update);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (6, project.note);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (7, project.avatar);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (8, project.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
 
-            if (res == Sqlite.DONE) {
-
-                debug ("List " + list.name + " created");
-            }
+            if (res == Sqlite.OK)
+                debug ("Project updated: " + project.name);
         }
 
-        public void add_task (Interfaces.Task task) {
-
+        public Objects.Project get_project (int id) {
             Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("INSERT INTO TASKS (name, " +
-                "state, deadline, note, id_list)" +
-                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
-
+            int res = db.prepare_v2 ("SELECT * FROM PROJECTS WHERE id = ?",
+                -1, out stmt);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (1, task.name);
+            res = stmt.bind_int (1, id);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_text (2, task.state);
-            assert (res == Sqlite.OK);
+            stmt.step ();
 
-            res = stmt.bind_text (3, task.deadline);
-            assert (res == Sqlite.OK);
+            var project = new Objects.Project ();
 
-            res = stmt.bind_text (4, task.note);
-            assert (res == Sqlite.OK);
+            project.id = int.parse (stmt.column_text (0));
+            project.name = stmt.column_text (1);
+            project.description = stmt.column_text (2);
+            project.start_date = stmt.column_text (3);
+            project.final_date = stmt.column_text (4);
+            project.last_update = stmt.column_text (5);
+            project.note = stmt.column_text (6);
+            project.avatar = stmt.column_text (7);
 
-            res = stmt.bind_int (5, task.id_list);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.DONE) {
-
-                debug ("task " + task.name + " created");
-            }
+            return project;
         }
 
-        public void remove_project (Interfaces.Project project) {
+        public void remove_project (Objects.Project project) {
             Sqlite.Statement stmt;
 
             int res = db.prepare_v2 ("DELETE FROM PROJECTS " +
@@ -237,320 +269,6 @@ namespace Planner {
             if (res == Sqlite.OK)
                 debug ("Project removed: " + project.name);
 
-        }
-
-        public void remove_task (Interfaces.Task task) {
-
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("DELETE FROM TASKS " +
-                "WHERE id = ?", -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, task.id);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.OK)
-                debug ("Task removed: " + task.name);
-        }
-
-        public void remove_list (Interfaces.List list) {
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("DELETE FROM LISTS " +
-                "WHERE id = ?", -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, list.id);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.OK)
-                debug ("List removed: " + list.name);
-
-        }
-
-        public void update_project (Interfaces.Project project) {
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("UPDATE PROJECTS SET name = ?, " +
-                "description = ?, start_date = ?, due_date = ?, last_update = ?, note = ?, type = ?, avatar = ? " +
-                "WHERE id = ?", -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (1, project.name);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (2, project.description);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (3, project.start_date);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (4, project.due_date);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (5, project.last_update);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (6, project.note);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (7, project.type);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (8, project.avatar);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (9, project.id);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.OK)
-                debug ("Project updated: " + project.name);
-        }
-
-        public void update_task (Interfaces.Task task) {
-
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("UPDATE TASKS SET name = ?, " +
-                "state = ?, deadline = ?, note = ? " +
-                "WHERE id = ?", -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (1, task.name);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (2, task.state);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (3, task.deadline);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (4, task.note);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (5, task.id);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.OK)
-                debug ("Task updated: " + task.name);
-        }
-
-        public void update_list (Interfaces.List list) {
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("UPDATE LISTS SET name = ?, icon = ?, note = ?" +
-            "WHERE id = ?", -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (1, list.name);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (2, list.icon);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_text (3, list.note);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (4, list.id);
-            assert (res == Sqlite.OK);
-
-            res = stmt.step ();
-
-            if (res == Sqlite.OK)
-                debug ("List updated: " + list.name);
-        }
-
-        public Gee.ArrayList<Interfaces.List?> get_all_lists (int id_project) {
-
-            Sqlite.Statement stmt;
-            int tasks_completed = 0;
-
-            int res = db.prepare_v2 ("SELECT * FROM LISTS WHERE id_project = ? ORDER BY id",
-                -1, out stmt);
-
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, id_project);
-            assert (res == Sqlite.OK);
-
-            var all = new Gee.ArrayList<Interfaces.List?> ();
-            var all_tasks = new Gee.ArrayList<Interfaces.Task?> ();
-
-            while ((res = stmt.step()) == Sqlite.ROW) {
-                Interfaces.List list = new Interfaces.List ();
-
-                list.id = int.parse(stmt.column_text (0));
-                list.name = stmt.column_text (1);
-                list.start_date = stmt.column_text (2);
-                list.due_date = stmt.column_text (3);
-                list.icon = stmt.column_text (4);
-                list.note = stmt.column_text (5);
-                list.id_project = int.parse(stmt.column_text (6));
-
-                all_tasks = get_all_tasks (list.id);
-                list.task_all = all_tasks.size;
-
-                foreach (var task in all_tasks) {
-                    if (task.state == "true") {
-                        tasks_completed = tasks_completed + 1;
-                    }
-                }
-                list.tasks_completed = tasks_completed;
-
-                all.add (list);
-                tasks_completed = 0;
-            }
-
-            return all;
-        }
-
-        public Interfaces.Project get_fist_project () {
-            Sqlite.Statement stmt;
-            int res = db.prepare_v2 ("SELECT * FROM PROJECTS LIMIT 1",
-                -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            stmt.step ();
-
-            var project = new Interfaces.Project ();
-
-            project.id = int.parse (stmt.column_text (0));
-            project.name = stmt.column_text (1);
-            project.description = stmt.column_text (2);
-            project.start_date = stmt.column_text (3);
-            project.due_date = stmt.column_text (4);
-            project.last_update = stmt.column_text (5);
-            project.note = stmt.column_text (6);
-            project.type = stmt.column_text (7);
-            project.avatar = stmt.column_text (8);
-
-            return project;
-        }
-
-        public Interfaces.Project get_project (int id) {
-            Sqlite.Statement stmt;
-            int res = db.prepare_v2 ("SELECT * FROM PROJECTS WHERE id = ?",
-                -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, id);
-            assert (res == Sqlite.OK);
-
-            stmt.step ();
-
-            var project = new Interfaces.Project ();
-
-            project.id = int.parse (stmt.column_text (0));
-            project.name = stmt.column_text (1);
-            project.description = stmt.column_text (2);
-            project.start_date = stmt.column_text (3);
-            project.due_date = stmt.column_text (4);
-            project.last_update = stmt.column_text (5);
-            project.note = stmt.column_text (6);
-            project.type = stmt.column_text (7);
-            project.avatar = stmt.column_text (8);
-
-            return project;
-        }
-
-        public Gee.ArrayList<Interfaces.Project?> get_all_projects () {
-            Sqlite.Statement stmt;
-
-            int res = db.prepare_v2 ("SELECT * FROM PROJECTS ORDER BY id",
-                -1, out stmt);
-
-            assert (res == Sqlite.OK);
-
-            var all = new Gee.ArrayList<Interfaces.Project?> ();
-
-            while ((res = stmt.step()) == Sqlite.ROW) {
-                var project = new Interfaces.Project ();
-
-                project.id = int.parse (stmt.column_text (0));
-                project.name = stmt.column_text (1);
-                project.description = stmt.column_text (2);
-                project.start_date = stmt.column_text (3);
-                project.due_date = stmt.column_text (4);
-                project.last_update = stmt.column_text (5);
-                project.note = stmt.column_text (6);
-                project.type = stmt.column_text (7);
-                project.avatar = stmt.column_text (8);
-
-                all.add (project);
-            }
-            return all;
-        }
-
-        public Gee.ArrayList<Interfaces.Task?> get_all_tasks (int id_list=1) {
-
-            Sqlite.Statement stmt;
-            int res = db.prepare_v2 ("SELECT * FROM TASKS where id_list = ? ORDER BY id",
-                -1, out stmt);
-            assert (res == Sqlite.OK);
-
-            res = stmt.bind_int (1, id_list);
-            assert (res == Sqlite.OK);
-
-            var all = new Gee.ArrayList<Interfaces.Task?> ();
-
-            while ((res = stmt.step()) == Sqlite.ROW) {
-
-                var task = new Interfaces.Task ();
-
-                task.id = stmt.column_int (0);
-                task.name = stmt.column_text (1);
-                task.state = stmt.column_text (2);
-                task.deadline = stmt.column_text (3);
-                task.note = stmt.column_text (4);
-                task.id_list = stmt.column_int (5);
-
-                all.add (task);
-            }
-
-            return all;
-        }
-
-        public int get_project_number () {
-            var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
-            all_projects = get_all_projects ();
-
-            return all_projects.size;
-        }
-
-        public int get_list_length () {
-            var all_lists = new Gee.ArrayList<Interfaces.List?> ();
-            all_lists = get_all_lists (settings.get_int ("last-project-id"));
-
-            return all_lists.size;
-        }
-
-        public int get_tasks_length  (int list_id) {
-            var all_tasks = new Gee.ArrayList<Interfaces.Task?> ();
-            all_tasks = get_all_tasks (list_id);
-
-            return all_tasks.size;
-        }
-
-        public bool project_exists (int id) {
-            var all_projects = new Gee.ArrayList<Interfaces.Project?> ();
-            all_projects = get_all_projects ();
-
-            foreach (var project in all_projects) {
-                if (project.id == id) {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

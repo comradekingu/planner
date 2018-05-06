@@ -10,8 +10,20 @@
     <file alias="planner-pen.svg">resources/planner-pen.svg</file>
     <file alias="planner-startup.svg">resources/planner-startup.svg</file>
     <file alias="planner-team.svg">resources/planner-team.svg</file>
-    <file alias="planner-video-player.svg">resources/planner-video-player.svg</file>
+    <file alias="planner-economy.svg">resources/planner-economy.svg</file>
+    <file alias="planner-games.svg">resources/planner-games.svg</file>
+    <file alias="planner-prototype.svg">resources/planner-prototype.svg</file>
     <file alias="planner-web.svg">resources/planner-web.svg</file>
-    <file alias="project-new.svg">resources/project-new.svg</file>
+    <file alias="planner-calendar.svg">resources/planner-calendar.svg</file>
+    <file alias="planner-chat.svg">resources/planner-chat.svg</file>
+    <file alias="planner-cloud.svg">resources/planner-cloud.svg</file>
+    <file alias="planner-development.svg">resources/planner-development.svg</file>
+    <file alias="planner-hearts.svg">resources/planner-hearts.svg</file>
+    <file alias="planner-elementary.svg">resources/planner-elementary.svg</file>
+    <file alias="planner-star.svg">resources/planner-star.svg</file>
+    <file alias="planner-power.svg">resources/planner-power.svg</file>
+    <file alias="planner-science.svg">resources/planner-science.svg</file>
+    <file alias="planner-notification.svg">resources/planner-notification.svg</file>
+
   </gresource>
 </gresources>

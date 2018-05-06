@@ -1,148 +1,57 @@
 namespace Planner {
-    public class Headerbar : Gtk.HeaderBar {
-        private FormatBar format_bar;
-        private ProjectButton project_button;
-
-        private Gtk.MenuButton team_button;
+    public class Widgets.Headerbar : Gtk.HeaderBar {
+        private Gtk.Button back_button;
+        private Widgets.FormatBar format_bar;
         private Gtk.MenuButton app_menu;
 
-        private ProjectPopover project_popover;
-
-        public signal void update_project (Interfaces.Project project);
-        public signal void on_headerbar_change (int index_bar);
-        public signal void update_actual_project ();
-        public signal void go_startup ();
-        public signal void go_fist ();
-
-        private Interfaces.Project project_actual;
-        private GLib.Settings settings;
-        private Services.Database db;
+        public signal void on_back_button ();
 
         public Headerbar () {
             set_show_close_button (true);
             get_style_context ().add_class ("compact");
             set_title (_("Planner"));
 
-            db = new Services.Database (true);
-			settings = new GLib.Settings ("com.github.alainm23.planner");
-			project_actual = new Interfaces.Project ();
-
             build_ui ();
         }
 
         private void build_ui () {
-            project_button = new ProjectButton ();
-            project_popover = new ProjectPopover (project_button);
-            project_button.clicked.connect ( () => {
-                project_popover.show_all ();
-            });
+            back_button = new Gtk.Button.with_label (_("Today"));
+            back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+            back_button.valign = Gtk.Align.CENTER;
+            back_button.margin_top = 2;
+            back_button.no_show_all = true;
 
-            project_popover.selected_project.connect (set_actual_project);
-            project_popover.update_project.connect ( () => {
-                update_actual_project ();
-                update_widget ();
-            });
-
-            project_popover.go_startup_view.connect ( () => {
-                go_startup ();
-            });
-            project_popover.go_fist_project.connect ( () => {
-                go_fist ();
-            });
-
-            format_bar = new FormatBar ();
-            set_custom_title (format_bar);
-            format_bar.on_formarbar_select.connect ( (index_bar) => {
-                on_headerbar_change (index_bar);
-            });
-
-            // ------- Team Button -------------------------------------
-            team_button = new Gtk.MenuButton ();
-            team_button.image = new Gtk.Image.from_icon_name ("system-users", Gtk.IconSize.LARGE_TOOLBAR);
-            team_button.set_border_width (4);
-
-            // ------- App Menu ---------------------------------
-            var menu_grid = new Gtk.Grid ();
-            menu_grid.margin = 12;
-            menu_grid.orientation = Gtk.Orientation.VERTICAL;
-            menu_grid.width_request = 200;
-            menu_grid.height_request = 200;
-
-            var username = GLib.Environment.get_user_name ();
-
-            var user_label = new Gtk.Label (username);
-
-            var iconfile = @"/var/lib/AccountsService/icons/$username";
-
-            var avatar = new Granite.Widgets.Avatar.from_file (iconfile, 48);
-
-
-            menu_grid.attach (avatar, 0, 0, 1, 2);
-            menu_grid.attach (user_label, 1, 0, 1, 1);
+            format_bar = new Widgets.FormatBar ();
+            //set_custom_title (format_bar);
 
             var menu = new Gtk.Popover (null);
-            menu.add (menu_grid);
 
             app_menu = new Gtk.MenuButton ();
             app_menu.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
-            app_menu.tooltip_text = _("Menu");
-            app_menu.set_border_width (4);
+            app_menu.tooltip_text = _("Preferences");
             app_menu.popover = menu;
 
-            pack_start (project_button);
-            //pack_end (app_menu);
-            //pack_end (team_button);
+            back_button.clicked.connect ( () => {
+                back_button.visible = false;
+                on_back_button ();
+            });
 
-            menu_grid.show_all ();
+            pack_start (back_button);
+            pack_end (app_menu);
+
+            disable_all ();
         }
 
         public void disable_all () {
-            project_button.set_sensitive (false);
-            project_button.set_opacity (0);
-
-            format_bar.set_sensitive (false);
-            format_bar.set_opacity (0);
-
-            team_button.set_sensitive (false);
-            team_button.set_opacity (0);
-
-            app_menu.set_sensitive (false);
-            app_menu.set_opacity (0);
-
+            back_button.visible = false;
             set_custom_title (null);
         }
 
         public void enable_all () {
-            project_button.set_sensitive (true);
-            project_button.set_opacity (1);
-
-            format_bar.set_sensitive (true);
-            format_bar.set_opacity (1);
-
-            team_button.set_sensitive (true);
-            team_button.set_opacity (1);
-
-            app_menu.set_sensitive (true);
-            app_menu.set_opacity (1);
-
+            back_button.visible = true;
             set_custom_title (format_bar);
 
-            update_widget ();
-        }
-
-        private void set_actual_project (Interfaces.Project project) {
-            project_button.set_project (project);
-            update_project (project);
-        }
-
-        public void update_widget () {
-            project_actual = db.get_project (settings.get_int ("last-project-id"));
-            project_button.set_project (project_actual);
-            project_popover.update_widget ();
-        }
-
-        public void set_item_index (int index) {
-            format_bar.set_item_index (index);
+            show_all ();
         }
     }
 }

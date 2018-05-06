@@ -26,11 +26,12 @@
       <description>Stores the window's last Y position</description>
     </key>
 
-    <key name="last-project-id" type="i">
-      <default>1</default>
-      <summary>Actual Project</summary>
-      <description>Saves the last project for restoring it later.</description>
+    <key name="project-sidebar-width" type="i">
+      <default>300</default>
+      <summary>project sidebar width</summary>
+      <description>Save the width of the sidebar in the project list</description>
     </key>
+
 
   </schema>
 </schemalist>
