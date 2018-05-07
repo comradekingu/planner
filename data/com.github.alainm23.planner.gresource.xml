@@ -24,6 +24,7 @@
     <file alias="planner-power.svg">resources/planner-power.svg</file>
     <file alias="planner-science.svg">resources/planner-science.svg</file>
     <file alias="planner-notification.svg">resources/planner-notification.svg</file>
+    <file alias="planner-github.svg">resources/planner-github.svg</file>
 
   </gresource>
 </gresources>

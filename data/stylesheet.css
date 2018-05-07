@@ -1,6 +1,6 @@
 
 .titlebar {
-    padding: 6 6px;
+    padding: 3 6px;
 }
 
 .label_link {
@@ -12,6 +12,9 @@
 }
 .color_label {
     background-color : #3689e6;
+}
+.project_button {
+    border-radius: 7px;
 }
 .badge {
     background-image:

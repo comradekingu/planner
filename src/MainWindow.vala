@@ -26,9 +26,13 @@ namespace Planner {
         private Widgets.Headerbar headerbar;
         private Views.TodayView today_view;
         private Views.OverviewView overview_view;
+        private Views.IssuesView issues_view;
+        private Views.TasksView tasks_view;
 
         private Services.Database db;
         private Services.Settings settings;
+
+        private int index;
 
         public MainWindow (Gtk.Application application) {
             Object (
@@ -87,15 +91,20 @@ namespace Planner {
 
             today_view = new Views.TodayView ();
             overview_view = new Views.OverviewView ();
+            tasks_view = new Views.TasksView ();
+            issues_view = new Views.IssuesView ();
 
             main_stack.add_named (today_view, "today_view");
             main_stack.add_named (overview_view, "overview_view");
+            main_stack.add_named (tasks_view, "tasks_view");
+            main_stack.add_named (issues_view, "issues_view");
             main_stack.visible_child_name = "today_view";
 
-            today_view.selected_project.connect ( () => {
+            today_view.selected_project.connect ( (project) => {
                 main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
                 main_stack.visible_child_name = "overview_view";
 
+                headerbar.update_project (project);
                 headerbar.enable_all ();
             });
 
@@ -104,6 +113,24 @@ namespace Planner {
                 main_stack.visible_child_name = "today_view";
 
                 headerbar.disable_all ();
+            });
+
+            headerbar.on_selected_view.connect ( (index_bar) => {
+                if (index > index_bar) {
+                    main_stack.transition_type = Gtk.StackTransitionType.SLIDE_RIGHT;
+                } else {
+                    main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
+                }
+
+                if (index_bar == 0) {
+                    main_stack.visible_child_name = "overview_view";
+                } else if (index_bar == 1) {
+                    main_stack.visible_child_name = "tasks_view";
+                } else if (index_bar == 2) {
+                    main_stack.visible_child_name = "issues_view";
+                }
+
+                index = index_bar;
             });
 
             add (main_stack);

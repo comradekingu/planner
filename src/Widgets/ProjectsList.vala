@@ -65,7 +65,7 @@ namespace Planner {
             projects_listbox.activate_on_single_click = true;
             projects_listbox.selection_mode = Gtk.SelectionMode.SINGLE;
             projects_listbox.vexpand = true;
-            projects_listbox.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
+            projects_listbox.get_style_context ().add_class (Gtk.STYLE_CLASS_POPOVER);
             projects_listbox.row_activated.connect (on_project_selected);
 
             var list_scrolled_window = new Gtk.ScrolledWindow (null, null);

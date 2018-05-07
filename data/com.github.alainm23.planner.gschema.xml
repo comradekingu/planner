@@ -32,6 +32,11 @@
       <description>Save the width of the sidebar in the project list</description>
     </key>
 
+    <key name="token" type="s">
+      <default>""</default>
+      <summary>Github token</summary>
+      <description>Github token to OAuth authorizations</description>
+    </key>
 
   </schema>
 </schemalist>
