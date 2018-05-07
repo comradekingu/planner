@@ -24,7 +24,6 @@ namespace Planner {
             back_button.no_show_all = true;
 
             project_button = new Widgets.ProjectButton ();
-            project_button.margin_left = 6;
             project_button.no_show_all = true;
 
             format_bar = new Widgets.FormatBar ();

@@ -15,7 +15,9 @@ namespace Planner {
             var main_grid = new Gtk.Grid ();
 
             avatar_image = new Gtk.Image.from_icon_name("planner-startup", Gtk.IconSize.DND);
-            avatar_image.pixel_size = 24;
+            avatar_image.pixel_size = 32;
+            avatar_image.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+
             // Title label
             project_title = new Gtk.Label ("Startup");
             project_title.valign = Gtk.Align.CENTER;
