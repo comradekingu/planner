@@ -15,7 +15,7 @@ namespace Planner {
             main_grid.orientation = Gtk.Orientation.VERTICAL;
 
             main_stack = new Gtk.Stack ();
-            main_stack.transition_duration = 400;
+            //main_stack.transition_duration = 400;
             main_stack.expand = true;
             main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
 

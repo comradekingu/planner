@@ -33,6 +33,7 @@ namespace Planner {
 
         public ProjectRow (Objects.Project _object) {
             project_object = _object;
+            tooltip_text = project_object.description;
 
             build_ui ();
         }
@@ -43,9 +44,7 @@ namespace Planner {
             main_grid.margin = 6;
 
             avatar_image = new Gtk.Image ();
-            avatar_image.pixel_size = 48;
-            avatar_image.margin_left = 5;
-            avatar_image.margin_right = 3;
+            avatar_image.pixel_size = 56;
 
             avatar = new Granite.Widgets.Avatar ();
 
@@ -65,14 +64,22 @@ namespace Planner {
             name_label.valign = Gtk.Align.END;
             name_label.use_markup = true;
 
+            var img = new Gtk.Image ();
+            img.icon_name = "appointment-symbolic";
+            img.pixel_size = 12;
+            img.margin_right = 3;
+
             last_update_label = new Gtk.Label ("");
-            //last_update_label.label = _("<small>Updated ago %s days</small>").printf("12");
             last_update_label.label = "<small>%s</small>".printf (date_differences (project_object.last_update));
             last_update_label.use_markup = true;
             last_update_label.ellipsize = Pango.EllipsizeMode.END;
             last_update_label.xalign = 0;
-            last_update_label.valign = Gtk.Align.START;
 
+            var last_update_box = new Gtk.Grid ();
+            last_update_box.valign = Gtk.Align.START;
+
+            last_update_box.add (img);
+            last_update_box.add (last_update_label);
 
             preferences_button = new Gtk.ToggleButton ();
             preferences_button.image = new Gtk.Image.from_icon_name ("application-menu-symbolic", Gtk.IconSize.MENU);
@@ -120,6 +127,7 @@ namespace Planner {
                 project_object = project;
                 name_label.label = "<b>%s</b>".printf (project_object.name);
                 last_update_label.label = "<small>%s</small>".printf (date_differences (project.last_update));
+                tooltip_text = project.description;
 
                 if (Utils.is_avatar_icon (project_object.avatar)) {
                     avatar_image.icon_name = project_object.avatar;
@@ -160,7 +168,7 @@ namespace Planner {
             main_grid.attach (avatar_image, 0, 0, 1, 2);
             main_grid.attach (avatar, 0, 0, 1, 2);
             main_grid.attach (name_label, 1, 0, 1, 1);
-            main_grid.attach (last_update_label, 1, 1, 1, 1);
+            main_grid.attach (last_update_box, 1, 1, 1, 1);
             main_grid.attach (preferences_revealer, 2, 0, 2, 2);
 
             add (main_grid);
@@ -180,11 +188,11 @@ namespace Planner {
             string days = "";
 
             if (days_total == 0) {
-                days = _("Last update today");
+                days = _("Updated today");
             } else if (days_total == 1) {
-                days = _("Last update yesterday");
+                days = _("Updated yesterday");
             } else {
-                days = _("Last update %s days ago").printf(days_total.to_string ());
+                days = _("Updated 26 %s days ago").printf(days_total.to_string ());
             }
 
             return days;

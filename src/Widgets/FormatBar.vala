@@ -4,6 +4,8 @@ namespace Planner {
         private FormatButton task_toggle;
         private FormatButton issues_toggle;
 
+        public Granite.Widgets.ModeButton main_mode_button;
+
         public signal void on_formarbar_select (int index_bar);
 
         private const string CSS = """
@@ -39,16 +41,16 @@ namespace Planner {
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");
             issues_toggle.text = _("Issues");
 
-            var main = new Granite.Widgets.ModeButton ();
-            main.append (overview_toggle);
-            main.append (task_toggle);
-            main.append (issues_toggle);
-            main.selected = 0;
-            main.mode_changed.connect ( (widget) => {
-                on_formarbar_select (main.selected);
+            main_mode_button = new Granite.Widgets.ModeButton ();
+            main_mode_button.append (overview_toggle);
+            main_mode_button.append (task_toggle);
+            main_mode_button.append (issues_toggle);
+            main_mode_button.selected = 0;
+            main_mode_button.mode_changed.connect ( (widget) => {
+                on_formarbar_select (main_mode_button.selected);
             });
 
-            add (main);
+            add (main_mode_button);
         }
     }
     public class FormatButton : Gtk.Box {

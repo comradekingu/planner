@@ -3,12 +3,19 @@ namespace Planner {
 		private Gtk.Entry username_entry;
 		private Gtk.Entry password_entry;
 		private Gtk.Button save_button;
+		private Gtk.Spinner spinner;
 		private Gtk.LinkButton forgot_button;
 		private Gtk.LinkButton signup_button;
 
+		private Services.Settings settings;
+		private string? token;
+
 		public IssuesView () {
 			get_style_context ().add_class ("login");
-            build_ui ();
+
+			settings = new Services.Settings ();
+
+			build_ui ();
         }
 
         private void build_ui () {
@@ -57,6 +64,10 @@ namespace Planner {
 			save_button.halign = Gtk.Align.CENTER;
 			save_button.sensitive = false;
 
+			spinner = new Gtk.Spinner ();
+			spinner.margin_top = 12;
+			spinner.no_show_all = true;
+
 			forgot_button = new Gtk.LinkButton.with_label ("https://github.com/password_reset", _("Forgot password…"));
 			signup_button = new Gtk.LinkButton.with_label ("https://github.com/join", _("Don't have an account? Sign Up"));
 
@@ -76,9 +87,8 @@ namespace Planner {
 				}
 			});
 
-			password_entry.activate.connect ( () => {
-				check_token ();
-			});
+			password_entry.activate.connect (check_token);
+			save_button.clicked.connect (check_token);
 
 			main_grid.add (github_image);
 			main_grid.add (title_label);
@@ -92,7 +102,56 @@ namespace Planner {
         }
 
 		private void check_token () {
-			// Code to get Token
+			Json.Builder builder = new Json.Builder ();
+            builder.begin_object ();
+            builder.set_member_name ("client_id");
+            builder.add_string_value ("c0fc83d4d56d7b6e006f");
+            builder.set_member_name ("client_secret");
+            builder.add_string_value ("cbd427556f7533d48483362592be1df4086a5015");
+            builder.set_member_name ("scopes");
+            builder.begin_array ();
+            builder.add_string_value ("user");
+            builder.add_string_value ("repo");
+            builder.end_array ();
+            builder.set_member_name ("note");
+            builder.add_string_value ("planner");
+            builder.set_member_name ("note_url");
+            builder.add_string_value ("https://github.com/alainm23/planner");
+            builder.end_object ();
+
+            // Generate a string:
+            Json.Generator generator = new Json.Generator ();
+            Json.Node root = builder.get_root ();
+            generator.set_root (root);
+            string str = generator.to_data (null);
+
+            //Send message and catch response
+            var uri = "https://api.github.com/authorizations";
+            var session = new Soup.Session ();
+            var message = new Soup.Message ("POST", uri);
+            var buffer = Soup.MemoryUse.COPY;
+            message.request_headers.append ("User-Agent", "planner");
+            message.set_request("application/json; charset=utf-8", buffer, str.data);
+            string encoded = Base64.encode ((username_entry.text + ":" + password_entry.text).data);
+            message.request_headers.append ("Authorization", "Basic " + encoded);
+            session.send_message (message);
+			var response_msg = (string) message.response_body.flatten ().data;
+            if ("Bad credentials" in response_msg) {
+				// Error Auth
+            } else {
+                try {
+                    var parser = new Json.Parser ();
+                    parser.load_from_data (response_msg, -1);
+                    var root_oa = parser.get_root ().get_object ();
+                    token = root_oa.get_string_member ("token");
+                    if (token != "") {
+                        settings.token = token;
+						// Action to
+                    }
+                } catch (Error e) {
+                    debug (e.message);
+                }
+            }
 		}
     }
 }

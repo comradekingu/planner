@@ -104,6 +104,7 @@ namespace Planner {
                 main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT;
                 main_stack.visible_child_name = "overview_view";
 
+                 headerbar.set_default_format_item ();
                 headerbar.update_project (project);
                 headerbar.enable_all ();
             });

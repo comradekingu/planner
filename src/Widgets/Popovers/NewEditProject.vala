@@ -31,8 +31,7 @@ namespace Planner {
 
         private Gtk.Label title_label;
         private Gtk.Entry name_entry;
-        private Gtk.Label add_description_label;
-        private Gtk.TextView description_textview;
+        private Gtk.Entry description_entry;
         private Gtk.Switch duedate_switch;
         private Granite.Widgets.DatePicker duedate_datepicker;
         private Gtk.Revealer revealer_datepicker;
@@ -144,18 +143,14 @@ namespace Planner {
             name_entry = new Gtk.Entry ();
             name_entry.margin_bottom = 12;
             name_entry.hexpand = true;
-            name_entry.max_length = 36;
-            name_entry.placeholder_text = _("Name");
+            name_entry.max_length = 50;
+            name_entry.placeholder_text = _("Project Work");
             name_entry.activate.connect (on_add_project);
 
-            description_textview = new Gtk.TextView ();
-            description_textview.set_wrap_mode (Gtk.WrapMode.WORD_CHAR);
-            description_textview.expand = true;
-            description_textview.margin_left = 1;
-
-            add_description_label = new Gtk.Label ("Add Description");
-            add_description_label.get_style_context ().add_class ("add_note");
-            description_textview.add (add_description_label);
+            description_entry = new Gtk.Entry ();
+            description_entry.hexpand = true;
+            description_entry.placeholder_text = _("This is a description");
+            description_entry.activate.connect (on_add_project);
 
             var duedate_label = new Granite.HeaderLabel (_("Duedate"));
 
@@ -233,32 +228,6 @@ namespace Planner {
                 if (update) {
                     add_button.sensitive = true;
                 }
-            });
-
-            description_textview.focus_in_event.connect ( () => {
-                add_description_label.visible = false;
-                return false;
-            });
-
-            description_textview.focus_out_event.connect ( () => {
-                if (description_textview.buffer.text == "") {
-                    add_description_label.visible = true;
-                }
-                return false;
-            });
-
-            description_textview.buffer.changed.connect ( () => {
-                if (update) {
-                    add_button.sensitive = true;
-                }
-            });
-
-            description_textview.key_press_event.connect ( (key) => {
-                if (key.keyval == Gdk.Key.Return) {
-                    on_add_project ();
-                }
-
-                return false;
             });
 
             duedate_datepicker.date_changed.connect ( () => {
@@ -367,12 +336,6 @@ namespace Planner {
             });
 
             this.show.connect ( () => {
-                if (description_textview.buffer.text == "") {
-                    add_description_label.visible = true;
-                } else {
-                    add_description_label.visible = false;
-                }
-
                 name_entry.grab_focus ();
             });
 
@@ -381,10 +344,10 @@ namespace Planner {
 
             main_grid.add (top_box);
             main_grid.add (avatar_box);
-            main_grid.add (new Granite.HeaderLabel (_("Project Name")));
+            main_grid.add (new Granite.HeaderLabel (_("Name")));
             main_grid.add (name_entry);
             main_grid.add (new Granite.HeaderLabel (_("Description")));
-            main_grid.add (description_textview);
+            main_grid.add (description_entry);
             main_grid.add (duedate_box);
             main_grid.add (revealer_datepicker);
             main_grid.add (action_box);
@@ -404,7 +367,7 @@ namespace Planner {
                 }
 
                 project_object.name = name_entry.text;
-                project_object.description = description_textview.buffer.text;
+                project_object.description = description_entry.text;
                 project_object.start_date = start_date;
                 project_object.final_date = final_date;
                 project_object.last_update = datetime.format ("%F");
@@ -447,7 +410,7 @@ namespace Planner {
 
         private void clear_all () {
             name_entry.text = "";
-            description_textview.buffer.text = "";
+            description_entry.text = "";
 
             index = 0;
             avatar_image.icon_name = project_types[0];
@@ -465,6 +428,7 @@ namespace Planner {
 
             title_label.label = _("Edit Project");
             name_entry.text = project_object.name;
+            description_entry.text = project_object.description;
 
             if (Utils.is_avatar_icon (project_object.avatar)) {
                 avatar_image.icon_name = project_object.avatar;
@@ -478,11 +442,6 @@ namespace Planner {
                 avatar_button.image = avatar;
                 avatar_pixbuf = avatar.pixbuf;
                 use_pixbuf = true;
-            }
-
-            if (project_object.description != "") {
-                description_textview.buffer.text = project.description;
-                add_description_label.no_show_all = true;
             }
 
             if (project_object.final_date != "") {

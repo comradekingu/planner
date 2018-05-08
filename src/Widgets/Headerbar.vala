@@ -25,6 +25,7 @@ namespace Planner {
 
             project_button = new Widgets.ProjectButton ();
             project_button.no_show_all = true;
+            project_button.margin_left = 12;
 
             format_bar = new Widgets.FormatBar ();
 
@@ -67,7 +68,11 @@ namespace Planner {
         }
 
         public void update_project (Objects.Project project) {
+            project_button.set_project (project);
+        }
 
+        public void set_default_format_item () {
+            format_bar.main_mode_button.selected = 0;
         }
     }
 }
