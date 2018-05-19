@@ -23,13 +23,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="837"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
      id="namedview54"
      showgrid="true"
      inkscape:zoom="5.656854"
-     inkscape:cx="16.490625"
-     inkscape:cy="10.826564"
+     inkscape:cx="31.25148"
+     inkscape:cy="24.9687"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -232,7 +232,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -245,7 +245,7 @@
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none" />
     <g
        id="g4196"
-       transform="matrix(1.5238095,0,0,1.5238095,-4.5714285,-20.571428)">
+       transform="matrix(1.3333333,0,0,1.3333333,1e-7,-15.999999)">
       <path
          style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#7a36b1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
          id="path2555"
@@ -280,32 +280,32 @@
          x="13.114781" />
       <polygon
          id="polygon7"
-         points="96.4,203.2 125.6,143.6 168.4,143.6 148.8,203.2 "
+         points="148.8,203.2 96.4,203.2 125.6,143.6 168.4,143.6 "
          style="fill:#324a5e"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <polygon
          id="polygon9"
-         points="148.8,203.2 168.4,143.6 211.2,143.6 201.6,203.2 "
+         points="201.6,203.2 148.8,203.2 168.4,143.6 211.2,143.6 "
          style="fill:#ff7058"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <polygon
          id="polygon11"
-         points="201.6,203.2 211.2,143.6 254,143.6 254,203.2 "
+         points="254,203.2 201.6,203.2 211.2,143.6 254,143.6 "
          style="fill:#324a5e"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <polygon
          id="polygon13"
-         points="254,203.2 254,143.6 296.8,143.6 306.4,203.2 "
+         points="306.4,203.2 254,203.2 254,143.6 296.8,143.6 "
          style="fill:#ff7058"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <polygon
          id="polygon15"
-         points="306.4,203.2 296.8,143.6 339.6,143.6 359.2,203.2 "
+         points="359.2,203.2 306.4,203.2 296.8,143.6 339.6,143.6 "
          style="fill:#324a5e"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <polygon
          id="polygon17"
-         points="359.2,203.2 339.6,143.6 382.4,143.6 411.6,203.2 "
+         points="411.6,203.2 359.2,203.2 339.6,143.6 382.4,143.6 "
          style="fill:#ff7058"
          transform="matrix(0.08745243,0,0,0.08745243,2.1307558,2.1966143)" />
       <path

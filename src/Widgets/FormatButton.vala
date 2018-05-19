@@ -24,8 +24,7 @@ namespace Planner {
 
         construct {
             can_focus = false;
-            width_request = 120;
-
+        
             img = new Gtk.Image ();
             img.halign = Gtk.Align.END;
             img.icon_size = Gtk.IconSize.BUTTON;

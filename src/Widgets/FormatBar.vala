@@ -32,10 +32,11 @@ namespace Planner {
             overview_toggle = new FormatButton ();
             overview_toggle.icon = new ThemedIcon ("office-calendar-symbolic");
             overview_toggle.text = _("Overview");
+            overview_toggle.width_request = 120;
 
             task_toggle = new FormatButton ();
             task_toggle.icon = new ThemedIcon ("emblem-default-symbolic");
-            task_toggle.text = _("Tasks");
+            task_toggle.text = _("Workspace");
 
             issues_toggle = new FormatButton ();
             issues_toggle.icon = new ThemedIcon ("emblem-important-symbolic");

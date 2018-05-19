@@ -68,6 +68,7 @@ namespace Planner {
             img.icon_name = "appointment-symbolic";
             img.pixel_size = 12;
             img.margin_right = 3;
+            img.margin_top = 2;
 
             last_update_label = new Gtk.Label ("");
             last_update_label.label = "<small>%s</small>".printf (date_differences (project_object.last_update));
@@ -192,7 +193,7 @@ namespace Planner {
             } else if (days_total == 1) {
                 days = _("Updated yesterday");
             } else {
-                days = _("Updated 26 %s days ago").printf(days_total.to_string ());
+                days = _("Updated %s days ago").printf(days_total.to_string ());
             }
 
             return days;

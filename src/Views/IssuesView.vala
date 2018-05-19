@@ -69,6 +69,7 @@ namespace Planner {
 			spinner.no_show_all = true;
 
 			forgot_button = new Gtk.LinkButton.with_label ("https://github.com/password_reset", _("Forgot password…"));
+			forgot_button.margin_top = 6;
 			signup_button = new Gtk.LinkButton.with_label ("https://github.com/join", _("Don't have an account? Sign Up"));
 
 			username_entry.changed.connect ( () => {
@@ -119,13 +120,11 @@ namespace Planner {
             builder.add_string_value ("https://github.com/alainm23/planner");
             builder.end_object ();
 
-            // Generate a string:
             Json.Generator generator = new Json.Generator ();
             Json.Node root = builder.get_root ();
             generator.set_root (root);
             string str = generator.to_data (null);
 
-            //Send message and catch response
             var uri = "https://api.github.com/authorizations";
             var session = new Soup.Session ();
             var message = new Soup.Message ("POST", uri);

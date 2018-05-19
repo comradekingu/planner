@@ -29,6 +29,7 @@ namespace Planner {
             var notifications = new FormatButton ();
             notifications.icon = new ThemedIcon ("notification-symbolic");
             notifications.text = _("Notifications");
+            notifications.width_request = 120;
 
             var tasks = new FormatButton ();
             tasks.icon = new ThemedIcon ("emblem-default-symbolic");

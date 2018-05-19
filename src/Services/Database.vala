@@ -66,7 +66,7 @@ namespace Planner {
                 "avatar VARCHAR)", null, null);
             debug ("Table PROJECTS created");
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS LISTS (" +
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS MILESTONES (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name VARCHAR, " +
                 "note VARCHAR, " +
@@ -80,7 +80,9 @@ namespace Planner {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "name VARCHAR, " +
                 "description VARCHAR, " +
-                "color VARCHAR)", null, null);
+                "color VARCHAR, " +
+                "id_project INTEGER, " +
+                "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
             debug ("Table TAGS created");
 
             rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS (" +
@@ -89,8 +91,10 @@ namespace Planner {
                 "state VARCHAR," +
                 "deadline DATETIME," +
                 "note VARCHAR," +
-                "id_list INTEGER," +
-                "FOREIGN KEY(id_list) REFERENCES LISTS(id) ON DELETE CASCADE)", null, null);
+                "id_project INTEGER," +
+                "id_milestone INTEGER," +
+                "FOREIGN KEY(id_milestone) REFERENCES MILESTONES(id), " +
+                "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
             debug ("Table TASKS created");
 
             rc = db.exec ("CREATE TABLE IF NOT EXISTS TASKS_TAGS (" +
@@ -113,13 +117,13 @@ namespace Planner {
                 "FOREIGN KEY(id_project) REFERENCES PROJECTS(id) ON DELETE CASCADE)", null, null);
             debug ("Table CONTACTS created");
 
-            rc = db.exec ("CREATE TABLE IF NOT EXISTS SUBTASK (" +
+            rc = db.exec ("CREATE TABLE IF NOT EXISTS SUBTASKS (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name VARCHAR, " +
                 "state VARCHAR, " +
                 "id_task INTEGER, " +
                 "FOREIGN KEY(id_task) REFERENCES TASKS(id) ON DELETE CASCADE)", null, null);
-            debug ("Table SUBTASK created");
+            debug ("Table SUBTASKS created");
 
             string errormsg;
             if (db.exec ("PRAGMA foreign_keys = ON;", null, out errormsg) != Sqlite.OK) {
@@ -269,6 +273,63 @@ namespace Planner {
             if (res == Sqlite.OK)
                 debug ("Project removed: " + project.name);
 
+        }
+
+        public void add_task (Objects.Task task) {
+            Sqlite.Statement stmt;
+
+            int res = db.prepare_v2 ("INSERT INTO TASKS (name, " +
+                "note, state, deadline, id_project)" +
+                "VALUES (?, ?, ?, ?, ?)", -1, out stmt);
+
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, task.name);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (2, task.note);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (3, task.state);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (4, task.deadline);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (5, task.id_project);
+            assert (res == Sqlite.OK);
+
+            res = stmt.step ();
+
+            if (res == Sqlite.DONE) {
+                debug ("task " + task.name + " created");
+            }
+        }
+        public Gee.ArrayList<Objects.Task?> get_all_tasks (int project_id) {
+            Sqlite.Statement stmt;
+            int res = db.prepare_v2 ("SELECT * FROM TASKS where id_project = ? ORDER BY id",
+                -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (1, project_id);
+            assert (res == Sqlite.OK);
+
+            var all = new Gee.ArrayList<Objects.Task?> ();
+
+            while ((res = stmt.step()) == Sqlite.ROW) {
+                var task = new Objects.Task ();
+
+                task.id = stmt.column_int (0);
+                task.name = stmt.column_text (1);
+                task.state = stmt.column_text (2);
+                task.deadline = stmt.column_text (3);
+                task.note = stmt.column_text (4);
+                task.id_project = stmt.column_int (5);
+
+                all.add (task);
+            }
+
+            return all;
         }
     }
 }

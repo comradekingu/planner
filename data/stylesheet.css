@@ -13,9 +13,30 @@
 .color_label {
     background-color : #3689e6;
 }
+.task_hover {
+    border: 0.2px solid #666666;
+    border-radius: 7px;
+    background-color: white;
+    color: #333333;
+}
+.task_selected {
+    background-color: white;
+    color: #333333;
+}
 .project_button {
     border-radius: 7px;
 }
+.color_menu {
+    background-color: #3689e6;
+}
+.color_menu_activate {
+    background-color: #f5f5f5;
+}
+
+.color_item {
+    background-color: #DDDDDD;
+}
+
 .badge {
     background-image:
         linear-gradient(
@@ -40,4 +61,5 @@
     min-width: 18px;
     min-height: 18px;
     text-shadow: 0 1px 1px alpha (#000, 0.3);
+    padding: 3 3px;
 }

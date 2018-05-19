@@ -26,6 +26,8 @@ namespace Planner {
         public int window_x { get; set; }
         public int window_y { get; set; }
         public int project_sidebar_width { get; set; }
+        public int workspace_sidebar_width { get; set; }
+        public int project_selected_id { get; set; }
         public string token { get; set; }
 
 
