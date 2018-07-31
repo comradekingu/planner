@@ -1,9 +1,10 @@
+# We moved
+## I have decided to create an organization to maintain Planner, from now on that will be the official repository and any update and the future release will be made from there, see you ...
 <p align="center">
   <img src="https://cdn.rawgit.com/alainm23/planner/master/data/icons/128/com.github.alainm23.planner.svg" alt="Icon" />
 </p>
 <h1 align="center">Planner</h1>
 <h3 align="center">Project manager designed for elementary OS</h3>
-<p align="center" style="color:red">*Application in development</p>
 <p align="center">
   <a href="https://appcenter.elementary.io/com.github.alainm23.planner"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
 </p>
