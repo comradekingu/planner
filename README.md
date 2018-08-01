@@ -1,7 +1,3 @@
-# We moved
-## I have decided to create an organization to maintain Planner, from now on that will be the official repository and any update and the future release will be made from there, see you ...
-https://github.com/lightninginthebottle/planner
-
 <p align="center">
   <img src="https://cdn.rawgit.com/alainm23/planner/master/data/icons/128/com.github.alainm23.planner.svg" alt="Icon" />
 </p>
