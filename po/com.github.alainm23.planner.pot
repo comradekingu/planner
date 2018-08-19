@@ -45,7 +45,7 @@ msgid "com.github.alainm23.planner"
 msgstr ""
 
 #: data/com.github.alainm23.planner.desktop.in:12
-msgid "Github;Repositories;Development;"
+msgid "GitHub;Repositories;Development;"
 msgstr ""
 
 #: src/Widgets/Headerbar.vala:84
@@ -281,7 +281,7 @@ msgid "No completed task"
 msgstr ""
 
 #: src/Widgets/TaskList.vala:54
-msgid "Start to complete to fill this space"
+msgid "Completed tasks are shown here"
 msgstr ""
 
 #: src/Widgets/TaskList.vala:98
@@ -293,11 +293,11 @@ msgid "Create a new Task"
 msgstr ""
 
 #: src/Widgets/TaskList.vala:136
-msgid "Add to list..."
+msgid "Add to list…"
 msgstr ""
 
 #: src/Widgets/TaskList.vala:140
-msgid "Add new task..."
+msgid "Add new task…"
 msgstr ""
 
 #: src/Widgets/FormatBar.vala:37
