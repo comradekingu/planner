@@ -8,5 +8,5 @@ Icon=com.github.alainm23.planner
 Terminal=false
 Type=Application
 X-GNOME-Gettext-Domain=planner
-Keywords=Github;Repositories;Development;
+Keywords=GitHub;Repositories;Development;
 X-GNOME-UsesNotifications=true
