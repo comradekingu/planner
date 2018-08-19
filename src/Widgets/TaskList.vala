@@ -51,7 +51,7 @@ namespace Planner {
 			DESCRIPTION_NONE_TASK_ALERT = _("Create a <b>Task</b> with the <b>+</b> button");
 
 			TITLE_NONE_TASK_COMPLETED_ALERT = _("No completed task");
-			DESCRIPTION_NONE_TASK_COMPLETED_ALERT = _("Start to complete to fill this space");
+			DESCRIPTION_NONE_TASK_COMPLETED_ALERT = _("Completed tasks are shown here");
 
 			list_actual = new Interfaces.List ();
 
@@ -133,11 +133,11 @@ namespace Planner {
 			box_title.pack_end (task_state_modebutton, false, false, 0);
 
 			task_entry = new Gtk.Entry ();
-			task_entry.set_icon_tooltip_text (Gtk.EntryIconPosition.SECONDARY, _("Add to list..."));
+			task_entry.set_icon_tooltip_text (Gtk.EntryIconPosition.SECONDARY, _("Add to list…"));
 			task_entry.no_show_all = true;
 			task_entry.max_length = 128;
 			task_entry.margin_left = 12;
-			task_entry.placeholder_text = _("Add new task...");
+			task_entry.placeholder_text = _("Add new task…");
 			task_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 			task_entry.changed.connect( () => {
                 if (task_entry.text == "") {
